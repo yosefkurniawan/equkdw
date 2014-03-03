@@ -5,7 +5,20 @@ class User extends MX_Controller
 	
 	public function index(){
 		# checking whether logged in or not
-		(!isset($this->session->userdata['username'] )) ? redirect('user/login') : '';
+		if (!isset($this->session->userdata['username'] )) {
+			redirect('user/login');	
+		} 
+		else{
+			if ($this->session->userdata['status'] == 'Mahasiswa') {
+				redirect('mahasiswa');
+			}
+			elseif ($this->session->userdata['status'] == 'Dosen') {
+				redirect('dosen');
+			}
+			else{
+				redirect('page_404');
+			}
+		}
 
 		echo "you're logged in!";
 	}
