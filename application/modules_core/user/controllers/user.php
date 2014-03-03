@@ -19,8 +19,6 @@ class User extends MX_Controller
 				redirect('page_404');
 			}
 		}
-
-		echo "you're logged in!";
 	}
 
 	public function login(){

@@ -5,11 +5,15 @@ class Mahasiswa extends MX_Controller
 	
 	function __construct()
 	{
-		# code...
+		$this->load->model('m_mahasiswa');
 	}
 
 	public function index(){
+		$krs = $this->m_mahasiswa->getKRS($this->session->userdata['username']);
 		echo "This is Mahasiswa's home page";
+		echo "<pre>";
+		print_r($krs);
+		echo "</pre>";
 	}
 }
 
