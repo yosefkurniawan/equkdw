@@ -48,9 +48,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
+$db['default']['hostname'] = 'pinaple.co.vu';
+$db['default']['username'] = 'usrsieva';
+$db['default']['password'] = 'qwepoi123098';
 $db['default']['database'] = 'sieva';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
