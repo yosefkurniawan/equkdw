@@ -43,11 +43,12 @@ class User extends MX_Controller
 
 			$result = json_decode(curl_exec($curl), TRUE);
 			curl_close($curl);
-			/* -- /login to SSAT -- */
+			/* -- //login to SSAT -- */
 			
 			if ($result['result']) {
 				$this->session->set_userdata('username', $result['id_user']);
 				$this->session->set_userdata('status', $result['status']);
+				$this->session->set_userdata('is_admin', false);
 				if ($result['status'] = 'Mahasiswa') {
 					redirect('user/index');
 				}
