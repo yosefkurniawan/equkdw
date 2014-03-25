@@ -10,7 +10,9 @@ class Admin extends MX_Controller
 
 	public function index() {
 		# check whether user has permission to access
-		(isset($this->session->userdata['is_admin']) && !$this->session->userdata['is_admin'])? redirect('page_404') : '';
+		if ($this->m_admin->cek_admin_login()){
+			redirect(base_url());
+		}
 
 		if(!empty($_POST)){
 			$username = $_POST['username'];
@@ -18,30 +20,33 @@ class Admin extends MX_Controller
 
 			$result	= $this->m_admin->admin_login($username,$password);
 			if ($result['result']) {
-				$this->session->set_userdata('username', $result['account']->username);
-				$this->session->set_userdata('role', $result['account']->role);
+				# Default session setting
+				$this->session->set_userdata('is_super_admin', false);
 				$this->session->set_userdata('is_admin', false);
+				$this->session->set_userdata('is_kepala_unit', false);
+				$this->session->set_userdata('status', false);
+
+				# Set login session
+				$this->session->set_userdata('username', $result['account']->username);
+				$this->session->set_userdata('nama', $result['account']->username);
+				if ($result['account']->role == 'admin') {
+					$this->session->set_userdata('is_admin', true);
+				}elseif($result['account']->role == 'super admin'){
+					$this->session->set_userdata('is_super_admin', true);
+				}
 				
-				# redirect to spesific admin page
-				if (strtoupper($result['account']->role) == 'SUPER') {
-					redirect('admin/super');
-				}
-				else if (strtoupper($result['account']->role) == 'UNIVERSAL') {
-					redirect('admin/universal');
-				}
-				else{
-					redirect('admin/kategori');
-				}
+				unset($_POST);
+				redirect(base_url());
 			}
 			else
 			{
 				$this->session->set_flashdata('admin_login_failed', 'Username dan password tidak sesuai.');
 				redirect('admin');
 			}
+		}else{
+			$data['form_action'] = 'admin';
+			$this->load->view('login',$data);
 		}
-
-		$data['form_action'] = 'admin';
-		$this->load->view('v_login',$data);
 	}
 }
 

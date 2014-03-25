@@ -2,9 +2,9 @@
 
 class m_admin extends CI_Model
 {
-	/*function admin_login($username,$password){
+	function admin_login($username,$password){
 		$result		= array();
-		$sql 		= "SELECT * FROM eva_role r WHERE r.username='$username' AND r.password=MD5('$password')";
+		$sql 		= "SELECT * FROM eva_user u WHERE u.username='$username' AND u.password=MD5('$password')";
 		$account 	= $this->db->query($sql);
 
 		if ($account->num_rows() > 0) {
@@ -16,29 +16,16 @@ class m_admin extends CI_Model
 			$result['account']	= array();
 		}
 		return $result;
-	}*/
-
-	function check_admin($username){
-		$result						= array();
-		$result['is_super_admin'] 	= 0;
-		$result['is_admin'] 		= 0;
-
-		$sql 		= "SELECT * FROM eva_role r WHERE r.username='$username'";
-		$account 	= $this->db->query($sql);
-
-		if ($account->num_rows() > 0) {
-			$roles = $account->result_array();
-			foreach ($roles as $value) {
-				if ($value['role'] == 'super admin') {
-					$result['is_super_admin'] = 1;
-				}
-				if ($value['role'] == 'admin') {
-					$result['is_admin'] = 1;
-				}
-			}
-		}
-		return $result;
 	}
+
+	function cek_admin_login(){
+		if ( (isset($this->session->userdata['is_super_admin']) && !$this->session->userdata['is_super_admin']) ||
+			 (isset($this->session->userdata['is_admin']) && !$this->session->userdata['is_admin']) ) {
+			return true;
+		}
+		else
+			return false;
+	}	
 }
 
 

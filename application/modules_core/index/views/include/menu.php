@@ -3,12 +3,21 @@
 	<li>
 		Super Admin
 		<ul>
-			<li><a href="#">Hak Akses</a></li>
+			<li><a href="superadmin">Hak Akses</a></li>
 			<li><a href="#">Login As</a></li>
 		</ul>
 	</li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_admin']): ?>
+	<li>
+		Admin
+		<ul>
+			<li><a href="#">Periode dan Soal</a></li>
+			<li><a href="#">Laporan</a></li>
+		</ul>
+	</li>
+	<?php endif ?>
+	<?php if ($this->session->userdata['is_kepala_unit']): ?>
 	<li>
 		Admin
 		<ul>
