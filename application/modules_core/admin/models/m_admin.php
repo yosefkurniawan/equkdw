@@ -19,8 +19,8 @@ class m_admin extends CI_Model
 	}
 
 	function cek_admin_login(){
-		if ( (isset($this->session->userdata['is_super_admin']) && !$this->session->userdata['is_super_admin']) ||
-			 (isset($this->session->userdata['is_admin']) && !$this->session->userdata['is_admin']) ) {
+		if ( (isset($this->session->userdata['is_super_admin']) && $this->session->userdata['is_super_admin']) ||
+			 (isset($this->session->userdata['is_admin']) && $this->session->userdata['is_admin']) ) {
 			return true;
 		}
 		else

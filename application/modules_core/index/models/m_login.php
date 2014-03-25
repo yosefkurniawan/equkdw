@@ -28,9 +28,9 @@ class M_login extends CI_Model {
 		$result 	= 0;
 
 		$sql 		= "SELECT * FROM ref_unit WHERE id_kepala='$username'";
-		$result 	= $this->db->query($sql);
+		$sql_result	= $this->db->query($sql);
 
-		if ($result->num_rows() > 0) {
+		if ($sql_result->num_rows() > 0) {
 			$result = 1;
 		}
 		return $result;
