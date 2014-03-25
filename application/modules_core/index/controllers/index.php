@@ -6,7 +6,7 @@ class Index extends MX_Controller
 	{
 		parent::__construct();
 		$this->load->model('m_general');
-		$this->load->model('admin/m_admin','m_admin');
+		$this->load->model('m_login');
 	}
 
 	public function index(){
@@ -15,15 +15,6 @@ class Index extends MX_Controller
 			redirect('index/login');	
 		} 
 		else{
-			/*if ($this->session->userdata['status'] == 'Mahasiswa') {
-				redirect('mahasiswa');
-			}
-			elseif ($this->session->userdata['status'] == 'Dosen') {
-				redirect('dosen');
-			}
-			else{
-				redirect('page_404');
-			}*/
 			$data['title'] = 'SIEVDO - Sistem Informasi Evaluasi Kinerja Dosen';
 			$data['content'] = 'welcome';
 			$this->load->view('render_layout',$data);
@@ -50,26 +41,54 @@ class Index extends MX_Controller
 				)
 			));
 
-			$result = json_decode(curl_exec($curl), TRUE);
+			$result_login_SSAT 	= json_decode(curl_exec($curl), TRUE);
 			curl_close($curl);
+			$SSAT_result 		= $result_login_SSAT['result'];
+			$SSAT_id_user 		= $result_login_SSAT['id_user'];
+			$SSAT_status 		= $result_login_SSAT['status'];
 			/* -- //login to SSAT -- */
 
-			if ($result['result']) {
+			if ($SSAT_result) {
 				# Checking wheter admin or not
-				$this->check_admin($result['id_user']);
+				// $cek_admin 			= $this->check_admin($SSAT_id_user);
+				// $is_super_admin 	= $cek_admin['is_super_admin'];
+				// $is_admin 			= $cek_admin['is_admin'];
+
+				# Checking wheter biro1 or not
+				$is_kepala_unit 			= $this->check_kepala_unit($SSAT_id_user);
 
 				# Get user's name
-				if (strtolower($result['status']) == strtolower('Dosen')) {
-					$nama = $this->m_general->getDetailUserByStatus($result['id_user'],$result['status'])->nama;
+				if (strtolower($SSAT_status) == strtolower('Dosen')) {
+					$nama = $this->m_general->getDetailUserByStatus($SSAT_id_user, $SSAT_status)->nama;
 				}
 				else{
-					$nama = $this->m_general->getDetailUserByStatus($result['id_user'],$result['status'])->nama_lengkap;
+					$nama = $this->m_general->getDetailUserByStatus($SSAT_id_user, $SSAT_status)->nama_lengkap;
 				}
-				$this->session->set_userdata('nama', $nama);
 				
 				# save login session
-				$this->session->set_userdata('username', $result['id_user']);
-				$this->session->set_userdata('status', $result['status']);
+				// if ($SSAT_status == 'Mahasiswa' || $SSAT_status == 'Dosen' || $SSAT_status == 'Mahasiswa' || $is_admin || $is_super_admin) {
+					$this->session->set_userdata('username', $SSAT_id_user);
+					$this->session->set_userdata('status', $SSAT_status);
+					$this->session->set_userdata('nama', $nama);
+
+					// if ($is_super_admin) 
+					// 	$this->session->set_userdata('is_super_admin', true);
+					// else
+					// 	$this->session->set_userdata('is_super_admin', false);
+
+					// if ($is_admin) 
+					// 	$this->session->set_userdata('is_admin', true);
+					// else
+					// 	$this->session->set_userdata('is_admin', false);
+
+					if ($is_kepala_unit) 
+						$this->session->set_userdata('is_kepala_unit', true);
+					else
+						$this->session->set_userdata('is_kepala_unit', false);
+				// }
+
+					$this->session->set_userdata('is_super_admin', false);
+					$this->session->set_userdata('is_admin', false);
 
 				redirect(base_url());
 			}
@@ -80,18 +99,13 @@ class Index extends MX_Controller
 	}
 
 	public function check_admin($username){
-		$result	= $this->m_admin->check_admin($username);
-		
-		if ($result['is_super_admin']) 
-			$this->session->set_userdata('is_super_admin', true);
-		else
-			$this->session->set_userdata('is_super_admin', false);
+		$result	= $this->m_login->check_admin($username);
+		return $result;
+	}
 
-
-		if ($result['is_admin']) 
-			$this->session->set_userdata('is_admin', true);
-		else
-			$this->session->set_userdata('is_admin', false);
+	public function check_kepala_unit($username){
+		$result	= $this->m_login->check_kepala_unit($username);
+		return $result;
 	}
 
 	public function logout(){
