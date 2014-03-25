@@ -7,6 +7,7 @@ class Index extends MX_Controller
 		parent::__construct();
 		$this->load->model('m_general');
 		$this->load->model('m_login');
+		$this->load->model('admin/m_admin');
 	}
 
 	public function index(){
@@ -43,12 +44,11 @@ class Index extends MX_Controller
 
 			$result_login_SSAT 	= json_decode(curl_exec($curl), TRUE);
 			curl_close($curl);
-			$SSAT_result 		= $result_login_SSAT['result'];
-			$SSAT_id_user 		= $result_login_SSAT['id_user'];
-			$SSAT_status 		= $result_login_SSAT['status'];
 			/* -- //login to SSAT -- */
 
-			if ($SSAT_result) {
+			if ($result_login_SSAT['result']) {
+				$SSAT_id_user 		= $result_login_SSAT['id_user'];
+				$SSAT_status 		= $result_login_SSAT['status'];
 				# Checking wheter admin or not
 				// $cek_admin 			= $this->check_admin($SSAT_id_user);
 				// $is_super_admin 	= $cek_admin['is_super_admin'];
@@ -92,6 +92,10 @@ class Index extends MX_Controller
 
 				redirect(base_url());
 			}
+			else{
+				$this->session->set_flashdata('login_failed', 'Username dan password tidak sesuai.');
+				redirect('index/login');	
+			}
 		}
 
 		$data['form_action'] = 'index/login';
@@ -109,8 +113,13 @@ class Index extends MX_Controller
 	}
 
 	public function logout(){
-		$this->session->sess_destroy();
-		redirect(base_url());
+		if ($this->m_admin->cek_admin_login()) {
+			$this->session->sess_destroy();
+			redirect('admin');
+		}else{
+			$this->session->sess_destroy();
+			redirect(base_url());
+		}
 	}
 }
 
