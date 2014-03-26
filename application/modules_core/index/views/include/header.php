@@ -40,7 +40,30 @@
     <div class="user pull-right"><a href="#" title="User Options" data-toggle="dropdown" class="pull-right">
       <div class="pull-left">
         <h5><?=$this->session->userdata['nama'];?></h5>
-        <p>Mahasiswa</p>
+        <p>
+  <?php if ($this->session->userdata['is_super_admin']): ?>
+    Superadmin
+  <?php endif; ?>
+  <?php if ($this->session->userdata['is_admin']): ?>
+    Admin
+  <?php endif; ?>
+  <?php if ($this->session->userdata['is_kepala_unit']) : ?>
+    
+      Kepala Unit
+    
+      <?php if ($this->session->userdata['status'] == 'Dosen'): ?>
+        dan Dosen
+      <?php endif ?>
+
+  <?php elseif ($this->session->userdata['status'] == 'Dosen'): ?>
+  Dosen
+  <?php endif ?>
+
+
+  <?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
+  Mahasiswa
+  <?php endif ?>
+</p>
       </div>
       <div class="pull-right"><img src="<?=base_url()?>public/assets/images/user_pic/user.jpg" title="User Pic" alt="User Pic"></div>
       </a>

@@ -4,38 +4,20 @@
   	<i class="icon-">&#xf0c9; </i></a>
     <ul>
 	<?php if ($this->session->userdata['is_super_admin']): ?>
-	<li>
-		Super Admin
-		<ul>
-			<li><a href="superadmin">Hak Akses</a></li>
-			<li><a href="#">Login As</a></li>
-		</ul>
-	</li>
+			<li><a href="#" title="Hak Akses" >Hak Akses</a></li>
+			<li><a href="#" title="Login As" >Login As</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_admin']): ?>
-	<li>
-		Admin
-		<ul>
-			<li><a href="#">Periode dan Soal</a></li>
-			<li><a href="#">Laporan</a></li>
-		</ul>
-	</li>
+			<li><a href="#" title="Periode dan Soal" >Periode dan Soal</a></li>
+			<li><a href="#" title="Laporan" >Laporan</a></li>
 	<?php endif ?>
-	<?php if ($this->session->userdata['is_kepala_unit'] || $this->session->userdata['status'] == 'Dosen'): ?>
-	<li>Other
-		<ul>
-			<li><a href="#">Buat Kuisioner Tambahan</a></li>
-		</ul>
-	</li>
+	<?php if ($this->session->userdata['is_kepala_unit'] || ($this->session->userdata['status'] == 'Dosen') :?>
+			<li><a href="#" title="Laporan" >Laporan</a></li>
+			<li><a href="#" title="Kuisioner" >Kuisioner</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['status'] == 'Dosen'): ?>
-	<li>
-		Dosen
-		<ul>
-			<li><a href="#">lorem</a></li>
-			<li><a href="#">lorem</a></li>
-		</ul>
-	</li>
+			<li><a href="#" title="Laporan" >Laporan</a></li>
+			<li><a href="#" title="Kuisioner" >Kuisioner</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
 			<li><a href="#" title="Dashboard" ><i class="icon-">&#xf0ac;</i>Dashboard</a></li>
