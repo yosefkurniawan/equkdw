@@ -10,6 +10,11 @@ class Index extends MX_Controller
 		$this->load->model('admin/m_admin');
 	}
 
+	public function coba_pull()
+	{
+		echo "ini push pertamaku";
+	}
+
 	public function index(){
 		# checking whether logged in or not
 		if (!isset($this->session->userdata['username'] )) {
