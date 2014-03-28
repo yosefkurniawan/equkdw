@@ -1,0 +1,20 @@
+/* FORM PAKEt PERTANYAAN */
+ul#sortable li
+{
+	border: 0;
+	padding: 0.2em;
+	margin-bottom: 0.2em;
+	border: 1px solid #CCC;
+	list-style-type: none;
+	cursor: move;
+}
+
+ul#sortable li.clone
+{
+	background: rgba(255, 212, 170, 0.3);
+}
+
+img#loading
+{
+	display: none;
+}
