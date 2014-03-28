@@ -36,11 +36,10 @@ class Soal extends CI_Controller {
 
 	public function baru()
 	{
-		// $list_aspek 		= $this->m_soal->getAspek();			
+		$list_aspek 		= $this->m_soal->getAspek();			
 
 		/* -- Render Layout -- */
-		// $data['info_paket']			= $info_paket;
-		// $data['list_pertanyaan']	= $list_pertanyaan;
+		$data['list_aspek']	= $list_aspek;
 		$data['title'] 		= 'Edit Paket Soal';
 		$data['content'][] 	= 'soal/form_info';
 		$data['content'][] 	= 'soal/form_pertanyaan';
@@ -48,9 +47,12 @@ class Soal extends CI_Controller {
 		
 	}
 
-	public function test(){
-		echo "</pre>";
-		print_r($_POST);
+	public function save_pertanyaan(){
+		$id_paket		= $_POST['id_paket'];
+		$isi_pertanyaan = $_POST['isi_pertanyaan'];
+		$id_aspek		= $_POST['id_aspek'];
+		$urutan			= $_POST['urutan'];
+		$result 		= $this->m_soal->save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan);
 	}
 
 }

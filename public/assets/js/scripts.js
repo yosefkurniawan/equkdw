@@ -62,8 +62,7 @@
   
   document.writeln('<script src="/public/assets/js/plugins/imgareaselect/jquery.imgareaselect.min.js"></script>'); /*==== Image Crop ====*/
 
-  document.writeln('<script src="/public/assets/js/mootools/mootools-yui-compressed.js"></script>'); /*==== mootools ====*/
-  document.writeln('<script src="/public/assets/js/mootools/mootools-1.2.4.4-more-sortables.js"></script>'); /*==== mootools ====*/
+  document.writeln('<script src="/public/assets/js/jquery.sortable.min.js"></script>'); /*==== sortable list ====*/
   
   document.writeln('<script src="/public/assets/js/custom.js"></script>'); /*==== Custom scripts ====*/
   

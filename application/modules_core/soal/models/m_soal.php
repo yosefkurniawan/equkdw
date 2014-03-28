@@ -30,6 +30,25 @@ class M_soal extends CI_Model {
 		}
 		return $result;
 	}
+
+	function getAspek(){
+		$sql = "SELECT * FROM eva_ref_aspek ORDER BY keterangan ASC";
+		$sql_result = $this->db->query($sql);
+
+		$result = array();
+		if ($sql_result->num_rows() > 0) {
+			$result = $sql_result->result_array();
+		}
+		return $result;
+	}
+
+	function save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan){
+		$sql 	= "INSERT INTO eva_pertanyaan (id_paket,isi_pertanyaan,id_aspek,urutan) VALUES
+				  ('$id_paket','$isi_pertanyaan','$id_aspek','$urutan')";
+		$result = $this->db->query($sql);
+
+		return $result;
+	}
 }
 
 /* End of file m_soal.php */

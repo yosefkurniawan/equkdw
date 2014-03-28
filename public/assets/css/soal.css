@@ -1,12 +1,21 @@
 /* FORM PAKEt PERTANYAAN */
-ul#sortable li
+ul#number{
+	float: left;
+	width: 10%;
+}
+ul.sortable{
+	float: left;
+	width: 90%;
+	cursor: move;
+}
+ul#number li,
+ul.sortable li
 {
-	border: 0;
-	padding: 0.2em;
-	margin-bottom: 0.2em;
+	padding: 10px 15px;
+	margin-bottom: 10px;
 	border: 1px solid #CCC;
 	list-style-type: none;
-	cursor: move;
+	height: 115px;
 }
 
 ul#sortable li.clone
@@ -14,7 +23,11 @@ ul#sortable li.clone
 	background: rgba(255, 212, 170, 0.3);
 }
 
-img#loading
+#save-paket-loading
 {
 	display: none;
+}
+#save-paket-loading img
+{
+	margin-right: 7px;
 }
