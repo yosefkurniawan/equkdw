@@ -6,6 +6,7 @@ class Soal extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('m_soal');
+		$this->load->model('index/m_general');
 	}
 
 	public function index()
@@ -37,12 +38,16 @@ class Soal extends CI_Controller {
 	public function baru()
 	{
 		$list_aspek 		= $this->m_soal->getAspek();			
+		$last_periode		= $this->m_general->getLastPeriode();
+		$kode 				= 'sample_id_'.rand();
 
 		/* -- Render Layout -- */
-		$data['list_aspek']	= $list_aspek;
-		$data['title'] 		= 'Edit Paket Soal';
-		$data['content'][] 	= 'soal/form_info';
-		$data['content'][] 	= 'soal/form_pertanyaan';
+		$data['kode']			= $kode;
+		$data['last_periode']	= $last_periode;
+		$data['list_aspek']		= $list_aspek;
+		$data['title'] 			= 'Edit Paket Soal';
+		$data['content'][] 		= 'soal/form_info';
+		$data['content'][] 		= 'soal/form_pertanyaan';
 		$this->load->view('index/render_layout',$data);
 		
 	}

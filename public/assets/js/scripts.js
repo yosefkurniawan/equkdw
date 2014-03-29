@@ -66,6 +66,6 @@
   
   document.writeln('<script src="/public/assets/js/custom.js"></script>'); /*==== Custom scripts ====*/
   
-  document.writeln('<script src="/public/assets/js/custom_pinaple.js"></script>'); /*==== Custom scripts from Pinaple ====*/
+  document.writeln('<script src="/public/assets/js/pinaple-soal.js"></script>'); /*==== JS soal ====*/
 
 }).call(this);
