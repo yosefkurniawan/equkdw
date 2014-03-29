@@ -16,7 +16,11 @@ class Index extends MX_Controller
 			redirect('index/login');	
 		} 
 		else{
-			$data['title'] = 'SIEVDO - Sistem Informasi Evaluasi Kinerja Dosen';
+
+			if ($this->session->userdata['status'] == 'Mahasiswa') {
+				redirect('mahasiswa/dashboard');	
+			} 
+			$data['title'] = 'eQuiz - Sistem Informasi Kuisioner dan Evaluasi';
 			$data['content'] = 'welcome';
 			$this->load->view('render_layout',$data);
 		}
