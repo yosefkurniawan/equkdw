@@ -1,8 +1,14 @@
-// Initialisation function
+/*
+ * JS for Soal module
+ * author 	: jojo
+ * date		: 2014-03-29
+ */
+
 $(document).ready(function(){
 
 	/* ------ drag and drop form pertanyaan ------ */
-	// When "save changes" clicked, save!
+
+	// Button save info paket CLICKED
 	$('#save-paket').click(function(){
 		$('#save-paket-loading').css('display', 'inline');;
 		$('#save-paket').hide();
@@ -11,7 +17,7 @@ $(document).ready(function(){
 		for (var number = 1; number <= 12; number++) {
 			var id 		= '#list-pertanyaan li:nth-child('+number+') form';
 			var items 	= $(id).serialize()+'&urutan='+number+'&id_paket=sample_id';
-			alert(items);
+			
 			// Send the AJAX request
 			$.ajax({
 			    url : "/soal/save_pertanyaan",

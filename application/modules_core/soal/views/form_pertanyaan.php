@@ -40,7 +40,7 @@
 	<div class="panel-footer">
 		<a href="javascript:void(0)" class="blue-bg btn" id="save-paket">Simpan</a>
 		<div id="save-paket-loading">
-			<img src="http://stuff.dan.cx/common/spinner.gif" alt="Loading..." title="Loading..." />Loading...
+			<img src="/public/assets/images/spinner.gif" alt="Saving..." title="Saving..." />Saving...
 		</div>
 	</div>
 </div>

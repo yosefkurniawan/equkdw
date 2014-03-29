@@ -24,6 +24,11 @@ class M_general extends CI_Model {
 		return $result;
 	}
 
+	public function getLastPeriode(){
+		$sql 	= "SELECT thn_ajaran,semester FROM ec_kelas_buka ORDER BY thn_ajaran DESC, semester DESC LIMIT 1";
+		$result = $this->db->query($sql)->row();
+		return $result;
+	}
 }
 
 /* End of file m_general.php */

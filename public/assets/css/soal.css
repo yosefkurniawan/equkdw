@@ -1,4 +1,3 @@
-/* FORM PAKEt PERTANYAAN */
 .box-form-pertanyaan .panel-body{
 	padding-left: 0 !important;
 }
@@ -28,11 +27,15 @@ ul#sortable li.clone
 	background: rgba(255, 212, 170, 0.3);
 }
 
-#save-paket-loading
+#save-info-loading,
+#save-paket-loading,
+#save-jadwal-loading
 {
 	display: none;
 }
-#save-paket-loading img
+#save-info-loading img,
+#save-paket-loading img,
+#save-jadwal-loading img
 {
 	margin-right: 7px;
 }
