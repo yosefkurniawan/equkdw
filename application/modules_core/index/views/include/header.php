@@ -24,9 +24,12 @@
 <link href="<?=base_url()?>public/assets/css/fullcalendar/fullcalendar.css" rel="stylesheet"/>
 <!-- Jquery UI-->
 <link href="<?=base_url()?>public/assets/css/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+
+<link href="<?=base_url()?>public/assets/css/jquery.datetimepicker.css" rel="stylesheet"/>
 <!-- Soal -->
 <link href="<?=base_url()?>public/assets/css/soal.css" rel="stylesheet"/>
 
+<script src="<?=base_url()?>public/assets/js/scripts.js"></script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]><script src="<?=base_url()?>public/assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="<?=base_url()?>public/assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->
 

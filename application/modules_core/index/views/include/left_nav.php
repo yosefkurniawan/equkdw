@@ -1,4 +1,10 @@
-<!--ASIDE LEFT PANNEL-->
+<!-- CUSTOM LEFT BAR -->
+<?php if(isset($left_bar)){
+  $this->load->view($left_bar); 
+}else{
+?>
+
+<!--DEFAULT LEFT PANNEL-->
 <aside id="left_panel">
   <div class="container-fluid">
     <form class="search_form clearfix">
@@ -32,8 +38,11 @@
     </ul>
   </nav>
 </aside>
-<!--ASIDE LEFT PANNEL ENDS-->
+<!--DEFAULT LEFT PANNEL ENDS-->
+
+<?php } ?>
 
 <!--MAIN CONTENT-->
 <section id="main_content">
   <div class="container-fluid">
+

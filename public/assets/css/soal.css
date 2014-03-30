@@ -1,4 +1,35 @@
-.box-form-pertanyaan .panel-body{
+/* LEFT BAR */
+#step li{
+	list-style: none;
+	padding: 20px 0;
+	height: 70px;
+	color: #AFAFAF;
+	vertical-align: middle;
+}
+#step li.line{
+	border-left: 1px solid #afafaf;
+	margin: -25px 0 -15px 14px;
+	padding: 0;
+	height: 40px;
+}
+#step li span{
+	margin-right: 10px;
+	margin-top: -5px;
+	border: #AFAFAF solid 1px;
+	border-radius: 1em !important;
+	width: 30px;
+	height: 30px;
+	display: block;
+	float: left;
+	text-align: center;
+	padding-top: 3px;
+}
+
+/* MAIN CONTENT */
+#soal-alert {
+	display: none;
+}
+#box-form-pertanyaan .panel-body{
 	padding-left: 0 !important;
 }
 ul#number{
@@ -28,13 +59,13 @@ ul#sortable li.clone
 }
 
 #save-info-loading,
-#save-paket-loading,
+#save-pertanyaan-loading,
 #save-jadwal-loading
 {
 	display: none;
 }
 #save-info-loading img,
-#save-paket-loading img,
+#save-pertanyaan-loading img,
 #save-jadwal-loading img
 {
 	margin-right: 7px;

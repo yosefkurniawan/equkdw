@@ -18,7 +18,7 @@
   
   document.writeln('<script src="/public/assets/js/plugins/tagsinput/jquery.tagsinput.js"></script>'); /*==== Tags Input (Custom) ====*/
   
-  document.writeln('<script src="/public/assets/js/bootstrap/bootstrap-datetimepicker.min.js"></script>'); /*==== Date/Time Picker - Bootstrap ====*/
+  // document.writeln('<script src="/public/assets/js/bootstrap/bootstrap-datetimepicker.min.js"></script>'); /*==== Date/Time Picker - Bootstrap ====*/
   
   document.writeln('<script src="/public/assets/js/plugins/inputmask/jquery.inputmask.bundle.js"></script>'); /*==== Tags Input (Custom) ====*/
   
@@ -63,6 +63,8 @@
   document.writeln('<script src="/public/assets/js/plugins/imgareaselect/jquery.imgareaselect.min.js"></script>'); /*==== Image Crop ====*/
 
   document.writeln('<script src="/public/assets/js/jquery.sortable.min.js"></script>'); /*==== sortable list ====*/
+
+  document.writeln('<script src="/public/assets/js/jquery.datetimepicker.js"></script>'); /*==== jQuery datetimepicker ====*/
   
   document.writeln('<script src="/public/assets/js/custom.js"></script>'); /*==== Custom scripts ====*/
   

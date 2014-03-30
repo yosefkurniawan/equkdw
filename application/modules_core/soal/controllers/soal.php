@@ -37,27 +37,51 @@ class Soal extends CI_Controller {
 
 	public function baru()
 	{
-		$list_aspek 		= $this->m_soal->getAspek();			
-		$last_periode		= $this->m_general->getLastPeriode();
 		$kode 				= 'sample_id_'.rand();
+		$list_aspek 		= $this->m_soal->getAspek();			
+		$list_prodi 		= $this->m_soal->getProdi();			
+		$last_periode		= $this->m_general->getLastPeriode();
 
 		/* -- Render Layout -- */
+		$data['left_bar']		= 'soal/left_bar';
 		$data['kode']			= $kode;
 		$data['last_periode']	= $last_periode;
 		$data['list_aspek']		= $list_aspek;
+		$data['list_prodi']		= $list_prodi;
 		$data['title'] 			= 'Edit Paket Soal';
 		$data['content'][] 		= 'soal/form_info';
 		$data['content'][] 		= 'soal/form_pertanyaan';
+		$data['content'][] 		= 'soal/form_jadwal';
 		$this->load->view('index/render_layout',$data);
 		
 	}
 
-	public function save_pertanyaan(){
+	public function save_info(){
 		$id_paket		= $_POST['id_paket'];
-		$isi_pertanyaan = $_POST['isi_pertanyaan'];
-		$id_aspek		= $_POST['id_aspek'];
-		$urutan			= $_POST['urutan'];
-		$result 		= $this->m_soal->save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan);
+		$thn_ajaran 	= $_POST['thn_ajaran'];
+		$semester 		= $_POST['semester'];
+		$status			= $_POST['status'];
+		$result 		= $this->m_soal->save_info($id_paket, $thn_ajaran, $semester, $status);
+	}
+
+	public function save_pertanyaan(){
+		foreach ($_POST as $value) {
+			$id_paket		= $value['id_paket'];
+			$isi_pertanyaan = $value['isi_pertanyaan'];
+			$id_aspek		= $value['aspek'];
+			$urutan			= $value['urutan'];
+			$result 		= $this->m_soal->save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan);
+		}
+	}
+
+	public function save_jadwal(){
+		foreach ($_POST as $value) {
+			$id_paket		= $value['id_paket'];
+			$id_unit 		= $value['id_unit'];
+			$tgl_mulai		= $value['tgl_mulai'];
+			$tgl_akhir		= $value['tgl_akhir'];
+			$result 		= $this->m_soal->save_jadwal($id_paket, $id_unit, $tgl_mulai, $tgl_akhir);
+		}
 	}
 
 }

@@ -12,20 +12,26 @@
 ?>
 
 <div class="page-header">
-	<h1>Pengaturan Paket Pertanyaan</h1>
+	<h1>Pengaturan Paket</h1>
 </div>
-<div class="panel colored">
+
+<div class="alert fade in" id="soal-alert">
+	<button data-dismiss="alert" class="close" type="button">×</button>
+	<p></p>
+</div>
+
+<div class="panel colored" id="box-form-info">
 	<div class="panel-heading green-bg">
 		<h3 class="panel-title">Informasi Paket</h3>
 	</div>
-	<form role="form">
+	<form role="form" id="form-info">
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Kode</label>
 						<div class="controls">
-							<input type="text" class="form-control" value="<?php echo $kode; ?>">
+							<input type="text" name="id_paket" class="form-control" value="<?php echo $kode; ?>">
 						</div>
 					</div>
 				</div>
@@ -62,7 +68,7 @@
 						<div class="controls">
 							<select name="status" class="form-control">
 								<option value="draft" selected>Draft</option>
-								<option value="draft">Final</option>
+								<option value="final">Final</option>
 							</select>
 						</div>
 					</div>
@@ -72,9 +78,9 @@
 	</form>
 	<div class="panel-footer">
 		<div class="form-group">
-			<a href="#" class="btn btn-med blue-bg">Simpan</a> 
+			<a href="javascript:void(0)" class="blue-bg btn" id="save-info">Simpan</a>
 			<div id="save-info-loading">
-				<img src="/public/assets/images/spinner.gif" alt="Saving..." title="Saving..." />Saving...
+				<img src="/public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
 			</div>
 		</div>
 	</div>
