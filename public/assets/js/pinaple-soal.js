@@ -24,7 +24,7 @@ $(document).ready(function(){
 		
 		// Send the AJAX request
 		$.ajax({
-		    url : "/soal/save_info",
+		    url : CI_ROOT+"soal/save_info",
 		    type: "POST",
 		    data : items,
 		    success: function(data, textStatus, jqXHR)
@@ -82,7 +82,7 @@ $(document).ready(function(){
 
 		// Send the AJAX request
 		$.ajax({
-		    url : "/soal/save_pertanyaan",
+		    url : CI_ROOT+"soal/save_pertanyaan",
 		    type: "POST",
 		    data : items,
 		    success: function(data, textStatus, jqXHR)
@@ -140,7 +140,7 @@ $(document).ready(function(){
 
 		// Send the AJAX request
 		$.ajax({
-		    url : "/soal/save_jadwal",
+		    url : CI_ROOT+"soal/save_jadwal",
 		    type: "POST",
 		    data : items,
 		    success: function(data, textStatus, jqXHR)
