@@ -1,6 +1,6 @@
 <h1>Periode dan Soal</h1>
 
-<a href="/soal/baru" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Buat Paket Baru</a>
+<a href="<?=base_url() ?>soal/baru" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Buat Paket Baru</a>
 
 <table class="metro-table">
 	<thead>
