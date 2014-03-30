@@ -29,6 +29,9 @@
 <!-- Soal -->
 <link href="<?=base_url()?>public/assets/css/soal.css" rel="stylesheet"/>
 
+<script type="text/javascript">
+        CI_ROOT = "<?=base_url() ?>";
+</script>
 <script src="<?=base_url()?>public/assets/js/scripts.js"></script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]><script src="<?=base_url()?>public/assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="<?=base_url()?>public/assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->

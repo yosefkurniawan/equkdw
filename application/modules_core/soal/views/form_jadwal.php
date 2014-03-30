@@ -44,7 +44,7 @@
 	<div class="panel-footer">
 		<a href="javascript:void(0)" class="blue-bg btn" id="save-jadwal">Simpan</a>
 		<div id="save-jadwal-loading">
-			<img src="/public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
+			<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
 		</div>
 	</div>
 </div>
