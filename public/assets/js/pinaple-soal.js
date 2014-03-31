@@ -27,8 +27,11 @@ $(document).ready(function(){
 		    url : CI_ROOT+"soal/save_info",
 		    type: "POST",
 		    data : items,
+		    dataType : "JSON",
 		    success: function(data, textStatus, jqXHR)
 		    {
+				if (data.success) {$('.id_paket').val(data.inserted_id)};
+
 				$('#save-info-loading').css('display', 'none');
 				$('#save-info').show();
 
@@ -40,7 +43,7 @@ $(document).ready(function(){
 				/* hide/show form*/
 				$('#box-form-info').fadeOut(400);
 				$('#box-form-pertanyaan').delay(400).fadeIn();
-
+				
 				/* show message */
 				$('#soal-alert').fadeIn(400);
 				$('#soal-alert').addClass('alert-success');

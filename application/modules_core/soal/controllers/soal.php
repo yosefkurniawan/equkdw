@@ -20,18 +20,19 @@ class Soal extends CI_Controller {
 		$this->load->view('index/render_layout',$data);
 	}
 
-	public function edit($kode=NULL)
+	public function edit($kode)
 	{
-			$info_paket 		= $this->m_soal->getPaketSoal($kode);
-			$list_pertanyaan	= $this->m_soal->getPertanyaanByKode($kode);
+		$info_paket 		= $this->m_soal->getPaketSoal($kode);
+		$list_pertanyaan	= $this->m_soal->getPertanyaanByKode($kode);
+		$list_jadwal		= $this->m_soal->getjadwalByKode($kode);
 
-			/* -- Render Layout -- */
-			$data['info_paket']			= $info_paket;
-			$data['list_pertanyaan']	= $list_pertanyaan;
-			$data['title'] 		= 'Edit Paket Soal';
-			$data['content'][] 	= 'soal/form_info';
-			$data['content'][] 	= 'soal/form_pertanyaan';
-			$this->load->view('index/render_layout',$data);
+		/* -- Render Layout -- */
+		$data['info_paket']			= $info_paket;
+		$data['list_pertanyaan']	= $list_pertanyaan;
+		$data['title'] 		= 'Edit Paket Soal';
+		$data['content'][] 	= 'soal/form_info';
+		$data['content'][] 	= 'soal/form_pertanyaan';
+		$this->load->view('index/render_layout',$data);
 		
 	}
 
@@ -57,11 +58,11 @@ class Soal extends CI_Controller {
 	}
 
 	public function save_info(){
-		$id_paket		= $_POST['id_paket'];
 		$thn_ajaran 	= $_POST['thn_ajaran'];
 		$semester 		= $_POST['semester'];
 		$status			= $_POST['status'];
-		$result 		= $this->m_soal->save_info($id_paket, $thn_ajaran, $semester, $status);
+		$result 		= $this->m_soal->save_info($thn_ajaran, $semester, $status);
+		print_r(json_encode($result));
 	}
 
 	public function save_pertanyaan(){
