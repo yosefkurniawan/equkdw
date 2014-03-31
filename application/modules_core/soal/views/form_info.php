@@ -29,16 +29,6 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Kode</label>
-						<div class="controls">
-							<input type="text" name="id_paket" class="form-control" value="<?php echo $kode; ?>">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
 						<label>Tahun Ajaran</label>
 						<div class="controls">
 							<select name="thn_ajaran" class="form-control">

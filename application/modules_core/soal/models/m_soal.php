@@ -6,7 +6,7 @@ class M_soal extends CI_Model {
 		if ($kode != NULL) {
 			$sql	= "SELECT * FROM eva_paket WHERE id_paket='$kode'";
 		}else{
-			$sql	= "SELECT * FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC";
+			$sql	= "SELECT * FROM eva_paket ORDER BY id_paket DESC";
 		}
 		$sql_result = $this->db->query($sql);
 
@@ -22,6 +22,17 @@ class M_soal extends CI_Model {
 
 	function getPertanyaanByKode($kode){
 		$sql		= "SELECT * FROM eva_pertanyaan WHERE id_paket = '$kode' ORDER BY urutan ASC";
+		$sql_result = $this->db->query($sql);
+
+		$result = array();
+		if ($sql_result->num_rows() > 0) {
+			$result = $sql_result->result_array();
+		}
+		return $result;
+	}
+
+	function getJadwalByKode($kode){
+		$sql		= "SELECT * FROM eva_deadline WHERE id_paket = '$kode'";
 		$sql_result = $this->db->query($sql);
 
 		$result = array();
@@ -53,12 +64,18 @@ class M_soal extends CI_Model {
 		return $result;
 	}
 
-	function save_info($id_paket, $thn_ajaran, $semester, $status){
-		$sql 	= "INSERT INTO eva_paket (id_paket,thn_ajaran,semester,status) VALUES
-				  ('$id_paket','$thn_ajaran',UPPER('$semester'),'$status')";
+	function save_info($thn_ajaran, $semester, $status){
+		$sql 	= "INSERT INTO eva_paket (thn_ajaran,semester,status) VALUES
+				  ('$thn_ajaran',UPPER('$semester'),'$status')";
 		$result = $this->db->query($sql);
 
-		return $result;
+		$data = array();
+		if ($result) {
+			$data['success'] 		= true;
+			$data['inserted_id'] 	= $this->db->insert_id();
+
+		}
+		return $data;
 	}
 
 	function save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan){
