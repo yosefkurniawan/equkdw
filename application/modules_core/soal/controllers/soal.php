@@ -26,9 +26,19 @@ class Soal extends CI_Controller {
 		$list_pertanyaan	= $this->m_soal->getPertanyaanByKode($kode);
 		$list_jadwal		= $this->m_soal->getjadwalByKode($kode);
 
+		$list_aspek 		= $this->m_soal->getAspek();			
+		$list_prodi 		= $this->m_soal->getProdi();			
+		$last_periode		= $this->m_general->getLastPeriode();
+
 		/* -- Render Layout -- */
+		$data['form_type']			= 'edit';
 		$data['info_paket']			= $info_paket;
 		$data['list_pertanyaan']	= $list_pertanyaan;
+		$data['list_jadwal']		= $list_jadwal;
+		$data['kode']			= '';
+		$data['last_periode']	= $last_periode;
+		$data['list_aspek']		= $list_aspek;
+		$data['list_prodi']		= $list_prodi;
 		$data['title'] 		= 'Edit Paket Soal';
 		$data['content'][] 	= 'soal/form_info';
 		$data['content'][] 	= 'soal/form_pertanyaan';
@@ -38,18 +48,18 @@ class Soal extends CI_Controller {
 
 	public function baru()
 	{
-		$kode 				= 'sample_id_'.rand();
 		$list_aspek 		= $this->m_soal->getAspek();			
 		$list_prodi 		= $this->m_soal->getProdi();			
 		$last_periode		= $this->m_general->getLastPeriode();
 
 		/* -- Render Layout -- */
+		$data['form_type']		= 'new';
 		$data['left_bar']		= 'soal/left_bar';
-		$data['kode']			= $kode;
+		$data['kode']			= '';
 		$data['last_periode']	= $last_periode;
 		$data['list_aspek']		= $list_aspek;
 		$data['list_prodi']		= $list_prodi;
-		$data['title'] 			= 'Edit Paket Soal';
+		$data['title'] 			= 'Paket Soal Baru';
 		$data['content'][] 		= 'soal/form_info';
 		$data['content'][] 		= 'soal/form_pertanyaan';
 		$data['content'][] 		= 'soal/form_jadwal';
