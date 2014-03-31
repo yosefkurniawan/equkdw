@@ -29,7 +29,7 @@ class m_user extends CI_Model
 
     // tambah user
     function tambah_user($params) {
-        $sql = "INSERT INTO eva_user(username, password, role, date_created) VALUES(?,?,?,NOW())";
+        $sql = "INSERT INTO eva_user(email, username, password, role, date_created) VALUES(?,?,?,?,NOW())";
         return $this->db->query($sql, $params);
     }
 
