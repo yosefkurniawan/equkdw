@@ -5,6 +5,7 @@ class Account extends MX_Controller
 	
 	function __construct()
 	{
+		$this->load->model('admin/m_admin');
 		$this->load->model('m_account');
 	}
 
@@ -64,6 +65,10 @@ class Account extends MX_Controller
 
 	// pengaturan akun
 	public function pengaturan_akun() {
+		if (!$this->m_admin->cek_admin_login()){
+			redirect(base_url(). 'admin');
+		}
+
 		$data['title'] 		= 'Pengaturan Akun';
 		$data['content'] 	= 'account/pengaturan_akun';
 		$this->load->view('index/render_layout',$data);

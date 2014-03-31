@@ -5,7 +5,11 @@ class User extends MX_Controller
 	
 	function __construct()
 	{
+		$this->load->model('admin/m_admin');
 		$this->load->model('m_user');
+		if (!$this->m_admin->cek_admin_login()){
+			redirect(base_url(). 'admin');
+		}
 	}
 
 	public function index() {

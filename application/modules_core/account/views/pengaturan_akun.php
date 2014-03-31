@@ -2,6 +2,9 @@
 	<h1>Pengaturan Akun</h1>
 </div>
 <div class="panel colored">
+	<div class="panel-heading green-bg">
+		<h3 class="panel-title">Ubah Password</h3>
+	</div>
 	<?php echo $this->session->flashdata('message'); ?>
 	<form method="POST" action="<?php echo base_url(); ?>account/proses_pengaturan_akun">
 		<input type="hidden" name="user" value="<?php echo $this->session->userdata('username'); ?>">
