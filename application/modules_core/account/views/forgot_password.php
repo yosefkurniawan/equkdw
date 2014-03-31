@@ -26,24 +26,17 @@
 <body class="blue-bg">
     <div class="signin">
         <div class="signin-body">
-            <h3>Login to your account</h3>
-            <form id="basic-validation" action="<?php echo base_url().$form_action ?>" method="POST">
-            	<div class="form-group">
-            		<div class="msg"><?php echo $this->session->flashdata('admin_login_failed'); ?></div>
-            	</div>
+            <h3>Enter your email address</h3>
+            <form id="basic-validation" action="<?php echo base_url(); ?>account/forgot_password_process" method="POST">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Username" name="username" id="username">
+                    <div class="msg"><?php echo $this->session->flashdata('message'); ?></div>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+                    <input type="text" class="form-control" placeholder="Email" name="email" id="email">
                 </div>
                 <div class="form-group clearfix">
-                    <input type="submit" class="btn btn-med blue-bg pull-right" value="Login">
+                    <input type="submit" class="btn btn-med blue-bg pull-right" value="Submit">
                 </div>
-                <hr>
-                <h4>Forgot your password ?</h4>
-                <p>if you have forgoten your password <a href="<?php echo base_url(); ?>account">click here</a>
-                </p>
             </form>
         </div>
     </div>

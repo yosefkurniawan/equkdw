@@ -34,6 +34,7 @@ class User extends MX_Controller
 	public function tambah_proses() {
 		// form validation
 		$this->form_validation->set_rules('user', '', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|max_length[255]|is_unique[eva_user.email]|valid_email');
 		$this->form_validation->set_rules('username', 'Username', 'required|trim|xss_clean|max_length[20]|is_unique[eva_user.username]');
 		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|md5');
 		$this->form_validation->set_rules('repassword', 'Konfirmasi Password', 'required|trim|xss_clean|matches[password]');
@@ -41,7 +42,7 @@ class User extends MX_Controller
 
 		if ($this->form_validation->run() == TRUE) {
 			// insert
-			$params = array($this->input->post('username'), $this->input->post('password'), $this->input->post('role'));
+			$params = array($this->input->post('email'), $this->input->post('username'), $this->input->post('password'), $this->input->post('role'));
 			if ($this->m_user->tambah_user($params)) {
 				$data['message'] = "Data user baru berhasil ditambahkan";
 			} else {
@@ -51,6 +52,7 @@ class User extends MX_Controller
 		} else {
 			$data = array(
 				'message'		=> validation_errors(),
+				'email'			=> $this->input->post('email'),
 				'user'			=> $this->input->post('username'),
 				'password'		=> $this->input->post('password'),
 				'repassword'	=> $this->input->post('repassword')

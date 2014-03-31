@@ -4,7 +4,7 @@
   	<i class="icon-">&#xf0c9; </i></a>
     <ul>
 	<?php if ($this->session->userdata['is_super_admin']): ?>
-			<li><a href="<?=base_url()?>hakakses" title="Hak Akses" >Hak Akses</a></li>
+			<li><a href="<?=base_url()?>manajemen/user" title="Hak Akses" >Manajemen User</a></li>
 			<li><a href="<?=base_url()?>loginas" title="Login As" >Login As</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_admin']): ?>
