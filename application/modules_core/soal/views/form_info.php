@@ -6,9 +6,25 @@
 	$next_thn_ajaran_start	= ((int)$explode_thn_ajaran[0])+1;
 	$next_thn_ajaran_end	= ((int)$explode_thn_ajaran[1])+1;
 	$next_thn_ajaran 		= $next_thn_ajaran_start.'/'.$next_thn_ajaran_end;
-	$prev_thn_ajaran_start	= ((int)$explode_thn_ajaran[0])-1;
-	$prev_thn_ajaran_end	= ((int)$explode_thn_ajaran[1])-1;
-	$prev_thn_ajaran 		= $prev_thn_ajaran_start.'/'.$prev_thn_ajaran_end;
+	// $prev_thn_ajaran_start	= ((int)$explode_thn_ajaran[0])-1;
+	// $prev_thn_ajaran_end	= ((int)$explode_thn_ajaran[1])-1;
+	// $prev_thn_ajaran 		= $prev_thn_ajaran_start.'/'.$prev_thn_ajaran_end;
+
+	if ($form_type == 'edit') {
+		$val_thn_ajaran 	= $info_paket->thn_ajaran;
+		$val_semester	 	= $info_paket->semester;
+		$val_status		 	= $info_paket->status;
+	} 
+	else{
+		if (strtoupper($cur_semester) == 'GENAP') {
+			$val_thn_ajaran	= $next_thn_ajaran;
+			$val_semester	= 'GASAL';
+		}
+		else{
+			$val_thn_ajaran = $cur_thn_ajaran;
+			$val_semester	= 'GENAP';
+		}
+	}
 ?>
 
 <div class="page-header">
@@ -24,55 +40,58 @@
 	<div class="panel-heading green-bg">
 		<h3 class="panel-title">Informasi Paket</h3>
 	</div>
-	<form role="form" id="form-info">
+	<form role="form" id="form-info" class="form-horizontal left-label">
 		<div class="panel-body">
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Tahun Ajaran</label>
-						<div class="controls">
-							<select name="thn_ajaran" class="form-control">
-								<option value="<?php echo $prev_thn_ajaran?>"><?php echo $prev_thn_ajaran?></option>
-								<option value="<?php echo $cur_thn_ajaran?>" selected><?php echo $cur_thn_ajaran?></option>
-								<option value="<?php echo $next_thn_ajaran?>"><?php echo $next_thn_ajaran?></option>
-							</select>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Semester</label>
-						<div class="controls">
-							<select name="semester" class="form-control">
-								<option value="GASAL" <?php echo (strtolower($cur_semester)=="gasal")? 'selected' : ''; ?>>GASAL</option>
-								<option value="GENAP" <?php echo (strtolower($cur_semester)=="genap")? 'selected' : ''; ?>>GENAP</option>
-							</select>
-						</div>
-					</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2">Tahun Ajaran</label>
+				<div class="col-lg-6">
+					<input type="text" name="thn_ajaran" value="<?=$val_thn_ajaran ?>" disabled class="form-control">
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Status</label>
-						<div class="controls">
-							<select name="status" class="form-control">
-								<option value="draft" selected>Draft</option>
-								<option value="final">Final</option>
-							</select>
-						</div>
-					</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2">Semester</label>
+				<div class="col-lg-6">
+					<input type="text" name="semester" value="<?=$val_semester ?>" disabled class="form-control">
 				</div>
 			</div>
+			<?php if ($form_type=='edit'): ?>
+			<div class="form-group">
+				<label class="control-label col-lg-2">Status</label>
+				<div class="col-lg-6">
+					<select name="status" class="form-control">
+						<option value="draft">Draft</option>
+						<option value="public">Public</option>
+						<option value="end">End</option>
+					</select>
+				</div>
+			</div>
+			<?php else: ?>
+				<input type="hidden" name="status" value="draft">
+				<div class="form-group">
+					<label class="control-label col-lg-2">Paket Pertanyaan</label>
+					<div class="col-lg-6">
+						<label class="radio">
+							<input type="radio" checked name="pilih_paket"> Salin paket pertanyaan semester sebelumnya
+						</label>
+						<label class="radio">
+							<input type="radio" name="pilih_paket"> Buat paket pertanyaan baru
+						</label>
+					</div>
+				</div>
+			<?php endif ?>
+
 		</div>
 	</form>
-	<div class="panel-footer">
+	<div class="panel-footer clearfix">
 		<div class="form-group">
-			<a href="javascript:void(0)" class="blue-bg btn" id="save-info">Simpan</a>
-			<div id="save-info-loading">
-				<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
+			<div class="col-lg-12">
+				<a href="javascript:void(0)" class="blue-bg btn" id="save-info">Simpan</a>
+				<div id="save-info-loading">
+					<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
- 
+
+<input type="hidden" value="<?= $form_type ?>" id="form_type">
