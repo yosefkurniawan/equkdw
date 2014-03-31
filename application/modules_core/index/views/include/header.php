@@ -79,7 +79,7 @@
 		<li><a href="http://www.ukdw.ac.id/portal/mahasiswa/universitas">Kembali ke portal UKDW</a></li>
 		<li><a href="<?php echo 'index/logout' ?>">Log Out</a></li>
         <li><a href="#">Edit profile</a></li>
-        <li><a href="#">Account settings</a></li>
+        <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Account settings</a></li>
         <li><a href="#">Sign out</a></li>
       </ul>
     </div>

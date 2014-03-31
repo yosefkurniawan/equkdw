@@ -61,6 +61,37 @@ class Account extends MX_Controller
 		}
 		redirect('account/forgot_password');
 	}
+
+	// pengaturan akun
+	public function pengaturan_akun() {
+		$data['title'] 		= 'Pengaturan Akun';
+		$data['content'] 	= 'account/pengaturan_akun';
+		$this->load->view('index/render_layout',$data);
+	}
+
+	// proses pengaturan akun
+	public function proses_pengaturan_akun() {
+		// form validation
+		$this->form_validation->set_rules('user', '', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('oldpassword', 'Password Lama', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('repassword', 'Konfirmasi Password', 'required|trim|xss_clean|matches[password]');
+
+		if ($this->form_validation->run() == TRUE) {
+			// cek username dan password
+			if ($this->m_account->validate_password(array($this->session->userdata('username'), md5($this->input->post('oldpassword'))))) {
+				// update password
+				$this->m_account->edit_password(array(md5($this->input->post('password')), $this->session->userdata('username')));
+
+				$this->session->set_flashdata('message', 'Password berhasil diperbaharui');
+			} else {
+				$this->session->set_flashdata('message', 'Password lama Anda salah');
+			}
+		} else {
+			$this->session->set_flashdata('message', validation_errors());
+		}
+		redirect('account/pengaturan_akun/');
+	}
 }
 
 /* End of file admin.php */
