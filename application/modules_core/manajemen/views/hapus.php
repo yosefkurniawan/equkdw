@@ -2,6 +2,9 @@
 	<h1>Tambah User</h1>
 </div>
 <div class="panel colored">
+	<div class="panel-heading green-bg">
+		<h3 class="panel-title">Informasi User</h3>
+	</div>
 	<?php echo $this->session->userdata('message'); ?>
 	<form method="POST" action="<?php echo base_url(); ?>manajemen/user/tambah_proses">
 		<input type="hidden" name="user" value="<?php echo $this->session->userdata('username'); ?>">
