@@ -19,22 +19,42 @@
 				</div>
 				<div class="col-md-3">
 					<div class="form-group">
+						<?php
+							if (isset($list_jadwal) && !empty($list_jadwal)) {
+								$tgl_mulai 		= $list_jadwal[$key]['tgl_mulai'];
+								$tgl_mulai_expl = explode('-', $tgl_mulai);
+								$tgl_mulai 		= $tgl_mulai_expl[2].'/'.$tgl_mulai_expl[1].'/'.$tgl_mulai_expl[0];
+							}
+							else
+								$tgl_mulai 		= '';
+						?>
 						<div class="input-group">
-							<input type="text" class="form-control tgl_mulai" name="tgl_mulai" id="paket-datepicker-start-<?=$key+1?>">
+							<input type="text" class="form-control tgl_mulai" name="tgl_mulai" id="paket-datepicker-start-<?=$key+1?>" value="<?=$tgl_mulai ?>">
 							<span class="input-group-addon  accordion-toggle">
 								<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
 							</span>
 						</div>
+						<span class="jadwal-tglmulai-error-notif"></span>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="form-group">
-						<div class="input-group">
-							<input type="text" class="form-control tgl_akhir" name="tgl_akhir" id="paket-datepicker-end-<?=$key+1?>">
+						<?php
+							if (isset($list_jadwal) && !empty($list_jadwal)) {
+								$tgl_akhir 		= $list_jadwal[$key]['tgl_akhir'];
+								$tgl_akhir_expl = explode('-', $tgl_akhir);
+								$tgl_akhir 		= $tgl_akhir_expl[2].'/'.$tgl_akhir_expl[1].'/'.$tgl_akhir_expl[0];
+							}
+							else
+								$tgl_akhir 		= '';
+						?>
+						<div class="input-group">	
+							<input type="text" class="form-control tgl_akhir" name="tgl_akhir" id="paket-datepicker-end-<?=$key+1?>" value="<?=$tgl_akhir ?>">
 							<span class="input-group-addon  accordion-toggle">
 								<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
 							</span>
 						</div>
+						<span class="jadwal-tglakhir-error-notif"></span>
 					</div>
 				</div>
 			</form>
