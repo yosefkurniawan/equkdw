@@ -1,6 +1,8 @@
 <h1>Periode dan Soal</h1>
 
-<a href="<?=base_url() ?>soal/baru" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Buat Paket Baru</a>
+<?php if ($allowCreateNew): ?>
+	<a href="<?=base_url() ?>soal/baru" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Buat Paket Baru</a>
+<?php endif ?>
 
 <table class="metro-table">
 	<thead>
@@ -18,7 +20,11 @@
 		    <td><?php echo $paket['id_paket'] ?></td>
 		    <td><?php echo strtoupper($paket['semester']).' '.$paket['thn_ajaran'] ?></td>
 		    <td><?php echo strtoupper($paket['status']) ?></td>
-		    <td><a href="soal/edit/<?php echo $paket['id_paket'] ?>" class="btn btn-med yellow-bg"><i class="icon-">&#xf0ad;</i></a></td>
+		    <?php if (strtoupper($paket['status']) == 'DRAFT'): ?>
+		    	<td><a href="soal/edit/<?php echo $paket['id_paket'] ?>" class="btn btn-med yellow-bg"><i class="icon-">&#xf0ad;</i></a></td>
+		    <?php else: ?>
+		    	<td><a href="soal/view/<?php echo $paket['id_paket'] ?>" class="btn btn-med green-bg"><i class="icon-eye-open"></i></a></td>
+		    <?php endif ?>
 		  </tr>
 		<?php endforeach ?>
 	</tbody>

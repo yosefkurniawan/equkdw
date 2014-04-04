@@ -27,6 +27,8 @@
 	}
 ?>
 
+<input type="hidden" value="<?= $form_type ?>" id="form_type">
+
 <div class="page-header">
 	<h1>Pengaturan Paket</h1>
 </div>
@@ -41,17 +43,20 @@
 		<h3 class="panel-title">Informasi Paket</h3>
 	</div>
 	<form role="form" id="form-info" class="form-horizontal left-label">
+		<?php if ($form_type=='edit'): ?>
+			<input type="hidden" value="<?= $kode ?>" name="id_paket">
+		<?php endif ?>
 		<div class="panel-body">
 			<div class="form-group">
 				<label class="control-label col-lg-2">Tahun Ajaran</label>
 				<div class="col-lg-6">
-					<input type="text" name="thn_ajaran" value="<?=$val_thn_ajaran ?>" disabled class="form-control">
+					<input type="text" name="thn_ajaran" value="<?=$val_thn_ajaran ?>" disabled class="form-control" id="thn_ajaran">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-lg-2">Semester</label>
 				<div class="col-lg-6">
-					<input type="text" name="semester" value="<?=$val_semester ?>" disabled class="form-control">
+					<input type="text" name="semester" value="<?=$val_semester ?>" disabled class="form-control" id="semester">
 				</div>
 			</div>
 			<?php if ($form_type=='edit'): ?>
@@ -61,25 +66,25 @@
 					<select name="status" class="form-control">
 						<option value="draft">Draft</option>
 						<option value="public">Public</option>
-						<option value="end">End</option>
 					</select>
 				</div>
 			</div>
 			<?php else: ?>
 				<input type="hidden" name="status" value="draft">
-				<div class="form-group">
-					<label class="control-label col-lg-2">Paket Pertanyaan</label>
-					<div class="col-lg-6">
-						<label class="radio">
-							<input type="radio" checked name="pilih_paket"> Salin paket pertanyaan semester sebelumnya
-						</label>
-						<label class="radio">
-							<input type="radio" name="pilih_paket"> Buat paket pertanyaan baru
-						</label>
-					</div>
-				</div>
 			<?php endif ?>
-
+			<?php if ($form_type=='new'): ?>
+			<div class="form-group">
+				<label class="control-label col-lg-2">Paket Pertanyaan</label>
+				<div class="col-lg-6">
+					<label class="radio">
+						<input type="radio" checked name="pilih_paket"> Salin paket pertanyaan semester sebelumnya
+					</label>
+					<label class="radio">
+						<input type="radio" name="pilih_paket"> Buat paket pertanyaan baru
+					</label>
+				</div>
+			</div>
+			<?php endif ?>
 		</div>
 	</form>
 	<div class="panel-footer clearfix">
@@ -93,5 +98,3 @@
 		</div>
 	</div>
 </div>
-
-<input type="hidden" value="<?= $form_type ?>" id="form_type">

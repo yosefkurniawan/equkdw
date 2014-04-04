@@ -20,7 +20,11 @@
 								<label>Aspek</label>
 								<select name="aspek" class="form-control aspek">
 									<?php foreach ($list_aspek as $aspek) {
-										echo "<option value='".$aspek['id_aspek']."'>".$aspek['keterangan']."</option>";
+										if (isset($list_pertanyaan[$i-1]['id_aspek']) && $list_pertanyaan[$i-1]['id_aspek']==$aspek['id_aspek']) 
+											$selected = 'selected';
+										else
+											$selected = '';
+										echo "<option value='".$aspek['id_aspek']."' $selected>".$aspek['keterangan']."</option>";
 									} ?>
 								</select>
 							</div>
@@ -28,7 +32,8 @@
 						<div class="col-md-9">
 							<div class="form-group">
 								<label>Pertanyaan</label>
-								<textarea class="form-control isi_pertanyaan" name="isi_pertanyaan"></textarea>
+								<textarea class="form-control isi_pertanyaan" name="isi_pertanyaan"><?=(isset($list_pertanyaan[$i-1]['isi_pertanyaan']))? $list_pertanyaan[$i-1]['isi_pertanyaan'] : '' ?></textarea>
+								<span class="pertanyaan-error-notif"></span>
 							</div>
 						</div>
 					</div>

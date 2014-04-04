@@ -1,4 +1,4 @@
-/* LEFT BAR */
+/* LEFT BAR NEW */
 #step li{
 	list-style: none;
 	padding: 20px 0;
@@ -16,6 +16,30 @@
 	margin-right: 10px;
 	margin-top: -5px;
 	border: #AFAFAF solid 1px;
+	border-radius: 1em !important;
+	width: 30px;
+	height: 30px;
+	display: block;
+	float: left;
+	text-align: center;
+	padding-top: 3px;
+}
+
+/* LEFT BAR EDIT */
+#nav li{
+	list-style: none;
+	padding: 20px 0;
+	height: 20px;
+	color: rgb(48, 170, 97);
+	vertical-align: middle;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#nav li span{
+	margin-right: 10px;
+	margin-top: -5px;
+	border: solid 2px rgb(48, 170, 97);
 	border-radius: 1em !important;
 	width: 30px;
 	height: 30px;
@@ -82,6 +106,15 @@ ul#sortable li.clone
 	margin: auto;
 	vertical-align: middle;
 	margin-top: 26px;
+}
+
+#list-pertanyaan .form-group textarea {
+	resize: none;
+}
+
+.pertanyaan-error-notif, .jadwal-tglmulai-error-notif, .jadwal-tglakhir-error-notif{
+	color: rgb(231, 49, 15);
+	display: none;
 }
 
 /* ---------------  <= 991 px layout -------------------- */
