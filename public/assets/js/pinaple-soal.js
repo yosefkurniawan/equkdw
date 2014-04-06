@@ -163,6 +163,8 @@ function save_new_pertanyaan(){
 	// validate
 	var is_scrolled = false;
 	$('.isi_pertanyaan').each(function(){
+		$(this).css('border','1px solid #ccc');
+		$(this).next('.pertanyaan-error-notif').fadeOut();
 		if ($(this).val()=='') {
 			$(this).css('border','1px solid rgb(231, 49, 15)');
 			$(this).next('.pertanyaan-error-notif').fadeIn();
@@ -174,11 +176,12 @@ function save_new_pertanyaan(){
 			    $(this).focus();
 				is_scrolled = true;
 			}
+			$('#save-pertanyaan-loading').css('display', 'none');
+			$('#save-pertanyaan').show();
+			is_validate = false;
 		}
-		$('#save-pertanyaan-loading').css('display', 'none');
-		$('#save-pertanyaan').show();
-		is_validate = false;
 	});
+	
 
 	if (is_validate) {
 		// Get data of each form
@@ -241,6 +244,8 @@ function save_edit_pertanyaan(){
 	// validate
 	var is_scrolled = false;
 	$('.isi_pertanyaan').each(function(){
+		$(this).css('border','1px solid #ccc');
+		$(this).next('.pertanyaan-error-notif').fadeOut();
 		if ($(this).val()=='') {
 			$(this).css('border','1px solid rgb(231, 49, 15)');
 			$(this).next('.pertanyaan-error-notif').fadeIn();
@@ -252,10 +257,10 @@ function save_edit_pertanyaan(){
 			    $(this).focus();
 				is_scrolled = true;
 			}
+			$('#save-pertanyaan-loading').css('display', 'none');
+			$('#save-pertanyaan').show();
+			is_validate = false;
 		}
-		$('#save-pertanyaan-loading').css('display', 'none');
-		$('#save-pertanyaan').show();
-		is_validate = false;
 	});
 
 	if (is_validate) {
@@ -310,6 +315,8 @@ function save_new_jadwal(){
 	// validate
 	var is_scrolled = false;
 	$('.tgl_mulai').each(function(){
+		$(this).css('border','1px solid #ccc');
+		$(this).parent().next('.jadwal-tglmulai-error-notif').fadeOut();
 		if ($(this).val()=='') {
 			$(this).css('border','1px solid rgb(231, 49, 15)');
 			$(this).parent().next('.jadwal-tglmulai-error-notif').fadeIn();
@@ -321,12 +328,14 @@ function save_new_jadwal(){
 			    $(this).focus();
 				is_scrolled = true;
 			}
+			$('#save-jadwal-loading').css('display', 'none');
+			$('#save-jadwal').show();
+			is_validate = false;
 		}
-		$('#save-jadwal-loading').css('display', 'none');
-		$('#save-jadwal').show();
-		is_validate = false;
 	});
 	$('.tgl_akhir').each(function(){
+		$(this).css('border','1px solid #ccc');
+		$(this).parent().next('.jadwal-tglakhir-error-notif').fadeOut();
 		if ($(this).val()=='') {
 			$(this).css('border','1px solid rgb(231, 49, 15)');
 			$(this).parent().next('.jadwal-tglakhir-error-notif').fadeIn();
@@ -338,10 +347,10 @@ function save_new_jadwal(){
 			    $(this).focus();
 				is_scrolled = true;
 			}
+			$('#save-jadwal-loading').css('display', 'none');
+			$('#save-jadwal').show();
+			is_validate = false;
 		}
-		$('#save-jadwal-loading').css('display', 'none');
-		$('#save-jadwal').show();
-		is_validate = false;
 	});
 
 	if (is_validate) {
@@ -399,6 +408,8 @@ function save_edit_jadwal(){
 	// validate
 	var is_scrolled = false;
 	$('.tgl_mulai').each(function(){
+		$(this).css('border','1px solid #ccc');
+		$(this).parent().next('.jadwal-tglmulai-error-notif').fadeOut();
 		if ($(this).val()=='') {
 			$(this).css('border','1px solid rgb(231, 49, 15)');
 			$(this).parent().next('.jadwal-tglmulai-error-notif').fadeIn();
@@ -410,12 +421,14 @@ function save_edit_jadwal(){
 			    $(this).focus();
 				is_scrolled = true;
 			}
+			$('#save-jadwal-loading').css('display', 'none');
+			$('#save-jadwal').show();
+			is_validate = false;
 		}
-		$('#save-jadwal-loading').css('display', 'none');
-		$('#save-jadwal').show();
-		is_validate = false;
 	});
 	$('.tgl_akhir').each(function(){
+		$(this).css('border','1px solid #ccc');
+		$(this).parent().next('.jadwal-tglakhir-error-notif').fadeOut();
 		if ($(this).val()=='') {
 			$(this).css('border','1px solid rgb(231, 49, 15)');
 			$(this).parent().next('.jadwal-tglakhir-error-notif').fadeIn();
@@ -427,10 +440,10 @@ function save_edit_jadwal(){
 			    $(this).focus();
 				is_scrolled = true;
 			}
+			$('#save-jadwal-loading').css('display', 'none');
+			$('#save-jadwal').show();
+			is_validate = false;
 		}
-		$('#save-jadwal-loading').css('display', 'none');
-		$('#save-jadwal').show();
-		is_validate = false;
 	});
 
 	if (is_validate) {
