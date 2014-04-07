@@ -73,8 +73,10 @@
       </a>
       <ul class="dropdown-menu pull-right">
     		<li><a href="http://www.ukdw.ac.id/portal/">Kembali ke portal UKDW</a></li>
-        <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
+        <?php if ($this->session->userdata['is_admin'] || $this->session->userdata['is_super_admin']): ?>
           <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Ubah Password</a></li>
+        <?php endif ?>
+        <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
           <li><a href="<?php echo base_url(); ?>index/logout">Log Out</a></li>
         <?php endif ?>
       </ul>
