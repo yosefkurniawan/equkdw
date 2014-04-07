@@ -14,7 +14,7 @@ class Soal extends CI_Controller {
 		# catch current page value of pagination
 		$page 	= $this->uri->segment(3);
 		(empty($page))? $page = 0 : $page = $page;
-		$limit	= 5;
+		$limit	= 20;
 
 		$list_paket			= $this->m_soal->getPaketSoal($page,$limit);
 		$allow_create_new 	= $this->m_soal->allowCreateNewPaket();
