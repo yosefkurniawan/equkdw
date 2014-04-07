@@ -2,19 +2,34 @@
 
 class M_soal extends CI_Model {
 
-	function getPaketSoal($kode=NULL){
-		if ($kode != NULL) {
-			$sql	= "SELECT * FROM eva_paket WHERE id_paket='$kode'";
-		}else{
-			$sql	= "SELECT * FROM eva_paket ORDER BY id_paket DESC";
-		}
+	function getRowsPaketSoal () {
+		$sql = "SELECT * FROM eva_paket";
+		$sql_result = $this->db->query($sql);
+
+		$rows = $sql_result->num_rows();
+
+		return $rows;
+	}
+
+	function getPaketSoal($page,$limit){
+		$sql	= "SELECT * FROM eva_paket ORDER BY id_paket DESC LIMIT $page,$limit";
 		$sql_result = $this->db->query($sql);
 
 		$result = array();
-		if ($sql_result->num_rows() == 1) {
-			$result = $sql_result->row();
-		}elseif($sql_result->num_rows() > 1){
+		if($sql_result->num_rows() > 1){
 			$result = $sql_result->result_array();
+		}
+
+		return $result;
+	}
+
+	function getPaketSoalByKode($kode){
+		$sql	= "SELECT * FROM eva_paket WHERE id_paket='$kode'";
+		$sql_result = $this->db->query($sql);
+
+		$result = array();
+		if ($sql_result->num_rows() > 0) {
+			$result = $sql_result->row();
 		}
 
 		return $result;

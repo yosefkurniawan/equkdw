@@ -11,8 +11,36 @@ class Soal extends CI_Controller {
 
 	public function index()
 	{
-		$list_paket			= $this->m_soal->getPaketSoal();
+		# catch current page value of pagination
+		$page 	= $this->uri->segment(3);
+		(empty($page))? $page = 0 : $page = $page;
+		$limit	= 5;
+
+		$list_paket			= $this->m_soal->getPaketSoal($page,$limit);
 		$allow_create_new 	= $this->m_soal->allowCreateNewPaket();
+
+
+		# set pagination
+		$config['full_tag_open'] = '<ul class="pagination pull-right hidden-xs">';
+		$config['full_tag_close'] = '</ul>';
+		$config['first_tag_open'] = '<li>';
+		$config['first_tag_close'] = '</li>';
+		$config['last_tag_open'] = '<li>';
+		$config['last_tag_close'] = '</li>';
+		$config['next_link'] = '<i class="icon-">&#xf105;</i>';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['prev_link'] = '<i class="icon-">&#xf104;</i>';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li><span class="cur_page">';
+		$config['cur_tag_close'] = '</span></li>';
+  		$config['num_tag_open'] = '<li>';
+  		$config['num_tag_close'] = '</li>';
+		$config['base_url'] 	= $this->config->base_url().'soal/index/';
+		$config['total_rows'] 	= $this->m_soal->getRowsPaketSoal();
+		$config['per_page'] 	= $limit; 
+		$this->pagination->initialize($config); 
 
 		/* -- Render Layout -- */
 		$data['list_paket']	= $list_paket;
@@ -24,7 +52,7 @@ class Soal extends CI_Controller {
 
 	public function edit($kode)
 	{
-		$info_paket 		= $this->m_soal->getPaketSoal($kode);
+		$info_paket 		= $this->m_soal->getPaketSoalByKode($kode);
 		$list_pertanyaan	= $this->m_soal->getPertanyaanByKode($kode);
 		$list_jadwal		= $this->m_soal->getjadwalByKode($kode);
 

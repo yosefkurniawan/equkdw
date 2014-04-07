@@ -7,8 +7,7 @@
 <table class="metro-table">
 	<thead>
 	  <tr>
-	    <td width="32%">Kode</td>
-	    <td width="32%">Periode</td>
+	    <td width="64%">Periode</td>
 	    <td width="32%">Status</td>
 	    <td width="4%">Action</td>
 	    <!-- <td class="hidden-xs">Category</td> -->
@@ -17,7 +16,6 @@
 	<tbody>
 		<?php foreach ($list_paket as $paket): ?>
 		  <tr>
-		    <td><?php echo $paket['id_paket'] ?></td>
 		    <td><?php echo strtoupper($paket['semester']).' '.$paket['thn_ajaran'] ?></td>
 		    <td><?php echo strtoupper($paket['status']) ?></td>
 		    <?php if (strtoupper($paket['status']) == 'DRAFT'): ?>
@@ -30,16 +28,9 @@
 	</tbody>
 	<tfoot>
 	  <tr>
-	    <td colspan="4"><ul class="pagination pull-right hidden-xs">
-	        <li><a href="#"><i class="icon-">&#xf104;</i></a></li>
-	        <li><a href="#">1</a></li>
-	        <li><a href="#">2</a></li>
-	        <li><a href="#">3</a></li>
-	        <li><a href="#">4</a></li>
-	        <li>...</li>
-	        <li><a href="#">17</a></li>
-	        <li><a href="#"><i class="icon-">&#xf105;</i></a></li>
-	      </ul></td>
+	    <td colspan="2">
+	      <?php echo $this->pagination->create_links(); ?>
+	  	</td>
 	  </tr>
 	</tfoot>
 </table>

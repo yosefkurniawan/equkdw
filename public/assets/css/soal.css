@@ -116,6 +116,20 @@ ul#sortable li.clone
 	color: rgb(231, 49, 15);
 	display: none;
 }
+.pagination .cur_page {
+	border: none;
+	padding: 2px 0;
+	width: 25px;
+	height: 25px;
+	font-weight: bold;
+	text-align: center;
+	z-index: 0;
+	margin: 0;
+}
+.pagination .cur_page:hover {
+	border: none;
+	background: none;
+}
 
 /* ---------------  <= 991 px layout -------------------- */
 @media only screen and (max-width: 991px) {
