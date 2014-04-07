@@ -45,42 +45,38 @@
   <div class="container-fluid clearfix"><a href="index.html" title="eQuiz" class="pull-left"><img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz"></a>
 
 
-    <div class="user pull-right"><a href="#" title="User Options" data-toggle="dropdown" class="pull-right">
-      <div class="pull-left">
-        <h5><?=$this->session->userdata['nama'];?></h5>
-        <p>
-  <?php if ($this->session->userdata['is_super_admin']): ?>
-    Superadmin
-  <?php endif; ?>
-  <?php if ($this->session->userdata['is_admin']): ?>
-    Admin
-  <?php endif; ?>
-  <?php if ($this->session->userdata['is_kepala_unit']) : ?>
-    
-      Kepala Unit
-    
-      <?php if ($this->session->userdata['status'] == 'Dosen'): ?>
-        dan Dosen
-      <?php endif ?>
-
-  <?php elseif ($this->session->userdata['status'] == 'Dosen'): ?>
-  Dosen
-  <?php endif ?>
-
-
-  <?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
-  Mahasiswa
-  <?php endif ?>
-</p>
-      </div>
-      <div class="pull-right"><img src="<?=base_url()?>public/assets/images/user_pic/user.jpg" title="User Pic" alt="User Pic"></div>
+    <div class="user pull-right">
+      <a href="#" title="User Options" data-toggle="dropdown" class="pull-right">
+        <div class="pull-left">
+          <h5><?=$this->session->userdata['nama'];?></h5>
+          <p>
+          <?php if ($this->session->userdata['is_super_admin']): ?>
+            Superadmin
+          <?php endif; ?>
+          <?php if ($this->session->userdata['is_admin']): ?>
+            Admin
+          <?php endif; ?>
+          <?php if ($this->session->userdata['is_kepala_unit']) : ?>          
+              Kepala Unit
+              <?php if ($this->session->userdata['status'] == 'Dosen'): ?>
+                dan Dosen
+              <?php endif ?>
+          <?php elseif ($this->session->userdata['status'] == 'Dosen'): ?>
+          Dosen
+          <?php endif ?>
+          <?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
+          Mahasiswa
+          <?php endif ?>
+        </p>
+        </div>
+        <div class="pull-right"><img src="<?=base_url()?>public/assets/images/user_pic/user.jpg" title="User Pic" alt="User Pic"></div>
       </a>
       <ul class="dropdown-menu pull-right">
-		<li><a href="http://www.ukdw.ac.id/portal/mahasiswa/universitas">Kembali ke portal UKDW</a></li>
-		<li><a href="<?php echo 'index/logout' ?>">Log Out</a></li>
-        <li><a href="#">Edit profile</a></li>
-        <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Account settings</a></li>
-        <li><a href="#">Sign out</a></li>
+    		<li><a href="http://www.ukdw.ac.id/portal/">Kembali ke portal UKDW</a></li>
+        <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
+          <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Ubah Password</a></li>
+          <li><a href="<?php echo base_url(); ?>index/logout">Log Out</a></li>
+        <?php endif ?>
       </ul>
     </div>
   </div>
