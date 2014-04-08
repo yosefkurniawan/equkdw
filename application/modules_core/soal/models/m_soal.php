@@ -195,6 +195,29 @@ class M_soal extends CI_Model {
 		}
 		return $result;
 	}
+
+	# This function used for check and update status of on going paket
+	function updateStatusLastPaket(){
+		# check paket with status public
+		$sql_public = "SELECT * FROM eva_paket WHERE UPPER(`status`)=UPPER('public')";
+		$sql_public_result = $this->db->query($sql_public);
+		if ($sql_public_result->num_rows() > 0) {
+			$public_paket = $sql_public_result->result_array();
+			# check every public paket
+			foreach ($public_paket as $key => $paket) {
+				# get latest period
+				$id_paket = $paket['id_paket'];
+				$sql_last_period 	= "SELECT MAX(`tgl_akhir`) as 'last_period' FROM eva_deadline WHERE `id_paket`='$id_paket'";
+				$last_period 		= strtotime($this->db->query($sql_last_period)->row()->last_period);
+				$today 				= strtotime(date('Y-m-d'));
+
+				if ($today > $last_period) {
+					$sql_update = "UPDATE eva_paket SET status = 'end' WHERE id_paket = '$id_paket'";
+					$update 	= $this->db->query($sql_update);
+				}
+			}
+		}
+	}
 }
 
 /* End of file m_soal.php */

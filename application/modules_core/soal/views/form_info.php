@@ -87,14 +87,16 @@
 			<?php endif ?>
 		</div>
 	</form>
-	<div class="panel-footer clearfix">
-		<div class="form-group">
-			<div class="col-lg-12">
-				<a href="javascript:void(0)" class="blue-bg btn" id="save-info">Simpan</a>
-				<div id="save-info-loading">
-					<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
+	<?php if ($form_type != "view"): ?>
+		<div class="panel-footer clearfix">
+			<div class="form-group">
+				<div class="col-lg-12">
+					<a href="javascript:void(0)" class="blue-bg btn" id="save-info">Simpan</a>
+					<div id="save-info-loading">
+						<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	<?php endif ?>
 </div>
