@@ -5,7 +5,11 @@ class Dashboard extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('m_mahasiswa');
+		if ($this->session->userdata('status') != 'Mahasiswa') {
+			redirect('index/index');
+		}
+			$this->load->model('m_mahasiswa');
+
 	}
 
 	//menampilkan halaman KRS
