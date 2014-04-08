@@ -16,9 +16,9 @@ class Soal extends CI_Controller {
 		(empty($page))? $page = 0 : $page = $page;
 		$limit	= 20;
 
+		$update_status_last_paket = $this->m_soal->updateStatusLastPaket();
 		$list_paket			= $this->m_soal->getPaketSoal($page,$limit);
 		$allow_create_new 	= $this->m_soal->allowCreateNewPaket();
-
 
 		# set pagination
 		$config['full_tag_open'] = '<ul class="pagination pull-right hidden-xs">';
@@ -153,6 +153,31 @@ class Soal extends CI_Controller {
 			$tgl_akhir		= $value['tgl_akhir'];
 			$result 		= $this->m_soal->save_edit_jadwal($id_paket, $id_unit, $tgl_mulai, $tgl_akhir);
 		}
+	}
+
+	public function view($kode){
+		$info_paket 		= $this->m_soal->getPaketSoalByKode($kode);
+		$list_pertanyaan	= $this->m_soal->getPertanyaanByKode($kode);
+		$list_jadwal		= $this->m_soal->getjadwalByKode($kode);
+		$list_aspek 		= $this->m_soal->getAspek();			
+		$list_prodi 		= $this->m_soal->getProdi();			
+		$last_periode		= $this->m_general->getLastPeriode();
+
+		/* -- Render Layout -- */
+		$data['form_type']			= 'view';
+		$data['left_bar']			= 'soal/left_bar_edit';
+		$data['info_paket']			= $info_paket;
+		$data['list_pertanyaan']	= $list_pertanyaan;
+		$data['list_jadwal']		= $list_jadwal;
+		$data['kode']			= $kode;
+		$data['last_periode']	= $last_periode;
+		$data['list_aspek']		= $list_aspek;
+		$data['list_prodi']		= $list_prodi;
+		$data['title'] 		= 'Edit Paket Soal';
+		$data['content'][] 	= 'soal/form_info';
+		$data['content'][] 	= 'soal/form_pertanyaan';
+		$data['content'][] 	= 'soal/form_jadwal';
+		$this->load->view('index/render_layout',$data);
 	}
 
 }

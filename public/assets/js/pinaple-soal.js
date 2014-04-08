@@ -9,6 +9,10 @@ $(document).ready(function(){
 
 	// Set Form pertanyaan as sortable list
 	$('.sortable').sortable();
+	// Check whether view mode or not
+	if (form_type=="view") {
+		$(":input").attr("disabled","disabled");
+	};
 
 	// Init
 	if (form_type=='new') {
