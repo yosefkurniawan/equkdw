@@ -10,11 +10,11 @@ class Dashboard extends CI_Controller {
 
 	//menampilkan halaman KRS
 	public function index()
-	{
-		// $list_krs			= $this->m_->getKRS();
+	{		
+		$list_krs			= $this->m_mahasiswa->getKRS($this->session->userdata('username'));
 
 		/* -- Render Layout -- */
-		// $data['list_paket']	= $list_paket;
+		$data['list_krs']	= $list_krs;
 		$data['title'] 		= 'Dashboard Daftar Kuisioner';
 		$data['content'] 	= 'mahasiswa/dashboard';
 		$this->load->view('index/render_layout',$data);				
