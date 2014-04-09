@@ -36,11 +36,13 @@
 				</td>
 				<td>
 					<!-- HANYA DITAMPILKAN APABILA : EVA STATUS = 1 , JADWAL PENGISIAN , DAN BELUM MENGISI -->
-					<a href="<?=base_url()?>mahasiswa/kuisioner/<?=$course->id_kelasb?>" class="purple-bg btn btn-xs showcase-btn"><i class="icon-plus-sign"></i></a>	
+					<a href="<?=base_url()?>mahasiswa/kuisioner/index/<?=$course->id_kelasb?>" class="purple-bg btn btn-xs showcase-btn"><i class="icon-plus-sign"></i></a>	
 			</td>
 			</tr>
 			<?php $x++; ?>
 		<?php endforeach ?>
+			</tbody>
+		</table>
 </diV>
 
 
