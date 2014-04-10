@@ -77,10 +77,10 @@
 				<label class="control-label col-lg-2">Paket Pertanyaan</label>
 				<div class="col-lg-6">
 					<label class="radio">
-						<input type="radio" checked name="pilih_paket"> Salin paket pertanyaan semester sebelumnya
+						<input type="radio" checked name="pilih_paket" value='salin'> Salin paket pertanyaan semester sebelumnya
 					</label>
 					<label class="radio">
-						<input type="radio" name="pilih_paket"> Buat paket pertanyaan baru
+						<input type="radio" name="pilih_paket" value='baru'> Buat paket pertanyaan baru
 					</label>
 				</div>
 			</div>

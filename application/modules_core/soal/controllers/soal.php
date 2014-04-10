@@ -180,6 +180,10 @@ class Soal extends CI_Controller {
 		$this->load->view('index/render_layout',$data);
 	}
 
+	public function getLatestQuestions(){
+		$result = $this->m_soal->getLatestQuestions();
+		print_r(json_encode($result));
+	}
 }
 
 /* End of file soal.php */
