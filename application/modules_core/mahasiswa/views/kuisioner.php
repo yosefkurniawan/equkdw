@@ -20,12 +20,16 @@
 
 <br><br>
 
+<?php if (validation_errors() != NULL) : ?>
+	<div class="alert alert-danger"><strong>Attention Message</strong> : <br> <?php echo validation_errors(); ?> </div>
+<?php endif; ?>
+
 <div class="row">
 	<div class="panel colored col-md-12">
 		<div class="panel-heading blue-bg">
 			<h3 class="panel-title">Form Kuisioner Evaluasi Dosen</h3>
 		</div>
-		<form class="form-horizontal form-bordered left-label" id="basic-validation" name="basic-validation" method="POST" action="<?php echo base_url(); ?>mahasiswa/kuisioner/submit_kuisioner">
+		<form class="form-horizontal form-bordered left-label" id="basic-validation" name="basic-validation" method="POST" action="<?php echo base_url(); ?>mahasiswa/kuisioner/jawab/<?=$row_matakuliah->id_kelasb?>">
 		
 		<!-- HIDDEN VALUE -->
 		<?php foreach ($list_dosen as $dosen) : ?>
@@ -65,7 +69,7 @@
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" checked>
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" >
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" 
@@ -97,14 +101,14 @@
 					<label class="col-lg-2 control-label">Masukan Dosen</label>
 					<div class="col-lg-10">
 						<textarea class="form-control" name="input[<?=$dosen->nik?>][masukan_dosen]"></textarea>
-						<span class="help-block">Masukan yang berhubungan dengan dosen misal : cara mengajar</span>
+						<span class="help-block">Masukan yang berhubungan dengan dosen misal : cara mengajar. Berikan tanda "-" bila tidak ada</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Masukan Materi</label>
 					<div class="col-lg-10">
 						<textarea class="form-control" name="input[<?=$dosen->nik?>][masukan_matkul]"></textarea>
-						<span class="help-block">Masukan yang berhubungan dengan materi yang diberikan misal : kurang update, dsb</span>
+						<span class="help-block">Masukan yang berhubungan dengan materi yang diberikan misal : kurang update, dsb. Berikan tanda "-" bila tidak ada</span>
 					</div>
 				</div>
 				<?php endforeach ?>				

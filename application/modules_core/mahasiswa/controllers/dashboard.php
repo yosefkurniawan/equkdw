@@ -16,8 +16,8 @@ class Dashboard extends CI_Controller {
 	public function index()
 	{		
 		$list_krs			= $this->m_mahasiswa->getKRS($this->session->userdata('username'));
-
 		/* -- Render Layout -- */
+		$data['message']	= $this->session->flashdata('message');
 		$data['list_krs']	= $list_krs;
 		$data['title'] 		= 'Dashboard Daftar Kuisioner';
 		$data['content'] 	= 'mahasiswa/dashboard';

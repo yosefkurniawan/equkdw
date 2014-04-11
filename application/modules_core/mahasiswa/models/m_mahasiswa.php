@@ -25,9 +25,13 @@ class M_mahasiswa extends CI_Model {
 		 					SEPARATOR ';')
 		 					),
 		 					'-'
-		 				) AS jawaban
-						FROM (ec_kelas_buka k LEFT JOIN eva_jawaban_paket j ON k.id_kelasb = j.id_kelasb AND j.nim = '$nim'), ec_matkul m, user_dosen_karyawan d, ec_pengajar p, ec_peserta s
+		 				) AS jawaban,
+						r.unit AS prodi, dd.tgl_mulai AS mulai, dd.tgl_akhir AS akhir
+						FROM (ec_kelas_buka k LEFT JOIN eva_jawaban_paket j ON k.id_kelasb = j.id_kelasb AND j.nim = '$nim'), ec_matkul m, 
+							user_dosen_karyawan d, ec_pengajar p, ec_peserta s, eva_paket pkt, eva_deadline dd, ref_unit r 
 						WHERE k.kode = m.kode
+						AND pkt.id_paket = dd.id_paket 
+						AND d.id_unit = r.id_unit
 						AND k.id_kelasb = p.id_kelasb
 						AND k.aktif = 1	
 						AND p.nik = d.nik
@@ -43,6 +47,8 @@ class M_mahasiswa extends CI_Model {
 						";
 
         $query = $this->db->query($sql);
+
+		// echo '<pre>'; print_r($query->result()); die;
 
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -105,9 +111,5 @@ class M_mahasiswa extends CI_Model {
             return array();
         }
 	}
-
-
-
-
 }
 

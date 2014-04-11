@@ -1,8 +1,13 @@
+<?php $today = date("Y-m-d"); ?>
 <div class="col-md-12">
 
 <h1>Dashboard Daftar Kuisioner</h1>
 <br>
 <!-- <a href="<?php echo base_url(); ?>manajemen/user/tambah" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Tambah User Baru</a> -->
+
+<?php if($message != NULL || $message !='') : ?>
+<div class="alert alert-info"> Info : <?php echo $message; ?> </div>
+<?php endif ?>
 
 <div class="panel colored">
 	<div class="panel-heading red-bg">
@@ -13,10 +18,11 @@
 			<thead>
 				<tr>
 				    <td width="4%">No</td>
-				    <td width="41%">Matakuliah</td>
-				    <td width="10%">Grup</td>
-				    <td width="30%">Status</td>
-				    <td width="15%">Action</td>
+				    <td width="36%">Matakuliah</td>
+				    <td width="15%">Grup</td>
+				    <td width="10%">Status</td>
+				    <td width="20%">Jadwal Pengisian</td>
+				    <td width="10%">Action</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,15 +34,38 @@
 					<?php echo $course->nama_dosen ?></td>
 				<td><?php echo $course->grup ; ?></td>
 				<td>
-					<!-- belum waktunya / belum / sudah -->
-					<!-- // <?php echo $course->eva_status ?> -->
-					<span class="label label-info">tidak ada</span>
-					<span class="label label-warning">belum diisi</span>
-					<span class="label label-success">sudah diisi</span>
+					<?php if ($course->eva_status == 1) : ?>
+						<!-- bila ada pengisian -->
+						<?php if ($course->jawaban != '-') : ?>
+							<span class="label label-success">sudah diisi</span>
+						<?php else : ?>
+							<span class="label label-warning">belum diisi</span>
+						<?php endif ?>
+					<?php else : ?>						
+						<!-- tidak ada kuisioner untuk matakuliah -->
+						<span class="label label-info">tidak ada kuisioner</span>
+					<?php endif ?>
 				</td>
 				<td>
-					<!-- HANYA DITAMPILKAN APABILA : EVA STATUS = 1 , JADWAL PENGISIAN , DAN BELUM MENGISI -->
-					<a href="<?=base_url()?>mahasiswa/kuisioner/index/<?=$course->id_kelasb?>" class="purple-bg btn btn-xs showcase-btn"><i class="icon-plus-sign"></i></a>	
+					<?= date('j F Y',strtotime($course->mulai)) ?> - <?= date('j F Y',strtotime($course->akhir)) ?>
+				</td>
+				<td>
+					<?php if ($course->eva_status == 1) : ?>
+						<?php if ($today >= $course->mulai AND $today <= $course->akhir) : ?>
+							<!-- bila sudah waktunya -->
+							<?php if ($course->jawaban == '-') : ?>
+								<a href="<?=base_url()?>mahasiswa/kuisioner/jawab/<?=$course->id_kelasb?>" 
+									class="blue-bg btn btn-xs showcase-btn"><i class="icon-pencil"></i></a>	
+							<?php endif ?>
+						<?php else : ?>
+							<!-- bila belum waktunya -->
+							<span class="label label-info">belum dapat mengisi</span>
+						<?php endif ?>
+					<?php else : ?>						
+						<!-- bila tidak ada -->
+						<span class="label label-info">tidak ada kuisioner</span>
+					<?php endif ?>
+
 			</td>
 			</tr>
 			<?php $x++; ?>

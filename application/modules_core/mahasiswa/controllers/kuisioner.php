@@ -14,9 +14,38 @@ class Kuisioner extends CI_Controller {
 	}
 
 	//menampilkan halaman KRS
-	public function index($id_kelasb)
+	public function jawab($id_kelasb)
 	{	
 		// check wheter user registered in this class or not
+
+
+		$input = $this->input->post('input');
+	    if(!empty($input))
+	    {
+	        // Loop through hotels and add the validation
+	        foreach($input as $id => $data)
+	        {
+	            $this->form_validation->set_rules('input[' . $id . '][a1]', 'Jawaban Pertanyaan 1', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a2]', 'Jawaban Pertanyaan 2', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a3]', 'Jawaban Pertanyaan 3', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a4]', 'Jawaban Pertanyaan 4', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a5]', 'Jawaban Pertanyaan 5', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a6]', 'Jawaban Pertanyaan 6', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a7]', 'Jawaban Pertanyaan 7', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a8]', 'Jawaban Pertanyaan 8', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a9]', 'Jawaban Pertanyaan 9', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a10]', 'Jawaban Pertanyaan 10', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a11]', 'Jawaban Pertanyaan 11', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][a12]', 'Jawaban Pertanyaan 12', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][masukan_dosen]', 'Masukan Dosen', 'required|trim');
+	            $this->form_validation->set_rules('input[' . $id . '][masukan_matkul]', 'Masukan Matakuliah', 'required|trim');
+	        }
+	    }
+
+		if ($this->form_validation->run())
+	    {
+			$this->submit_kuisioner();
+	    }
 
 		// fetch data
 		$row_matakuliah		= $this->m_mahasiswa->getKelas($id_kelasb);
@@ -34,11 +63,12 @@ class Kuisioner extends CI_Controller {
 
 	public function submit_kuisioner()
 	{
-		echo "validation berhasil"; die;
 		$input = $this->input->post('input');
 		foreach ($input as $key) 
 		{
 			$this->m_kuisioner->save_evaluasi($key);
 		}
+		$this->session->set_flashdata('message', 'kuisioner berhasil diisi');
+		redirect('mahasiswa/dashboard');
 	}
 }
