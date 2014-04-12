@@ -16,7 +16,7 @@ class M_soal extends CI_Model {
 		$sql_result = $this->db->query($sql);
 
 		$result = array();
-		if($sql_result->num_rows() > 1){
+		if($sql_result->num_rows() > 0){
 			$result = $sql_result->result_array();
 		}
 
@@ -80,15 +80,29 @@ class M_soal extends CI_Model {
 	}
 
 	function save_info($thn_ajaran, $semester, $status){
-		$sql 	= "INSERT INTO eva_paket (thn_ajaran,semester,status) VALUES
-				  ('$thn_ajaran',UPPER('$semester'),'$status')";
-		$result = $this->db->query($sql);
+		$sql_cek= "SELECT * FROM eva_paket WHERE thn_ajaran = '$thn_ajaran' AND semester = '$semester'";
+		$cek 	= $this->db->query($sql_cek);
 
-		$data = array();
-		if ($result) {
-			$data['success'] 		= true;
-			$data['inserted_id'] 	= $this->db->insert_id();
+		if ($cek->num_rows() == 0) {
+			$sql 	= "INSERT INTO eva_paket (thn_ajaran,semester,status) VALUES
+					  ('$thn_ajaran',UPPER('$semester'),'$status')";
+			$result = $this->db->query($sql);
 
+			$data = array();
+			if ($result) {
+				$data['success'] 		= true;
+				$data['inserted_id'] 	= $this->db->insert_id();
+
+			}
+		}
+		else{
+			# data dengan periode yg sama sudah ada
+			$data = array();
+			if ($result) {
+				$data['success'] 		= false;
+				$data['error_msg'] 		= "Data dengan periode yang sama sudah ada.";
+
+			}	
 		}
 		return $data;
 	}
@@ -184,14 +198,17 @@ class M_soal extends CI_Model {
 	}
 
 	function allowCreateNewPaket(){
+		$sql_empty = "SELECT COUNT(*) AS tot_rows FROM `eva_pertanyaan`";
+		$tot_rows = $this->db->query($sql_empty)->row()->tot_rows;
+
 		$sql = "SELECT * FROM eva_paket WHERE UPPER(status) != 'END'";
 		$sql_result = $this->db->query($sql);
 
-		if ($sql_result->num_rows() > 0) {
-			$result = false;
+		if ($sql_result->num_rows() == 0 || $tot_rows == 0) {
+			$result = true;
 		}
 		else{
-			$result = true;
+			$result = false;
 		}
 		return $result;
 	}
@@ -217,6 +234,25 @@ class M_soal extends CI_Model {
 				}
 			}
 		}
+	}
+
+	function getLatestQuestions(){
+		$sql_last_paket 	= "SELECT id_paket FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC LIMIT 1";
+		$id_paket 			= $this->db->query($sql_last_paket)->row()->id_paket;
+
+		$sql_questions 		= "SELECT per.*,a.`keterangan` as aspek FROM eva_paket pak
+								JOIN eva_pertanyaan per ON per.`id_paket` = pak.`id_paket`
+								JOIN eva_ref_aspek a ON a.`id_aspek` = per.`id_aspek`
+								WHERE pak.`id_paket` = '$id_paket' 
+								ORDER BY per.`urutan`";
+		$questions 			= $this->db->query($sql_questions);
+
+		$result = array();
+		if ($questions->num_rows() > 0) {
+			$result = $questions->result_array();
+		}
+
+		return $result;
 	}
 }
 

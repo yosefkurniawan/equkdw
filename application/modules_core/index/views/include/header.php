@@ -26,8 +26,13 @@
 <link href="<?=base_url()?>public/assets/css/jquery-ui/jquery-ui.css" rel="stylesheet"/>
 
 <link href="<?=base_url()?>public/assets/css/jquery.datetimepicker.css" rel="stylesheet"/>
+
+<!-- general -->
+<link href="<?=base_url()?>public/assets/css/general.css" rel="stylesheet"/>
 <!-- Soal -->
 <link href="<?=base_url()?>public/assets/css/soal.css" rel="stylesheet"/>
+<!-- admin -->
+<link href="<?=base_url()?>public/assets/css/admin.css" rel="stylesheet"/>
 
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
@@ -42,7 +47,10 @@
 <!-- FOTO PROFIL -->
 <header>
  <!-- LOGO -->
-  <div class="container-fluid clearfix"><a href="index.html" title="eQuiz" class="pull-left"><img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz"></a>
+  <div class="container-fluid clearfix">
+    <a href="index.html" title="eQuiz" class="pull-left">
+      <img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz">
+    </a>
 
 
     <div class="user pull-right">
@@ -77,6 +85,7 @@
           <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Ubah Password</a></li>
         <?php endif ?>
         <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
+          <li><a href="<?php echo base_url(); ?>index">Dashboard</a></li>
           <li><a href="<?php echo base_url(); ?>index/logout">Log Out</a></li>
         <?php endif ?>
       </ul>

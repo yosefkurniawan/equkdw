@@ -27,7 +27,11 @@ $(document).ready(function(){
 		$('#save-info-loading').css('display', 'inline');
 		$('#save-info').hide();
 		if (form_type=='new') {
-			save_new_paket_info();
+			if($('input:radio[name=pilih_paket]:checked').val() == 'salin'){
+				getLatestQuestions();
+			}else{
+				save_new_paket_info();
+			}
 		}else{
 			save_edit_paket_info();
 		}
@@ -73,6 +77,58 @@ $(document).ready(function(){
 	});
 
 });
+
+
+function getLatestQuestions(){
+	$.ajax({
+		    url : CI_ROOT+"soal/getLatestQuestions",
+		    type: "GET",
+	    	dataType : "JSON",
+		    success: function(data, textStatus, jqXHR)
+		    {
+		    		$('list-pertanyaan option.aspek:selected', 'select').removeAttr('selected');
+
+		    		$('#pertanyaan1 .aspek').val(data[0].id_aspek);
+		    		$('#pertanyaan1 .isi_pertanyaan').val(data[0].isi_pertanyaan);
+		    		$('#pertanyaan2 .aspek').val(data[1].id_aspek);
+		    		$('#pertanyaan2 .isi_pertanyaan').val(data[1].isi_pertanyaan);
+		    		$('#pertanyaan3 .aspek').val(data[2].id_aspek);
+		    		$('#pertanyaan3 .isi_pertanyaan').val(data[2].isi_pertanyaan);
+		    		$('#pertanyaan4 .aspek').val(data[3].id_aspek);
+		    		$('#pertanyaan4 .isi_pertanyaan').val(data[3].isi_pertanyaan);
+		    		$('#pertanyaan5 .aspek').val(data[4].id_aspek);
+		    		$('#pertanyaan5 .isi_pertanyaan').val(data[4].isi_pertanyaan);
+		    		$('#pertanyaan6 .aspek').val(data[5].id_aspek);
+		    		$('#pertanyaan6 .isi_pertanyaan').val(data[5].isi_pertanyaan);
+		    		$('#pertanyaan7 .aspek').val(data[6].id_aspek);
+		    		$('#pertanyaan7 .isi_pertanyaan').val(data[6].isi_pertanyaan);
+		    		$('#pertanyaan8 .aspek').val(data[7].id_aspek);
+		    		$('#pertanyaan8 .isi_pertanyaan').val(data[7].isi_pertanyaan);
+		    		$('#pertanyaan9 .aspek').val(data[8].id_aspek);
+		    		$('#pertanyaan9 .isi_pertanyaan').val(data[8].isi_pertanyaan);
+		    		$('#pertanyaan10 .aspek').val(data[9].id_aspek);
+		    		$('#pertanyaan10 .isi_pertanyaan').val(data[9].isi_pertanyaan);
+		    		$('#pertanyaan11 .aspek').val(data[10].id_aspek);
+		    		$('#pertanyaan11 .isi_pertanyaan').val(data[10].isi_pertanyaan);
+		    		$('#pertanyaan12 .aspek').val(data[11].id_aspek);
+		    		$('#pertanyaan12 .isi_pertanyaan').val(data[11].isi_pertanyaan);
+		    },
+		    error: function (jqXHR, textStatus, errorThrown)
+		    {
+				$('#save-info-loading').css('display', 'none');
+				$('#save-info').show();
+
+				/* show message */
+				$('#soal-alert').fadeIn(400);
+				$('#soal-alert').addClass('alert-danger');
+				$('#soal-alert p').html('Terjadi kesalahan saat mengambil data pertanyaan semester sebelumnya.');
+
+				$('html,body').animate({ scrollTop: 0 }, 'slow');
+		    }
+		}).done(function(){
+			save_new_paket_info();
+		});
+}
 
 function save_new_paket_info(){
 	// Get data of form
