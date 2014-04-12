@@ -71,7 +71,7 @@ class Account extends MX_Controller
 
 		$data['title'] 		= 'Pengaturan Akun';
 		$data['content'] 	= 'account/pengaturan_akun';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 	}
 
 	// proses pengaturan akun

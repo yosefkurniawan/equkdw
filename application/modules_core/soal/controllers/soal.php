@@ -13,7 +13,7 @@ class Soal extends CI_Controller {
 
 		# load models
 		$this->load->model('m_soal');
-		$this->load->model('index/m_general');
+		$this->load->model('main/m_general');
 	}
 
 	public function index()
@@ -54,7 +54,7 @@ class Soal extends CI_Controller {
 		$data['allowCreateNew']	= $allow_create_new;
 		$data['title'] 		= 'Periode dan Soal';
 		$data['content'] 	= 'soal/periode_soal';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 	}
 
 	public function edit($kode)
@@ -81,7 +81,7 @@ class Soal extends CI_Controller {
 		$data['content'][] 	= 'soal/form_info';
 		$data['content'][] 	= 'soal/form_pertanyaan';
 		$data['content'][] 	= 'soal/form_jadwal';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 		
 	}
 
@@ -102,7 +102,7 @@ class Soal extends CI_Controller {
 		$data['content'][] 		= 'soal/form_info';
 		$data['content'][] 		= 'soal/form_pertanyaan';
 		$data['content'][] 		= 'soal/form_jadwal';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 		
 	}
 
@@ -189,7 +189,7 @@ class Soal extends CI_Controller {
 		$data['content'][] 	= 'soal/form_info';
 		$data['content'][] 	= 'soal/form_pertanyaan';
 		$data['content'][] 	= 'soal/form_jadwal';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 	}
 
 	public function getLatestQuestions(){

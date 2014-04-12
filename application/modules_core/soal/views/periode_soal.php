@@ -19,8 +19,8 @@
 		    <td><?php echo strtoupper($paket['semester']).' '.$paket['thn_ajaran'] ?></td>
 		    <td><?php echo strtoupper($paket['status']) ?></td>
 		    <?php if (strtoupper($paket['status']) == 'DRAFT'): ?>
-		    	<td><a href="soal/edit/<?php echo $paket['id_paket'] ?>" class="btn btn-med yellow-bg"><i class="icon-">&#xf0ad;</i></a></td>
-		    	<td><a href="javascript:void(0)?>" onclick="delPaket(<?= $paket['id_paket'] ?>)" class="btn btn-med red-bg"><i class="icon-trash"></i></a></td>
+		    	<td><a href="soal/edit/<?php echo $paket['id_paket'] ?>" class="btn btn-med yellow-bg"><i class="icon-">&#xf0ad;</i></a>
+		    		<a href="javascript:void(0)?>" onclick="delPaket(<?= $paket['id_paket'] ?>)" class="btn btn-med red-bg"><i class="icon-trash"></i></a></td>
 		    <?php else: ?>
 		    	<td><a href="soal/view/<?php echo $paket['id_paket'] ?>" class="btn btn-med green-bg"><i class="icon-eye-open"></i></a></td>
 		    <?php endif ?>

@@ -19,7 +19,7 @@ class User extends MX_Controller
 		/* -- Render Layout -- */
 		$data['title'] 		= 'List User';
 		$data['content'] 	= 'manajemen/list';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 		// delete message
 		$this->delete_message();
 	}
@@ -29,7 +29,7 @@ class User extends MX_Controller
 		/* -- Render Layout -- */
 		$data['title'] 		= 'Tambah User';
 		$data['content'] 	= 'manajemen/tambah';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 		// delete message
 		$this->delete_message();
 	}

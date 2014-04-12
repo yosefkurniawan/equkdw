@@ -85,8 +85,8 @@
           <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Ubah Password</a></li>
         <?php endif ?>
         <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
-          <li><a href="<?php echo base_url(); ?>index">Dashboard</a></li>
-          <li><a href="<?php echo base_url(); ?>index/logout">Log Out</a></li>
+          <li><a href="<?php echo base_url(); ?>main">Dashboard</a></li>
+          <li><a href="<?php echo base_url(); ?>main/logout">Log Out</a></li>
         <?php endif ?>
       </ul>
     </div>
