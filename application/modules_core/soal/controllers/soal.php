@@ -82,7 +82,7 @@ class Soal extends CI_Controller {
 	{
 		$list_aspek 		= $this->m_soal->getAspek();			
 		$list_prodi 		= $this->m_soal->getProdi();			
-		$last_periode		= $this->m_general->getLastPeriode();
+		$last_periode		= $this->m_soal->getLatestPeriodePaket();
 
 		/* -- Render Layout -- */
 		$data['form_type']		= 'new';
@@ -97,6 +97,11 @@ class Soal extends CI_Controller {
 		$data['content'][] 		= 'soal/form_jadwal';
 		$this->load->view('index/render_layout',$data);
 		
+	}
+
+	public function delete($id_paket){
+		$this->m_soal->deletePaket($id_paket);
+		redirect('soal');
 	}
 
 	public function save_info(){

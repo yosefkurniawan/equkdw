@@ -197,6 +197,16 @@ class M_soal extends CI_Model {
 		return $result;
 	}
 
+	function deletePaket($id_paket){
+		$sql_del_paket 		= "DELETE FROM eva_paket WHERE id_paket='$id_paket'";
+		$sql_del_pertanyaan	= "DELETE FROM eva_pertanyaan WHERE id_paket='$id_paket'";
+		$sql_del_deadline	= "DELETE FROM eva_deadline WHERE id_paket='$id_paket'";
+		
+		$this->db->query($sql_del_deadline);
+		$this->db->query($sql_del_pertanyaan);
+		$this->db->query($sql_del_paket);
+	}
+
 	function allowCreateNewPaket(){
 		$sql_empty = "SELECT COUNT(*) AS tot_rows FROM `eva_pertanyaan`";
 		$tot_rows = $this->db->query($sql_empty)->row()->tot_rows;
@@ -253,6 +263,17 @@ class M_soal extends CI_Model {
 		}
 
 		return $result;
+	}
+
+	function getLatestPeriodePaket(){
+		$sql_last_periode 	= "SELECT thn_ajaran, semester FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC LIMIT 1";
+		$periode 			= $this->db->query($sql_last_periode);
+
+		$result = array();
+		if ($periode->num_rows() > 0) {
+			$result = $periode->result();
+		}
+		return $result[0];
 	}
 }
 

@@ -551,3 +551,11 @@ function save_edit_jadwal(){
 		});
 	}
 }
+
+
+// Confirmation delete paket
+function delPaket(id_paket){
+	if (confirm('Anda yakin ingin menghapus paket?')) {
+		window.location.replace(CI_ROOT+'soal/delete/'+id_paket);
+	}
+}
