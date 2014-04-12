@@ -6,7 +6,7 @@ class Dashboard extends CI_Controller {
 	{
 		parent::__construct();
 		if ($this->session->userdata('status') != 'Mahasiswa') {
-			redirect('index/index');
+			redirect('main');
 		}
 			$this->load->model('m_mahasiswa');
 
@@ -21,7 +21,7 @@ class Dashboard extends CI_Controller {
 		$data['list_krs']	= $list_krs;
 		$data['title'] 		= 'Dashboard Daftar Kuisioner';
 		$data['content'] 	= 'mahasiswa/dashboard';
-		$this->load->view('index/render_layout',$data);				
+		$this->load->view('main/render_layout',$data);				
 	}
 
 }

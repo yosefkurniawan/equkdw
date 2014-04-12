@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Index extends MX_Controller
+class Main extends MX_Controller
 {
 	public function __construct()
 	{
@@ -13,7 +13,7 @@ class Index extends MX_Controller
 	public function index(){
 		# checking whether logged in or not
 		if (!isset($this->session->userdata['username'] )) {
-			redirect('index/login');	
+			redirect('main/login');	
 		} 
 		else{
 
@@ -95,11 +95,11 @@ class Index extends MX_Controller
 			}
 			else{
 				$this->session->set_flashdata('login_failed', 'Username dan password tidak sesuai.');
-				redirect('index/login');	
+				redirect('main/login');	
 			}
 		}
 
-		$data['form_action'] = 'index/login';
+		$data['form_action'] = 'main/login';
 		$this->load->view('login',$data);
 	}
 

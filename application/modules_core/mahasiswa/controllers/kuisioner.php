@@ -6,7 +6,7 @@ class Kuisioner extends CI_Controller {
 	{
 		parent::__construct();
 		if ($this->session->userdata('status') != 'Mahasiswa') {
-			redirect('index/index');
+			redirect('main');
 		}
 			$this->load->model('m_kuisioner');
 			$this->load->model('m_mahasiswa');
@@ -58,7 +58,7 @@ class Kuisioner extends CI_Controller {
 		$data['list_soal']	= $list_soal;
 		$data['title'] 		= 'Kuisioner Dosen';
 		$data['content'] 	= 'mahasiswa/kuisioner';
-		$this->load->view('index/render_layout',$data);				
+		$this->load->view('main/render_layout',$data);				
 	}
 
 	public function submit_kuisioner()

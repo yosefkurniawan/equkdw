@@ -39,4 +39,4 @@ class M_login extends CI_Model {
 }
 
 /* End of file m_login.php */
-/* Location: ./application/modules_core/index/models/m_login.php */
+/* Location: ./application/modules_core/main/models/m_login.php */
