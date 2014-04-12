@@ -8,7 +8,7 @@
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>'); /*==== Slimscroll JQuery ====*/
   
-  document.writeln('<script src="'+CI_ROOT+'public/assets/js/touchswipe/jquery.touchSwipe.min.js"></script>'); /*==== Touch Device scripts ====*/
+  // document.writeln('<script src="'+CI_ROOT+'public/assets/js/touchswipe/jquery.touchSwipe.min.js"></script>'); /*==== Touch Device scripts ====*/
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/fullcalendar/fullcalendar.js"></script>'); /*==== Full Calendar ====*/
   

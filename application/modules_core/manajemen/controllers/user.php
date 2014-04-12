@@ -76,7 +76,7 @@ class User extends MX_Controller
 		/* -- Render Layout -- */
 		$data['title'] 		= 'Ubah User';
 		$data['content'] 	= 'manajemen/ubah';
-		$this->load->view('index/render_layout',$data);
+		$this->load->view('main/render_layout',$data);
 		// delete message
 		$this->delete_message();
 	}
