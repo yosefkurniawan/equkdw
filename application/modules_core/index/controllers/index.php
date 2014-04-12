@@ -122,6 +122,7 @@ class Index extends MX_Controller
 			redirect(base_url());
 		}
 	}
+
 }
 
 /* End of file user.php */

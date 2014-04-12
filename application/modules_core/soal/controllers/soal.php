@@ -5,6 +5,13 @@ class Soal extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		# checking whether logged in or not
+		if (!isset($this->session->userdata['is_admin'] )) {
+			redirect('admin');	
+		} 
+
+		# load models
 		$this->load->model('m_soal');
 		$this->load->model('index/m_general');
 	}
