@@ -1,7 +1,14 @@
 <!-- VERTICAL NAVBAR -->
 <nav id="main_topnav">
-  <div class="container-fluid"><a href="javascript:;" class="pull-left toggle-aside"><i class="icon-">&#xf0a9; </i></a><a href="javascript:;" class="pull-right toggle-topmenu">
-  	<i class="icon-">&#xf0c9; </i></a>
+  <div class="container-fluid">
+  	<?php if (isset($left_bar)): ?>
+	  	<a href="javascript:;" class="pull-left toggle-aside">
+	  		<i class="icon-">&#xf0a9; </i>
+	  	</a>
+  	<?php endif ?>
+  	<a href="javascript:;" class="pull-right toggle-topmenu">
+	  	<i class="icon-">&#xf0c9; </i>
+	</a>
     <ul>
 	<?php if ($this->session->userdata['is_super_admin']): ?>
 			<li><a href="<?=base_url()?>manajemen/user" title="Hak Akses" >Manajemen User</a></li>
