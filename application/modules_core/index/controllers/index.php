@@ -19,9 +19,17 @@ class Index extends MX_Controller
 
 			if ($this->session->userdata['status'] == 'Mahasiswa') {
 				redirect('mahasiswa/dashboard');	
-			} 
+			}
+			elseif($this->session->userdata['is_admin']){
+				$data['content'] = 'dashboard_admin';
+			}
+			elseif($this->session->userdata['is_super_admin']){
+				$data['content'] = 'dashboard_superadmin';
+			}
+			else{
+				$data['content'] = 'welcome';
+			}
 			$data['title'] = 'eQuiz - Sistem Informasi Kuisioner dan Evaluasi';
-			$data['content'] = 'welcome';
 			$this->load->view('render_layout',$data);
 		}
 	}
