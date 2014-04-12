@@ -3,3 +3,12 @@
 	width: 50%;
 	margin-top: 10%;
 }
+
+
+
+/* ---------------  <= 768 px layout -------------------- */
+@media only screen and (max-width: 768px) {
+	.admin-center {
+		width: 100%;
+	}
+}

@@ -78,29 +78,18 @@ class Index extends MX_Controller
 				}
 				
 				# save login session
-				// if ($SSAT_status == 'Mahasiswa' || $SSAT_status == 'Dosen' || $SSAT_status == 'Mahasiswa' || $is_admin || $is_super_admin) {
-					$this->session->set_userdata('username', $SSAT_id_user);
-					$this->session->set_userdata('status', $SSAT_status);
-					$this->session->set_userdata('nama', $nama);
+				$this->session->set_userdata('username', $SSAT_id_user);
+				$this->session->set_userdata('status', $SSAT_status);
+				$this->session->set_userdata('nama', $nama);
 
-					// if ($is_super_admin) 
-					// 	$this->session->set_userdata('is_super_admin', true);
-					// else
-					// 	$this->session->set_userdata('is_super_admin', false);
+				if ($is_kepala_unit) 
+					$this->session->set_userdata('is_kepala_unit', true);
+				else
+					$this->session->set_userdata('is_kepala_unit', false);
 
-					// if ($is_admin) 
-					// 	$this->session->set_userdata('is_admin', true);
-					// else
-					// 	$this->session->set_userdata('is_admin', false);
-
-					if ($is_kepala_unit) 
-						$this->session->set_userdata('is_kepala_unit', true);
-					else
-						$this->session->set_userdata('is_kepala_unit', false);
-				// }
-
-					$this->session->set_userdata('is_super_admin', false);
-					$this->session->set_userdata('is_admin', false);
+				# login trough this way always not as admin/superadmin
+				$this->session->set_userdata('is_super_admin', false);
+				$this->session->set_userdata('is_admin', false);
 
 				redirect(base_url());
 			}
@@ -133,6 +122,7 @@ class Index extends MX_Controller
 			redirect(base_url());
 		}
 	}
+
 }
 
 /* End of file user.php */
