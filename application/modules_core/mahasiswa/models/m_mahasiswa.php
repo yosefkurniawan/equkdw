@@ -26,7 +26,7 @@ class M_mahasiswa extends CI_Model {
 		 					),
 		 					'-'
 		 				) AS jawaban,
-						r.unit AS prodi, dd.tgl_mulai AS mulai, dd.tgl_akhir AS akhir
+						r.unit AS prodi, dd.tgl_mulai AS mulai, dd.tgl_akhir AS akhir, pkt.status
 						FROM (ec_kelas_buka k LEFT JOIN eva_jawaban_paket j ON k.id_kelasb = j.id_kelasb AND j.nim = '$nim'), ec_matkul m, 
 							user_dosen_karyawan d, ec_pengajar p, ec_peserta s, eva_paket pkt, eva_deadline dd, ref_unit r 
 						WHERE k.kode = m.kode
