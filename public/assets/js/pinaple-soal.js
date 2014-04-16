@@ -9,6 +9,7 @@ $(document).ready(function(){
 
 	// Set Form pertanyaan as sortable list
 	$('.sortable').sortable();
+
 	// Check whether view mode or not
 	if (form_type=="view") {
 		$(":input").attr("disabled","disabled");
@@ -57,6 +58,47 @@ $(document).ready(function(){
 		}else{
 			save_edit_jadwal();
 		}
+	});
+
+	// set date all as date picker
+	$('#tgl_mulai_all').datetimepicker({
+		lang:'de',
+		 i18n:{
+		  de:{
+		   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+		   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+		  }
+		 },
+		 timepicker:false,
+		 format:'d/m/Y',
+		 minDate:Date(),
+		 onShow:function( ct ){
+		 	maxDate 	= $('#tgl_akhir_all').val();
+		 	arrMaxDate 	= maxDate.split('/');
+		 	newMaxDate 	= arrMaxDate[2]+'/'+arrMaxDate[1]+'/'+arrMaxDate[0];
+		   	this.setOptions({
+		   		maxDate:$('#tgl_akhir_all').val()?newMaxDate:false
+		   	});
+		 }
+	});
+	$('#tgl_akhir_all').datetimepicker({
+			lang:'de',
+		 i18n:{
+		  de:{
+		   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+		   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+		  }
+		 },
+		 timepicker:false,
+		 format:'d/m/Y',
+		 onShow:function( ct ){
+		 	minDate 	= $('#tgl_mulai_all').val();
+		 	arrMinDate 	= minDate.split('/');
+		 	newMinDate 	= arrMinDate[2]+'/'+arrMinDate[1]+'/'+arrMinDate[0];
+		   	this.setOptions({
+		   		minDate:$('#tgl_mulai_all').val()?newMinDate:false
+		   	})
+		 }
 	});
 
 	// Navbar Scroll To
@@ -572,4 +614,15 @@ function setAllDate(){
 		$('#set-all-date-link i').removeClass();
 		$('#set-all-date-link i').addClass('icon-angle-up');
 	}
+}
+
+function setAllDateClick(){
+	var tgl_mulai = $('#tgl_mulai_all').val();
+	var tgl_akhir = $('#tgl_akhir_all').val();
+	$('.tgl_mulai').each(function(){
+		$(this).val(tgl_mulai);
+	});
+	$('.tgl_akhir').each(function(){
+		$(this).val(tgl_akhir);
+	});
 }
