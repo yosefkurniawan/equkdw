@@ -16,10 +16,10 @@ $(document).ready(function(){
 
 	// Init
 	if (form_type=='new') {
-		$('#box-form-pertanyaan').hide();
-		$('#box-form-jadwal').hide();
-		$('#step .step-1').css({'color':'rgb(48, 170, 97)','font-weight':'bold'});
-		$('#step .step-1 span').css('border','solid 2px rgb(48, 170, 97)');
+		// $('#box-form-pertanyaan').hide();
+		// $('#box-form-jadwal').hide();
+		// $('#step .step-1').css({'color':'rgb(48, 170, 97)','font-weight':'bold'});
+		// $('#step .step-1 span').css('border','solid 2px rgb(48, 170, 97)');
 	};
 
 	// Button save info paket CLICKED
@@ -75,7 +75,6 @@ $(document).ready(function(){
 	        scrollTop: $('#box-form-jadwal').offset().top-55
 	    }, 'slow');
 	});
-
 });
 
 
@@ -252,6 +251,7 @@ function save_new_pertanyaan(){
 			items[number]['id_paket'] 		= $(id+' .id_paket').val()
 			items[number]['isi_pertanyaan'] = $(id+' .isi_pertanyaan').val()
 			items[number]['aspek'] 			= $(id+' .aspek').val()
+			items[number]['keterangan']		= $(id+' .keterangan').val()
 			items[number]['urutan']			= number;
 
 		};
@@ -332,6 +332,7 @@ function save_edit_pertanyaan(){
 			items[number]['id_paket'] 		= $(id+' .id_paket').val()
 			items[number]['isi_pertanyaan'] = $(id+' .isi_pertanyaan').val()
 			items[number]['aspek'] 			= $(id+' .aspek').val()
+			items[number]['keterangan']		= $(id+' .keterangan').val()
 			items[number]['urutan']			= number;
 
 		};
@@ -557,5 +558,18 @@ function save_edit_jadwal(){
 function delPaket(id_paket){
 	if (confirm('Anda yakin ingin menghapus paket?')) {
 		window.location.replace(CI_ROOT+'soal/delete/'+id_paket);
+	}
+}
+
+function setAllDate(){
+	$('#set-all-date').slideToggle();
+	
+	if ($('#set-all-date-link i').hasClass('icon-angle-up')) {
+		$('#set-all-date-link i').removeClass();
+		$('#set-all-date-link i').addClass('icon-angle-down');
+	}
+	else{
+		$('#set-all-date-link i').removeClass();
+		$('#set-all-date-link i').addClass('icon-angle-up');
 	}
 }

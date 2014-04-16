@@ -37,6 +37,14 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label>Keterangan</label>
+								<textarea rows="1" class="form-control keterangan" name="keterangan"><?=(isset($list_pertanyaan[$i-1]['keterangan']))? $list_pertanyaan[$i-1]['keterangan'] : '' ?></textarea>
+							</div>
+						</div>
+					</div>
 				</form>
 			</li>
 		<?php } ?>

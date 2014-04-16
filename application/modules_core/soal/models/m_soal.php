@@ -114,28 +114,28 @@ class M_soal extends CI_Model {
 		return $data;
 	}
 
-	function save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan){
-		$sql 	= "INSERT INTO eva_pertanyaan (id_paket,isi_pertanyaan,id_aspek,urutan) VALUES
-				  ('$id_paket','$isi_pertanyaan','$id_aspek','$urutan')";
+	function save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $keterangan, $urutan){
+		$sql 	= "INSERT INTO eva_pertanyaan (id_paket,isi_pertanyaan,id_aspek,keterangan,urutan) VALUES
+				  ('$id_paket','$isi_pertanyaan','$id_aspek','$keterangan','$urutan')";
 		$result = $this->db->query($sql);
 
 		return $result;
 	}
 
-	function save_edit_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan){
+	function save_edit_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $keterangan, $urutan){
 		$check 	= "SELECT * FROM eva_pertanyaan WHERE urutan='$urutan' AND id_paket='$id_paket'";
 		$result_check = $this->db->query($check);
 
 		#Check whether reow is exist or not
 		if ($result_check->num_rows() > 0) {
 			# exist, update the old one
-			$sql 	= "UPDATE eva_pertanyaan SET isi_pertanyaan='$isi_pertanyaan',id_aspek='$id_aspek'
+			$sql 	= "UPDATE eva_pertanyaan SET isi_pertanyaan='$isi_pertanyaan',id_aspek='$id_aspek',keterangan='$keterangan'
 					   WHERE urutan='$urutan' AND id_paket='$id_paket'";
 			$result = $this->db->query($sql);
 		}else{
 			# not exist, create new one
-			$sql 	= "INSERT INTO eva_pertanyaan (id_paket,isi_pertanyaan,id_aspek,urutan) VALUES
-				  ('$id_paket','$isi_pertanyaan','$id_aspek','$urutan')";
+			$sql 	= "INSERT INTO eva_pertanyaan (id_paket,isi_pertanyaan,id_aspek,keterangan,urutan) VALUES
+				  ('$id_paket','$isi_pertanyaan','$id_aspek','$keterangan','$urutan')";
 			$result = $this->db->query($sql);
 		}
 

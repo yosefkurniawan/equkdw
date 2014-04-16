@@ -4,6 +4,38 @@
 	</div>
 	<div class="panel-body">
 		<div class="row">
+			<div class="col-md-12"><a href="javascript:void(0)" class="btn btn-med green-bg" id="set-all-date-link" onclick="setAllDate()">Atur tanggal secara umum &nbsp;<i class="icon-angle-down"></i></a></div>
+		</div>
+		<div id="set-all-date">
+			<div class="row">
+				<div class="col-md-1"><label>Mulai</label></div>
+				<div class="col-md-3">
+					<div class="input-group">
+						<input type="text" class="form-control tgl_mulai_all" name="tgl_mulai_all" id="tgl_mulai_all">
+						<span class="input-group-addon  accordion-toggle">
+							<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-1"><label>Akhir</label></div>
+				<div class="col-md-3">
+					<div class="input-group">
+						<input type="text" class="form-control tgl_mulai_all" name="tgl_mulai_all" id="tgl_mulai_all">
+						<span class="input-group-addon  accordion-toggle">
+							<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-3"><a href="#" class="btn btn-med blue-bg">Lakukan</a></div>
+			</div>
+		</div>
+
+		<div class="row">
 			<div class="col-md-6"></div>
 			<div class="col-md-3"><h4>Mulai</h4></div>
 			<div class="col-md-3"><h4>Akhir</h4></div>
