@@ -17,10 +17,10 @@ $(document).ready(function(){
 
 	// Init
 	if (form_type=='new') {
-		// $('#box-form-pertanyaan').hide();
-		// $('#box-form-jadwal').hide();
-		// $('#step .step-1').css({'color':'rgb(48, 170, 97)','font-weight':'bold'});
-		// $('#step .step-1 span').css('border','solid 2px rgb(48, 170, 97)');
+		$('#box-form-pertanyaan').hide();
+		$('#box-form-jadwal').hide();
+		$('#step .step-1').css({'color':'rgb(48, 170, 97)','font-weight':'bold'});
+		$('#step .step-1 span').css('border','solid 2px rgb(48, 170, 97)');
 	};
 
 	// Button save info paket CLICKED
