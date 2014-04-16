@@ -22,7 +22,7 @@
 				<div class="col-md-1"><label>Akhir</label></div>
 				<div class="col-md-3">
 					<div class="input-group">
-						<input type="text" class="form-control tgl_mulai_all" name="tgl_mulai_all" id="tgl_mulai_all">
+						<input type="text" class="form-control tgl_akhir_all" name="tgl_akhir_all" id="tgl_akhir_all">
 						<span class="input-group-addon  accordion-toggle">
 							<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
 						</span>
@@ -31,7 +31,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-1"></div>
-				<div class="col-md-3"><a href="#" class="btn btn-med blue-bg">Lakukan</a></div>
+				<div class="col-md-3"><a href="javascript:void(0)" class="btn btn-med blue-bg" onclick="setAllDateClick()">Lakukan</a></div>
 			</div>
 		</div>
 
