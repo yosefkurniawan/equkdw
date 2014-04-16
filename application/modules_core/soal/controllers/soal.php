@@ -132,8 +132,9 @@ class Soal extends CI_Controller {
 			$id_paket		= $value['id_paket'];
 			$isi_pertanyaan = $value['isi_pertanyaan'];
 			$id_aspek		= $value['aspek'];
+			$keterangan		= $value['keterangan'];
 			$urutan			= $value['urutan'];
-			$result 		= $this->m_soal->save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan);
+			$result 		= $this->m_soal->save_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $keterangan, $urutan);
 		}
 	}
 
@@ -142,8 +143,9 @@ class Soal extends CI_Controller {
 			$id_paket		= $value['id_paket'];
 			$isi_pertanyaan = $value['isi_pertanyaan'];
 			$id_aspek		= $value['aspek'];
+			$keterangan		= $value['keterangan'];
 			$urutan			= $value['urutan'];
-			$result 		= $this->m_soal->save_edit_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $urutan);
+			$result 		= $this->m_soal->save_edit_pertanyaan($id_paket, $isi_pertanyaan, $id_aspek, $keterangan, $urutan);
 		}
 	}
 
