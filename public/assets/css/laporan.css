@@ -1,0 +1,6 @@
+#list_prodi>div.panel-heading {
+	margin-top: 5px;
+}
+#list_prodi>div.panel-heading:first-child {
+	margin-top: 0;
+}

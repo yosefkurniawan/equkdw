@@ -31,6 +31,8 @@
 <link href="<?=base_url()?>public/assets/css/general.css" rel="stylesheet"/>
 <!-- Soal -->
 <link href="<?=base_url()?>public/assets/css/soal.css" rel="stylesheet"/>
+<!-- Laporan -->
+<link href="<?=base_url()?>public/assets/css/laporan.css" rel="stylesheet"/>
 <!-- admin -->
 <link href="<?=base_url()?>public/assets/css/admin.css" rel="stylesheet"/>
 
