@@ -70,4 +70,6 @@
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/pinaple-soal.js"></script>'); /*==== JS soal ====*/
 
+  document.writeln('<script src="'+CI_ROOT+'public/assets/js/pinaple-jawab.js"></script>'); /*==== JS soal ====*/
+
 }).call(this);

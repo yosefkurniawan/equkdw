@@ -84,6 +84,7 @@ ul#sortable li.clone
 
 #save-info-loading,
 #save-pertanyaan-loading,
+#save-jawaban-loading,
 #save-jadwal-loading
 {
 	display: none;
@@ -112,10 +113,11 @@ ul#sortable li.clone
 	resize: none;
 }
 
-.pertanyaan-error-notif, .jadwal-tglmulai-error-notif, .jadwal-tglakhir-error-notif{
+.pertanyaan-error-notif, .jawaban-error-notif, .jadwal-tglmulai-error-notif, .jadwal-tglakhir-error-notif{
 	color: rgb(231, 49, 15);
 	display: none;
 }
+
 .pagination .cur_page {
 	border: none;
 	padding: 2px 0;
