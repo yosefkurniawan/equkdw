@@ -21,7 +21,7 @@
 					<ul class="list_dosen list-unstyled">
 						<?php foreach ($prodi['listDosen'] as $dosen): ?>
 							<li class="col-md-4">
-								<a href="<?= base_url().'laporan/hasil_evaluasi/'.$dosen['nik'] ?>"><?= $dosen['gelar_prefix'].$dosen['nama'].$dosen['gelar_suffix'] ?></a>
+								<a href="<?= base_url().'laporan/hasil_evaluasi_dosen/'.$dosen['nik'] ?>"><?= $dosen['gelar_prefix'].$dosen['nama'].$dosen['gelar_suffix'] ?></a>
 							</li>
 						<?php endforeach ?>
 					</ul>

@@ -4,3 +4,8 @@
 #list_prodi>div.panel-heading:first-child {
 	margin-top: 0;
 }
+
+#hasil-evaluasi-dosen .grup-pertanyaan {
+	text-align: center;
+	border: solid 1px #ddd;
+}

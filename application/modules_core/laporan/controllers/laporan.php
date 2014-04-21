@@ -34,6 +34,20 @@ class Laporan extends CI_Controller {
 		$data['active']		= 'hasil evaluasi';
 		$this->load->view('main/render_layout',$data);
 	}
+
+	public function hasil_evaluasi_dosen($nik){
+		$dosen 			= $this->m_laporan->getDetailDosen($nik);
+		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik);
+
+		/* -- Render Layout -- */
+		$data['dosen']				= $dosen;
+		$data['hasil_evaluasi']		= $hasil_evaluasi;
+		$data['title'] 		= "Laporan - $nik";
+		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
+		$data['left_bar']	= 'laporan/left_bar_admin';
+		$data['active']		= 'hasil evaluasi';
+		$this->load->view('main/render_layout',$data);
+	}
 }
 
 /* End of file laporan.php */

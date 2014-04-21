@@ -1,3 +1,12 @@
+/* TYPOGRAPHY */
+.center {
+	text-align: center;
+}
+.italic {
+	font-style: italic;
+}
+
+
 .welcome {
 	text-align: center;
 	font-size: 20px;
