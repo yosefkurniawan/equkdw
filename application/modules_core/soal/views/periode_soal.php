@@ -1,4 +1,11 @@
-<h1>Periode dan Soal</h1>
+<div class="page-header">
+	<h1>Periode &amp; Soal</h1>
+</div>
+
+<ol class="breadcrumb">
+	<li><a href="<?= base_url() ?>">Dashboard</a></li>
+	<li class="active">Periode &amp; Soal</li>
+</ol>
 
 <?php if ($allowCreateNew): ?>
 	<a href="<?=base_url() ?>soal/baru" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Buat Paket Baru</a>

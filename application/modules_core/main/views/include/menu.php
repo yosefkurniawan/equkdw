@@ -15,7 +15,7 @@
 			<li><a href="<?=base_url()?>loginas" title="Login As" >Login As</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_admin']): ?>
-			<li><a href="<?=base_url()?>soal" title="Periode dan Soal" >Periode dan Soal</a></li>
+			<li><a href="<?=base_url()?>soal" title="Periode dan Soal" >Periode &amp; Soal</a></li>
 			<li><a href="<?=base_url()?>laporan" title="Laporan" >Laporan</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_kepala_unit'] || ($this->session->userdata['status'] == 'Dosen')) :?>
