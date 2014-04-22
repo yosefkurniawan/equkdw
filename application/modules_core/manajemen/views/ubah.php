@@ -1,6 +1,12 @@
 <div class="page-header">
 	<h1>Ubah Role User</h1>
 </div>
+
+<ol class="breadcrumb">
+	<li><a href="<?= base_url() ?>">Dashboard</a></li>
+	<li><a href="<?= base_url() ?>manajemen/user">Manajemen User</a></li>
+	<li class="active">Ubah role user</li>
+</ol>
 <div class="panel colored">
 	<div class="panel-heading green-bg">
 		<h3 class="panel-title">Informasi User</h3>
@@ -12,6 +18,12 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-2">
+					<div class="form-group">
+						<label>Username</label>
+						<div class="controls">
+							<input class="form-control" type="text" disabled value="<?= $user['username'] ?>">
+						</div>
+					</div>
 					<div class="form-group">
 						<label>Role</label>
 						<div class="controls">

@@ -27,7 +27,7 @@
 </head>
 <body class="alert-danger">
 	<div class="col-md-12">
-		<h1>Error 404 small</h1>
+		<h1>Error 404</h1>
 		<hr>
 		<h4>Halaman yang Anda maksud tidak dapat ditemukan.</h4>
 	</div>

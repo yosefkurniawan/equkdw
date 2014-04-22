@@ -5,7 +5,7 @@ class m_user extends CI_Model
 	// get all user
 	function get_all_user() {
         $sql = "SELECT *
-            FROM eva_user";
+            FROM eva_user WHERE status != 'dihapus' ORDER BY username";
         $query = $this->db->query($sql);
         if ($query->num_rows() > 0) {
             return $query->result_array();
