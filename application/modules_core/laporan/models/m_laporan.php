@@ -47,9 +47,11 @@ class M_laporan extends CI_Model {
 			$hasil_evaluasi = $result->result_array();
 		}
 
-		// hitung % baik
+		// hitung % baik & hitung jml peserta kelas
 		if (!empty($hasil_evaluasi)) {
 			foreach ($hasil_evaluasi as $key => $hasil) {
+
+				// hitung % baik
 				$count=0;
 				if ($hasil['Q1'] > 80) {$count++;}
 				if ($hasil['Q2'] > 80) {$count++;}
@@ -66,6 +68,17 @@ class M_laporan extends CI_Model {
 				
 				$baik = ($count*100)/12;
 				$hasil_evaluasi[$key]['baik'] = round($baik,2);
+
+				// get jml peserta
+				$id_kelasb = $hasil['id_kelasb'];
+				$sql_jml_peserta 	= "SELECT COUNT(nim) as jml_peserta FROM ec_peserta WHERE id_kelasb = '$id_kelasb'";
+				$result_jml_peserta = $this->db->query($sql_jml_peserta);
+				$terisi = 0;
+				if ($result_jml_peserta->num_rows() > 0) {
+					$terisi = $result_jml_peserta->row()->jml_peserta;
+				}
+				$hasil_evaluasi[$key]['terisi'] = $terisi;
+
 			}
 		}
 
@@ -82,6 +95,31 @@ class M_laporan extends CI_Model {
 		}
 
 		return $dosen;
+	}
+
+	public function getMasukanDosen($nik){
+		$sql 		= "SELECT GROUP_CONCAT(`masukan_dosen` SEPARATOR ';') as masukan FROM `eva_jawaban_paket` WHERE `nik` = '$nik' ORDER BY RAND()";
+		$result 	= $this->db->query($sql);
+		$masukan 	= array();
+		
+		if ($result->num_rows() > 0) {
+			$masukan = $result->row()->masukan;
+		}
+		return $masukan;
+	}
+
+	public function getMasukanMatkul($nik){
+		$sql 		= "SELECT m.nama,m.kode,GROUP_CONCAT(j.`masukan_matkul` SEPARATOR ';') as masukan 
+						FROM `eva_jawaban_paket` j 
+						JOIN `ec_kelas_buka` b ON b.id_kelasb = j.id_kelasb
+						JOIN `ec_matkul` m ON m.kode = b.kode
+						WHERE `nik` = '$nik' ORDER BY RAND()";
+		$result 	= $this->db->query($sql);
+		$masukan 	= array();
+		if ($result->num_rows() > 0) {
+			$masukan = $result->result_array();
+		}
+		return $masukan;
 	}
 }
 

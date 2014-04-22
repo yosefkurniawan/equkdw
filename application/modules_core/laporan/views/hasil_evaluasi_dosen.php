@@ -8,9 +8,13 @@
 	<li><a href="<?= base_url().'laporan' ?>">Hasil Evaluasi</a></li>
 	<li class="active"><?= $dosen->nama ?></li>
 </ol>
+
+<h4>Dosen : <?= $dosen->gelar_prefix.$dosen->nama.$dosen->gelar_suffix ?> / <?= $dosen->nik ?></h4>
+
+<!-- Hasil evaluasi kelas -->
 <div class="panel colored">
-	<div class="panel-heading green-bg"><h3 class="panel-title"><?= $dosen->gelar_prefix.$dosen->nama.$dosen->gelar_suffix ?></h3></div>
-	<div class="panel-body">
+	<div class="panel-heading green-bg"><h3 class="panel-title">Hasil kuisioner kelas</h3></div>
+	<div class="panel-body table-responsive">
 		<table class="table table-hover" id="hasil-evaluasi-dosen">
 			<thead>
 				<tr>
@@ -47,7 +51,7 @@
 						<td><?= $hasil['kode'] ?></td>
 						<td><?= $hasil['nama'] ?></td>
 						<td><?= $hasil['grup'] ?></td>
-						<td></td>
+						<td><?= $hasil['terisi'] ?></td>
 						<td><?= $hasil['pengisi'] ?></td>
 						<td><?= $hasil['baik'] ?></td>
 						<td><?= $hasil['Q1'] ?></td>
@@ -66,5 +70,26 @@
 				<?php endforeach ?>
 			</tbody>
 		</table>
+	</div>
+</div>
+
+<!-- Masukan Dosen -->
+<div class="panel colored">
+	<div class="panel-heading green-bg"><h3 class="panel-title">Masukan Untuk Dosen</h3></div>
+	<div class="panel-body">
+		<p><?= $masukan_dosen ?></p>
+	</div>
+</div>
+
+<!-- Masukan Matkul -->
+<div class="panel colored">
+	<div class="panel-heading green-bg"><h3 class="panel-title">Masukan Untuk Matakuliah</h3></div>
+	<div class="panel-body">
+		<dl>
+			<?php foreach ($masukan_matkul as $key => $value): ?>
+				<dt><?= $value['nama'] ?></dt>
+				<dd><?= $value['masukan'] ?></dd>
+			<?php endforeach ?>
+		</dl>
 	</div>
 </div>

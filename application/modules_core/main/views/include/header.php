@@ -88,7 +88,9 @@
         <?php endif ?>
         <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
           <li><a href="<?php echo base_url(); ?>main">Dashboard</a></li>
-          <li><a href="<?php echo base_url(); ?>main/logout">Log Out</a></li>
+          <?php if ($this->session->userdata['is_kepala_unit'] || $this->session->userdata['is_admin'] || $this->session->userdata['is_super_admin']): ?>
+            <li><a href="<?php echo base_url(); ?>main/logout">Log Out</a></li>
+          <?php endif ?>
         <?php endif ?>
       </ul>
     </div>

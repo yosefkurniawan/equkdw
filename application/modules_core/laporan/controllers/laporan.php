@@ -5,6 +5,12 @@ class Laporan extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		# checking whether logged in or not
+		if (!isset($this->session->userdata['is_admin']) || !$this->session->userdata['is_admin'] ) {
+			redirect('main/page404');	
+		} 
+
 		$this->load->model('soal/m_soal');
 		$this->load->model('m_laporan');
 	}
@@ -38,10 +44,14 @@ class Laporan extends CI_Controller {
 	public function hasil_evaluasi_dosen($nik){
 		$dosen 			= $this->m_laporan->getDetailDosen($nik);
 		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik);
+		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
+		$masukan_matkul = $this->m_laporan->getMasukanMatkul($nik);
 
 		/* -- Render Layout -- */
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;
+		$data['masukan_matkul']		= $masukan_matkul;
+		$data['masukan_dosen']		= $masukan_dosen;
 		$data['title'] 		= "Laporan - $nik";
 		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
 		$data['left_bar']	= 'laporan/left_bar_admin';

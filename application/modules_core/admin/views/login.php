@@ -26,11 +26,13 @@
 <body class="blue-bg">
     <div class="signin">
         <div class="signin-body">
-            <h3>Login to your account</h3>
+            <h3>Login</h3>
             <form id="basic-validation" action="<?php echo base_url().$form_action ?>" method="POST">
-            	<div class="form-group">
-            		<div class="msg"><?php echo $this->session->flashdata('admin_login_failed'); ?></div>
-            	</div>
+                <?php if ($this->session->flashdata('admin_login_failed')): ?>
+                    <div class="alert alert-danger fade in">
+                        <?php echo $this->session->flashdata('admin_login_failed'); ?>
+                    </div>
+                <?php endif ?>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Username" name="username" id="username">
                 </div>
@@ -41,8 +43,8 @@
                     <input type="submit" class="btn btn-med blue-bg pull-right" value="Login">
                 </div>
                 <hr>
-                <h4>Forgot your password ?</h4>
-                <p>if you have forgoten your password <a href="<?php echo base_url(); ?>account">click here</a>
+                <h4>Lupa password ?</h4>
+                <p><a href="<?php echo base_url(); ?>account">Klik di sini</a> jika Anda lupa password.
                 </p>
             </form>
         </div>

@@ -1,6 +1,13 @@
 <div class="page-header">
 	<h1>Tambah User</h1>
 </div>
+
+<ol class="breadcrumb">
+	<li><a href="<?= base_url() ?>">Dashboard</a></li>
+	<li><a href="<?= base_url() ?>manajemen/user">Manajemen User</a></li>
+	<li class="active">Tambah User</li>
+</ol>
+
 <div class="panel colored">
 	<div class="panel-heading green-bg">
 		<h3 class="panel-title">Informasi User</h3>
@@ -13,7 +20,6 @@
 				<div class="col-md-5">
 					<div class="form-group">
 						<label>Email</label>
-						<span>* wajib diisi</span>
 						<div class="controls">
 							<input type="text" name="email" class="form-control" value="<?php echo $this->session->userdata('email'); ?>" />
 						</div>
@@ -24,7 +30,6 @@
 				<div class="col-md-5">
 					<div class="form-group">
 						<label>Username</label>
-						<span>* wajib diisi</span>
 						<div class="controls">
 							<input type="text" name="username" class="form-control" value="<?php echo $this->session->userdata('user'); ?>" />
 						</div>
@@ -35,7 +40,6 @@
 				<div class="col-md-5">
 					<div class="form-group">
 						<label>Password</label>
-						<span>* wajib diisi</span>
 						<div class="controls">
 							<input type="password" name="password" class="form-control" value="" />
 						</div>
@@ -46,7 +50,6 @@
 				<div class="col-md-5">
 					<div class="form-group">
 						<label>Konfirmasi Password</label>
-						<span>* wajib diisi</span>
 						<div class="controls">
 							<input type="password" name="repassword" class="form-control" value="" />
 						</div>
@@ -57,7 +60,6 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<label>Role</label>
-						<span>* wajib diisi</span>
 						<div class="controls">
 							<select name="role" class="form-control">
 								<option value="">-- PILIH --</option>

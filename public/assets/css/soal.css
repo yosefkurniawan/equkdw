@@ -118,6 +118,17 @@ ul#sortable li.clone
 	display: none;
 }
 
+#set-all-date {
+	padding: 10px;
+	margin: 10px 0;
+	border: 1px solid #E5E5E5;
+	display: none;
+}
+#set-all-date .row{
+	margin: 10px 0;
+}
+
+/* PAGINATION */
 .pagination .cur_page {
 	border: none;
 	padding: 2px 0;
@@ -131,15 +142,6 @@ ul#sortable li.clone
 .pagination .cur_page:hover {
 	border: none;
 	background: none;
-}
-#set-all-date {
-	padding: 10px;
-	margin: 10px 0;
-	border: 1px solid #E5E5E5;
-	display: none;
-}
-#set-all-date .row{
-	margin: 10px 0;
 }
 
 /* ---------------  <= 991 px layout -------------------- */
