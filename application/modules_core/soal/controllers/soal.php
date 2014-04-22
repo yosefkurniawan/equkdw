@@ -7,8 +7,8 @@ class Soal extends CI_Controller {
 		parent::__construct();
 
 		# checking whether logged in or not
-		if (!isset($this->session->userdata['is_admin'] )) {
-			redirect('admin');	
+		if (!isset($this->session->userdata['is_admin']) || !$this->session->userdata['is_admin'] ) {
+			redirect('main/page404');	
 		} 
 
 		# load models

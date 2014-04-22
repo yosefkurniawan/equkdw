@@ -20,6 +20,9 @@ class Main extends MX_Controller
 			if ($this->session->userdata['status'] == 'Mahasiswa') {
 				redirect('mahasiswa/dashboard');	
 			}
+			elseif ($this->session->userdata['status'] == 'Dosen') {
+				$data['content'] = 'dashboard_dosen';	
+			}
 			elseif($this->session->userdata['is_admin']){
 				$data['content'] = 'dashboard_admin';
 			}
@@ -123,6 +126,9 @@ class Main extends MX_Controller
 		}
 	}
 
+	public function page404(){
+		$this->load->view('page404');
+	}
 }
 
 /* End of file user.php */
