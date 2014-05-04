@@ -70,9 +70,10 @@
 					</tr>
 					<?php endif;?>
 					<?php $aspek = $pertanyaan->aspek ?>
-					<tr>
+					<tr class="q<?=$pertanyaan->no?>">
 						<td>
-							<?=$pertanyaan->pertanyaan?>
+							<?=$pertanyaan->pertanyaan?><br/>
+							<span class="pertanyaan-error-notif" style="display:none">Jawaban tidak boleh kosong!</span>
 						</td>
 						<td> 
 							<i class="tooltip-demo"
@@ -83,17 +84,18 @@
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?>" checked >
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?> setuju">
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>">
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?> ragu-ragu">
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?>" >
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?> tidak-setuju" >
 
 						</td>
+
 						<!-- <span class="help-block has-error" for="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" generated="false">Harus diisi</span> -->
 						<input type="hidden" name="input[<?=$dosen->nik?>][id_paket]" class="id_paket" value="<?=$pertanyaan->kode?>">		
 					</tr>

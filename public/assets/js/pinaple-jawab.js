@@ -43,20 +43,37 @@ function submit_jawaban(){
 	var r=confirm("Anda yakin dengan isian anda?");
 	if (r==true)
 	{
-	    //Make groups
-	    var names = []
-	    $('input:radio').each(function () {
-	        var rname = $(this).attr('name');
-	        if ($.inArray(rname, names) == -1) names.push(rname);
-	    });
+		for (var i = 1; i <= 12; i++) {
+			$('.q'+i+' .pertanyaan-error-notif').hide();
+			$('.q'+i).css('background','inherit');
 
-	    //do validation for each group
-	    $.each(names, function (i, name) {
-	        if ($('input[name="' + name + '"]:checked').length == 0) {
-	            console.log('Please check ' + name);
+			var filled = false;
+			$('.q'+i+' input[type=radio].a'+i).each(function () {
+				if ($(this).is(':checked')) {
+					filled = true;
+					console.log('q'+i+' a'+i);
+				}
+			});
+			if (!filled) {
 				is_validate = false;
-	        }
-	    });
+				$('.q'+i+' .pertanyaan-error-notif').show();
+				$('.q'+i).css('background','rgb(255, 244, 244)');
+			}
+		};
+
+		// goes to first answer wich is not  filled
+		if (!is_scrolled) {
+			$('.pertanyaan-error-notif').each(function(){
+				if ($(this).css('display') != 'none') {
+					$('html, body').animate({
+				        scrollTop: $(this).first().offset().top-100
+				    }, 'slow');
+				    $(this).focus();
+					is_scrolled = true;
+					return false;
+				};
+			});
+		}
 		
 		$('.isi_masukan').each(function(){
 			$(this).css('border','1px solid #ccc');
@@ -130,6 +147,9 @@ function submit_jawaban(){
 
 		} //end of validation
 
+	}else{
+		$('#save-jawaban-loading').css('display', 'none');
+		$('#save-jawaban').show();
 	} //end of confirmation
 	
 }
