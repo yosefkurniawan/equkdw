@@ -15,7 +15,19 @@
 		Semester		: <strong><?=$row_matakuliah->semester?></strong> <br>
 		Dosen Pengampu	: <strong><?=$row_matakuliah->nama_dosen?></strong> <br>
 		</div>
-</diV>
+	</div>
+</div>
+
+<div class="panel colored">
+	<div class="panel-heading green-bg">
+		<h3 class="panel-title">Kehadiran di Kelas</h3>
+	</div>
+	<div class="panel-body">
+		<div class="col-md-12">
+			Anda hadir dalam <?=$kehadiran->num_rows()?> dari <?=$pertemuan->num_rows()?> yang diselenggarakan (<?=$presensi?>%)
+		</div>
+	</div>
+<div>
 
 <br><br>
 
@@ -45,9 +57,7 @@
 			<input type="hidden" name="input[<?=$dosen->nik?>][nik]" class="nik" value="<?=$dosen->nik?>">		
 			<input type="hidden" name="input[<?=$dosen->nik?>][id_kelasb]" class="id_kelasb" value="<?=$row_matakuliah->id_kelasb?>">		
 			<input type="hidden" name="input[<?=$dosen->nik?>][nim]" class="nim" value="<?=$this->session->userdata('username')?>">				
-
-		
-		
+			<input type="hidden" name="input[<?=$dosen->nik?>][presensi]" class="presensi" value="<?=$presensi?>">				
 
 			<div class="panel-body no-padding">
 
@@ -84,15 +94,20 @@
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?> setuju">
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?>">
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?> ragu-ragu">
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>">
 						</td>
 						<td style="text-align:center">
-							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?> tidak-setuju" >
+							<?php if ($presensi < 75) : ?>
+								<input type="radio" id="" 
+								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" >
+							<?php else : ?>
+								<input type="radio" id="" 
+								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?>" >
+							<?php endif ?>
 
 						</td>
 

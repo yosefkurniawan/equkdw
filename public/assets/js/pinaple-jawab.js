@@ -23,6 +23,16 @@ $(document).ready(function(){
 	        scrollTop: $('#box-form-dosen-3').offset().top-80
 	    }, 'slow');
 	});
+	$('#nav-dosen-4').click(function(){
+		$('html, body').animate({
+	        scrollTop: $('#box-form-dosen-3').offset().top-80
+	    }, 'slow');
+	});
+	$('#nav-dosen-5').click(function(){
+		$('html, body').animate({
+	        scrollTop: $('#box-form-dosen-3').offset().top-80
+	    }, 'slow');
+	});
 
 
 	$('#save-jawaban').click(function(){
@@ -58,6 +68,9 @@ function submit_jawaban(){
 				is_validate = false;
 				$('.q'+i+' .pertanyaan-error-notif').show();
 				$('.q'+i).css('background','rgb(255, 244, 244)');
+				$('#save-jawaban-loading').css('display', 'none');
+				$('#save-jawaban').show();
+				is_validate = false;
 			}
 		};
 
@@ -97,51 +110,62 @@ function submit_jawaban(){
 
 		if (is_validate) {
 			// Get data of each form
-			var items =	{};
+			var items =	{}; 
 			var jumlah_dosen= $('#jumlah_dosen').val();
 			for (var number = 1; number <= jumlah_dosen; number++) {
 				form		= '#form-kuisioner-'+number;
 
 				items[number] = {};
+				items[number]['presensi'] 	= $(form+' .presensi').val();
 				items[number]['nik'] 		= $(form+' .nik').val();
 				items[number]['id_kelasb'] 	= $(form+' .id_kelasb').val();
 				items[number]['id_paket'] 	= $(form+' .id_paket').val();
 				items[number]['nim'] 		= $(form+' .nim').val();
+
 				for (var num = 1; num <= 12; num++) {
-					var nama = 'a'+num;
-					var kelas = ' .a'+num;
-					items[number][nama] 		= $(form+kelas).val();
+					// var nama = 'a'+num;
+					// var kelas = ' .a'+num;
+					// items[number][nama] 		= $(form+kelas).val();
 					// alert(nama);
+
+					$(form+' .q'+num+' input[type=radio].a'+num).each(function () {
+						if ($(this).is(':checked')) {
+							var nama = 'a'+num;
+							items[number][nama] 		= $(form+' .q'+num+' input[type=radio].a'+num).val();
+							console.log(form+' q'+i+' a'+i+' = '+items[number][nama]);
+							alert(items[number][nama]);
+						}
+					});
 				}
 				items[number]['masukan_dosen'] 			= $(form+' .masukan_dosen').val();
 				items[number]['masukan_matkul'] 		= $(form+' .masukan_matkul').val();
-				// alert(JSON.stringify(items[number]));
+				alert(JSON.stringify(items[number]));
 			};
 
 			// Send the AJAX request
 			$.ajax({
-			    url : CI_ROOT+"mahasiswa/kuisioner/save_jawaban_kuisioner",
-			    type: "POST",
-			    data : items,
-			    success: function(data, textStatus, jqXHR)
-			    {
-					$('#save-jawaban-loading').css('display', 'none');
-					$('#save-jawaban').show();
-	                window.location.replace(CI_ROOT + 'mahasiswa/dashboard');
-			    },
+			   url : CI_ROOT+"mahasiswa/kuisioner/save_jawaban_kuisioner",
+			   type: "POST",
+			   data : items,
+			   success: function(data, textStatus, jqXHR)
+			   {
+			$('#save-jawaban-loading').css('display', 'none');
+			$('#save-jawaban').show();
+			        window.location.replace(CI_ROOT + 'mahasiswa/dashboard');
+			   },
 
-			    error: function (jqXHR, textStatus, errorThrown)
-			    {
-					$('#save-jawaban-loading').css('display', 'none');
-					$('#save-jawaban').show();
+			   error: function (jqXHR, textStatus, errorThrown)
+			   {
+			$('#save-jawaban-loading').css('display', 'none');
+			$('#save-jawaban').show();
 
-					/* show message */
-					$('#soal-alert').fadeIn(400);
-					$('#soal-alert').addClass('alert-danger');
-					$('#soal-alert p').html('Terjadi kesalahan saat menyimpan data.');
+			/* show message */
+			$('#soal-alert').fadeIn(400);
+			$('#soal-alert').addClass('alert-danger');
+			$('#soal-alert p').html('Terjadi kesalahan saat menyimpan data.');
 
-					$('html,body').animate({ scrollTop: 0 }, 'slow');
-			    }
+			$('html,body').animate({ scrollTop: 0 }, 'slow');
+			   }
 			});
 
 
