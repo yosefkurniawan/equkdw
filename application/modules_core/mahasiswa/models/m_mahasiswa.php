@@ -58,6 +58,59 @@ class M_mahasiswa extends CI_Model {
         }
 	}
 
+	public function getKelasStatus($id_kelasb,$nim)
+	{							
+		$sql = "SELECT k.id_kelasb, 
+						m.nama AS nama_matkul, m.eva_status AS eva_status, 
+						IFNULL(
+							(GROUP_CONCAT(DISTINCT
+								CONCAT(IF(IFNULL(d.gelar_prefix,'NULL')='NULL','',CONCAT(d.gelar_prefix,' ')),
+								d.nama,
+								', ',
+								d.gelar_suffix) 
+							SEPARATOR '; ')
+							),
+							'-'
+						) AS nama_dosen,
+		 				IFNULL(
+		 					(GROUP_CONCAT(
+		 						DISTINCT j.id_jawaban
+		 					SEPARATOR ';')
+		 					),
+		 					'-'
+		 				) AS jawaban,
+						dd.tgl_mulai AS mulai, dd.tgl_akhir AS akhir, j.tanggal_pengisian
+						FROM (ec_kelas_buka k LEFT JOIN eva_jawaban_paket j ON k.id_kelasb = j.id_kelasb AND j.nim = '$nim'), ec_matkul m, 
+							user_dosen_karyawan d, ec_pengajar p, ec_peserta s, ref_unit r, eva_paket pkt, eva_deadline dd
+						WHERE k.kode = m.kode
+						AND k.id_kelasb = '$id_kelasb'
+						AND d.id_unit = r.id_unit
+						AND dd.id_unit = r.id_unit
+						AND pkt.id_paket = dd.id_paket 
+						AND k.id_kelasb = p.id_kelasb
+						AND k.aktif = 1	
+						AND p.nik = d.nik
+						AND s.nim = '$nim'
+						AND k.id_kelasb = s.id_kelasb
+						AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) 
+							as thn_ajaran FROM ec_kelas_buka))
+						AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) 
+							as thn_ajaran FROM ec_kelas_buka))
+						GROUP BY k.id_kelasb, nama_matkul 
+						ORDER BY k.kode
+						";
+
+        $query = $this->db->query($sql);
+
+		// echo '<pre>'; print_r($query->result()); die;
+
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        } else {
+            return array();
+        }
+	}
+
 	public function getKelas($id_kelasb)
 	{
 		$sql = "SELECT k.id_kelasb, k.semester, k.thn_ajaran, k.kode, IFNULL(k.grup,'-') as grup, m.sks, 
