@@ -43,7 +43,7 @@
 <?php $aspek = '' ?>
 <?php foreach ($list_dosen as $dosen): ?>
 
-<form role="form" class="form-horizontal form-bordered left-label" id="form-kuisioner-<?= $y ?>">
+<form role="form" class="form-horizontal form-bordered left-label form-kuisioner" id="form-kuisioner-<?= $y ?>">
 
 
 <div class="row" >
@@ -94,19 +94,19 @@
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?>">
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?>"/>
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>">
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" checked />
 						</td>
 						<td style="text-align:center">
 							<?php if ($presensi < 75) : ?>
 								<input type="radio" id="" 
-								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" >
+								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" />
 							<?php else : ?>
 								<input type="radio" id="" 
-								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?>" >
+								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?>" />
 							<?php endif ?>
 
 						</td>

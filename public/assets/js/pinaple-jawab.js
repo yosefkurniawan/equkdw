@@ -53,26 +53,28 @@ function submit_jawaban(){
 	var r=confirm("Anda yakin dengan isian anda?");
 	if (r==true)
 	{
-		for (var i = 1; i <= 12; i++) {
-			$('.q'+i+' .pertanyaan-error-notif').hide();
-			$('.q'+i).css('background','inherit');
+		$('.form-kuisioner').each(function(){
+			var id_form = '#'+$(this).attr('id');
+			for (var i = 1; i <= 12; i++) {
+				$(id_form+' .q'+i+' .pertanyaan-error-notif').hide();
+				$(id_form+' .q'+i).css('background','inherit');
 
-			var filled = false;
-			$('.q'+i+' input[type=radio].a'+i).each(function () {
-				if ($(this).is(':checked')) {
-					filled = true;
-					console.log('q'+i+' a'+i);
+				var filled = false;
+				$(id_form+' .q'+i+' input[type=radio].a'+i).each(function () {
+					if ($(this).is(':checked')) {
+						filled = true;
+					}
+				});
+				if (!filled) {
+					is_validate = false;
+					$(id_form+' .q'+i+' .pertanyaan-error-notif').show();
+					$(id_form+' .q'+i).css('background','rgb(255, 244, 244)');
+					$('#save-jawaban-loading').css('display', 'none');
+					$('#save-jawaban').show();
+					is_validate = false;
 				}
-			});
-			if (!filled) {
-				is_validate = false;
-				$('.q'+i+' .pertanyaan-error-notif').show();
-				$('.q'+i).css('background','rgb(255, 244, 244)');
-				$('#save-jawaban-loading').css('display', 'none');
-				$('#save-jawaban').show();
-				is_validate = false;
-			}
-		};
+			};
+		});
 
 		// goes to first answer wich is not  filled
 		if (!is_scrolled) {
@@ -123,23 +125,15 @@ function submit_jawaban(){
 				items[number]['nim'] 		= $(form+' .nim').val();
 
 				for (var num = 1; num <= 12; num++) {
-					// var nama = 'a'+num;
-					// var kelas = ' .a'+num;
-					// items[number][nama] 		= $(form+kelas).val();
-					// alert(nama);
-
-					$(form+' .q'+num+' input[type=radio].a'+num).each(function () {
+					$(form+' input[type=radio].a'+num).each(function () {
 						if ($(this).is(':checked')) {
 							var nama = 'a'+num;
-							items[number][nama] 		= $(form+' .q'+num+' input[type=radio].a'+num).val();
-							console.log(form+' q'+i+' a'+i+' = '+items[number][nama]);
-							alert(items[number][nama]);
+							items[number][nama] 		= $(this).val();
 						}
 					});
 				}
 				items[number]['masukan_dosen'] 			= $(form+' .masukan_dosen').val();
 				items[number]['masukan_matkul'] 		= $(form+' .masukan_matkul').val();
-				alert(JSON.stringify(items[number]));
 			};
 
 			// Send the AJAX request
