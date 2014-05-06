@@ -76,7 +76,10 @@
 					<?php foreach ($list_soal as $pertanyaan): ?>
 					<?php if ($aspek != $pertanyaan->aspek) : ?>
 					<tr>
-						<td colspan="5" style="text-align:left"><strong><?=$pertanyaan->aspek?><strong></td>
+						<td colspan="5" style="text-align:left">						
+							<br>
+							<strong><?=$pertanyaan->aspek?><strong>
+					</td>
 					</tr>
 					<?php endif;?>
 					<?php $aspek = $pertanyaan->aspek ?>
@@ -98,7 +101,7 @@
 						</td>
 						<td style="text-align:center">
 							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" checked />
+							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" />
 						</td>
 						<td style="text-align:center">
 							<?php if ($presensi < 75) : ?>
@@ -121,19 +124,19 @@
 			</div>
 			<div class="panel-body no-padding">
 				<div class="form-group">
-					<label class="col-lg-2 control-label"><strong>Masukan Dosen</strong></label>
+					<label class="col-lg-2 control-label"><strong>Masukan untuk Dosen</strong></label>
 					<div class="col-lg-10">
 						<textarea class="form-control masukan_dosen isi_masukan" name="input[<?=$dosen->nik?>][masukan_dosen]"></textarea>
 						<span class="pertanyaan-error-notif"></span>
-						<span class="help-block">Masukan yang berhubungan dengan dosen misal : cara mengajar. Berikan tanda "-" bila tidak ada</span>
+						<span class="help-block">Masukan yang berhubungan dengan dosen misal : cara mengajar. <br>Berikan tanda "-" bila tidak ada</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-lg-2 control-label"><strong>Masukan Materi</strong></label>
+					<label class="col-lg-2 control-label"><strong>Masukan mengenai Materi Perkuliahan</strong></label>
 					<div class="col-lg-10">
 						<textarea class="form-control masukan_matkul isi_masukan" name="input[<?=$dosen->nik?>][masukan_matkul]"></textarea>
 						<span class="pertanyaan-error-notif"></span>
-						<span class="help-block">Masukan yang berhubungan dengan materi yang diberikan misal : kurang update, dsb. Berikan tanda "-" bila tidak ada</span>
+						<span class="help-block">Masukan yang berhubungan dengan materi yang diberikan misal : kurang update, dsb. <br>Berikan tanda "-" bila tidak ada</span>
 					</div>
 				</div>
 			</div>
@@ -156,7 +159,7 @@
 						<div id="save-jawaban-loading">
 							<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
 						</div>
-						<a href="<?=base_url()?>mahasiswa/dashboard" class="btn btn-med gray-bg">Cancel</a>
+						<a href="<?=base_url()?>mahasiswa/dashboard" class="btn btn-med gray-bg">Batal</a>
 					</div>
 				</div>
 

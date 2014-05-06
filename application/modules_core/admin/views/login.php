@@ -10,9 +10,9 @@
     <link rel="shortcut icon" href="assets/images/favicon.ico" />
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=Standards"><![endif]-->
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="keywords" content="Admin Template, Dashboard, Web Application, C Panel, Admin Theme">
-    <meta name="description" content="Flatron - responsive admin template, based on bootstrap v3.0, this theme is very useful in developing web application">
-    <meta name="author" content="Akshay Kumar">
+    <meta name="keywords" content="eQuiz, UKDW, SI, Universitas Kristen Duta Wacana, DWCU, Duta Wacana Christian University, Yogyakarta, Indonesia, SI, IS">
+    <meta name="description" content="eQuiz - information system for creating survey and evaluation in duta wacana christian university">
+    <meta name="author" content="Pinaple Studio">
     <!-- Bootstrap Version 3.0-->
     <link rel="stylesheet" href="<?php echo base_url(); ?>public/assets/css/bootstrap/bootstrap.min.css" />
     <!--Base style sheet-->
@@ -26,7 +26,9 @@
 <body class="blue-bg">
     <div class="signin">
         <div class="signin-body">
-            <h3>Login</h3>
+              <img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz">
+              <hr>
+              <h4>Login Pengguna</h4>
             <form id="basic-validation" action="<?php echo base_url().$form_action ?>" method="POST">
                 <?php if ($this->session->flashdata('admin_login_failed')): ?>
                     <div class="alert alert-danger fade in">

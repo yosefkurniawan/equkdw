@@ -32,7 +32,7 @@ class Kuisioner extends CI_Controller {
 				if ($today >= $row_status->mulai AND $today <= $row_status->akhir) {
 
 					//apakah sudah mengisi
-					if ($row_status->jawaban = '-') {
+					if ($row_status->jawaban == '-') {
 						$authorize = TRUE;						
 					}
 					else {
@@ -49,7 +49,8 @@ class Kuisioner extends CI_Controller {
 				$authorize = FALSE;
 				$pesan = "matakuliah ini tidak memiliki kuisioner yang perlu untuk anda isi"; //tidak ada kuisioner
 			}
-		} else {
+		} 
+		else {
 			$authorize = FALSE;
 			$pesan = "anda tidak terdaftar" ; //tidak terdaftar
 
