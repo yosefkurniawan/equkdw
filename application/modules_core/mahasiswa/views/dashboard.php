@@ -41,7 +41,7 @@
 		<?php if ($percent == 100) : ?>
 			Selamat! Anda sudah mengisi semua kuisioner wajib yang ada!<br> 
 		<?php else : ?>
-			Anda sudah mengisi	<strong> <?= $x ?> </strong> dari <strong> <?= $y ?> </strong> Matakuliah &nbsp;(<strong><?=$percent?>%</strong>)<br> 
+			Anda sudah mengisi	<strong> <?= $x ?> </strong> dari <strong> <?= $y ?> </strong> Matakuliah yang memiliki Kuisioner untuk diisi&nbsp;(<strong><?=$percent?>%</strong>)<br> 
 		<?php endif; ?>
 		</div>
 
