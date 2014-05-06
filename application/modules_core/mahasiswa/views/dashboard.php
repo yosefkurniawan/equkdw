@@ -1,12 +1,20 @@
 <?php $today = date("Y-m-d"); ?>
 <?php 
-	$x = 0; $percent = 0;
+
+	$x = 0; $y = 0; $percent = 0;
 	foreach ($list_krs as $course) {
-		if ($course->jawaban != '-') {
+		if ($course->jawaban != '-' AND $course->eva_status == 1) {
 			$x = $x + 1;
 		}
+		if ($course->eva_status == 1) {
+			$y = $y + 1;
+		}
 	}
-	$percent = ($x / count($list_krs)) * 100;
+	if ($y == 0) {
+		$percent = 100;
+	} else {
+		$percent = ($x / $y) * 100;
+	}
 ?>
 <div class="col-md-12">
 
@@ -29,11 +37,11 @@
 		<div class="col-md-3">
 		Semester		: <strong><?=$thn_ajaran->semester?></strong> <br>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-6">
 		<?php if ($percent == 100) : ?>
 			Selamat! Anda sudah mengisi semua kuisioner wajib yang ada!<br> 
 		<?php else : ?>
-			Anda sudah mengisi	<strong> <?= $x ?> </strong> dari <strong> <?= count($list_krs) ?> </strong> Matakuliah &nbsp;(<strong><?=$percent?>%</strong>)<br> 
+			Anda sudah mengisi	<strong> <?= $x ?> </strong> dari <strong> <?= $y ?> </strong> Matakuliah &nbsp;(<strong><?=$percent?>%</strong>)<br> 
 		<?php endif; ?>
 		</div>
 
