@@ -36,6 +36,10 @@
 <!-- admin -->
 <link href="<?=base_url()?>public/assets/css/admin.css" rel="stylesheet"/>
 
+<link href="<?=base_url()?>public/assets/css/data-tables/data-table.css" rel="stylesheet" type=
+"text/css">
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
 </script>
