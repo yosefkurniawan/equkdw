@@ -39,6 +39,12 @@ class Matakuliah extends CI_Controller {
 		$data['content'] 	= 'matakuliah/daftar_matakuliah';
 		$this->load->view('main/render_layout',$data);				
 	}
+
+	public function gantistatus($matkul,$status)
+	{
+		$this->m_matakuliah->gantiStatusMatakuliah($matkul,$status);
+		redirect('matakuliah');
+	}
 }
 
 /* End of file laporan.php */
