@@ -31,4 +31,31 @@ class M_matakuliah extends CI_Model {
             return $query->result();
         }
 	}
+
+	public function gantiStatusMatakuliah($matkul,$status)
+	{
+		if ($status == 1)
+		{
+			$insert = array('eva_status' => 0);
+		} 
+		else 
+		{
+			$insert = array('eva_status' => 1);
+		}
+
+
+		$this->db->where('kode',$matkul);
+		$ins = $this->db->update('ec_matkul',$insert);
+		if ($ins) 
+		{
+			echo "berhasil";
+			return true;
+		}
+		else
+		{
+			echo "gagal";
+			return false;
+		}
+
+	}
 }
