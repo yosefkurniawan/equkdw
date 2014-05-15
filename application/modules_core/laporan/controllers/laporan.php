@@ -8,7 +8,7 @@ class Laporan extends CI_Controller {
 
 		# checking whether logged in or not
 		if (!isset($this->session->userdata['is_admin']) || !$this->session->userdata['is_admin'] ) {
-			redirect('main/page404');	
+			redirect('admin');	
 		} 
 
 		$this->load->model('soal/m_soal');

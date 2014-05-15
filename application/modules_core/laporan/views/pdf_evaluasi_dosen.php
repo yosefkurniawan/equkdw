@@ -23,7 +23,7 @@ ob_start();
 	}
 	else{
 		foreach ($hasil_evaluasi as $key => $hasil){
-			$data_hasil_kelas = "<tr>
+			$data_hasil_kelas .= "<tr>
 				<td>".$hasil['kode']."</td>
 				<td>".$hasil['nama']."</td>
 				<td>".$hasil['grup']."</td>
