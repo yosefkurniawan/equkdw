@@ -88,8 +88,8 @@ ob_start();
 		<table class="table" id="hasil-evaluasi-dosen">
 			<tbody>
 				<tr>
-					<td colspan="6"></td>
-					<td colspan="12" class="grup-pertanyaan">Index Atas Kuisioner 1 s/d 12</td>
+					<td width="52%" colspan="6"></td>
+					<td width="48%" colspan="12" class="grup-pertanyaan">Index Atas Kuisioner 1 s/d 12</td>
 				</tr>
 				<tr class="header">
 					<td width="5%">Kode</td>
