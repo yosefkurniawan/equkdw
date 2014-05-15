@@ -6,6 +6,9 @@ class Matakuliah extends CI_Controller {
 	{
 		parent::__construct();
 
+		#give default timezone
+		date_default_timezone_set('Asia/Jakarta');
+
 		# checking whether logged in or not
 		if (!isset($this->session->userdata['is_admin']) || !$this->session->userdata['is_admin'] ) {
 			redirect('main/page404');	

@@ -83,7 +83,9 @@
           <?php endif ?>
         </p>
         </div>
-        <div class="pull-right"><img src="<?=base_url()?>public/assets/images/user_pic/user.jpg" title="User Pic" alt="User Pic"></div>
+        <div class="pull-right">
+          <!-- <img src="<?=base_url()?>public/assets/images/user_pic/user.jpg" title="User Pic" alt="User Pic"> -->
+        </div>
       </a>
       <ul class="dropdown-menu pull-right">
         <?php if ($this->session->userdata['is_admin'] || $this->session->userdata['is_super_admin']): ?>
