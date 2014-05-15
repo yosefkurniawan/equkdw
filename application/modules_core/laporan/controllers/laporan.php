@@ -56,6 +56,7 @@ class Laporan extends CI_Controller {
 		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
 		$data['left_bar']	= 'laporan/left_bar_admin';
 		$data['active']		= 'hasil evaluasi';
+		$data['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen/".$dosen->nik."' class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Print</a>";
 		$this->load->view('main/render_layout',$data);
 	}
 

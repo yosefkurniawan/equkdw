@@ -94,4 +94,4 @@
 	</div>
 </div>
 
-<a href="<?php echo base_url().'laporan/pdf_hasil_evaluasi_dosen/'.$dosen->nik ?>" class="btn btn-med blue-bg" target="_blank"><i class="icon-print"></i> Print</a>
+<?php echo $btn_print; ?>

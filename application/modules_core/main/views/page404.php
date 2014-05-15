@@ -25,7 +25,7 @@
 <!--[if lt IE 9]><script src="<?=base_url()?>public/assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="<?=base_url()?>public/assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->
 
 </head>
-<body class="alert-danger">
+<body class="page404">
 	<div class="col-md-12">
 		<h1>Error 404</h1>
 		<hr>
