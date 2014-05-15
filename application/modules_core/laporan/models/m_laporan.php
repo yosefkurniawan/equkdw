@@ -34,8 +34,8 @@ class M_laporan extends CI_Model {
 					IFNULL(SUM(a9)*100/(COUNT(a9)*2),'-') AS Q9,
 					IFNULL(SUM(a10)*100/(COUNT(a10)*2),'-') AS Q10,
 					IFNULL(SUM(a11)*100/(COUNT(a11)*2),'-') AS Q11, 
-					IFNULL(SUM(a12)*100/(COUNT(a12)*2),'-') AS Q12
-					#k.kode,k.id_kelasb,k.semester,k.thn_ajaran,k.grup,m.sks,k.waktu_mulai,k.waktu_selesai,waktu_mulai_2,k.waktu_selesai_2,k.diadakan_hari,k.diadakan_hari_2,m.nama AS nama_matkul,p.nik,d.nama AS nama_dosen 
+					IFNULL(SUM(a12)*100/(COUNT(a12)*2),'-') AS Q12,
+					IFNULL(j.masukan_matkul, '-') as masukan_matkul
 					FROM ec_kelas_buka k
 					JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb AND p.nik = '$nik'
 					JOIN ec_matkul m ON m.kode = k.kode

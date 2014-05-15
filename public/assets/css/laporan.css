@@ -9,3 +9,7 @@
 	text-align: center;
 	border: solid 1px #ddd;
 }
+#hasil-evaluasi-dosen th i {
+	font-style: normal;
+	cursor: help;
+}
