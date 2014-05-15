@@ -28,18 +28,54 @@
 					<th>Terisi</th>
 					<th>Pengisi</th>
 					<th>% Baik</th>
-					<th>Q1</th>
-					<th>Q2</th>
-					<th>Q3</th>
-					<th>Q4</th>
-					<th>Q5</th>
-					<th>Q6</th>
-					<th>Q7</th>
-					<th>Q8</th>
-					<th>Q9</th>
-					<th>Q10</th>
-					<th>Q11</th>
-					<th>Q12</th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[0]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q1</i> </th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[1]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q2</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[2]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q3</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[3]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q4</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[4]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q5</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[5]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q6</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[6]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q7</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[7]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q8</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[8]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q9</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[9]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q10</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[10]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q11</i> </th></th>
+					<th><i class="tooltip-demo"
+	                            data-original-title="<?=$pertanyaan[11]->pertanyaan?>"
+	                            data-placement="left" data-toggle="tooltip" href="#"
+	                            title="">Q12</i> </th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -86,9 +122,9 @@
 	<div class="panel-heading green-bg"><h3 class="panel-title">Masukan Untuk Matakuliah</h3></div>
 	<div class="panel-body">
 		<dl>
-			<?php foreach ($masukan_matkul as $key => $value): ?>
+			<?php foreach ($hasil_evaluasi as $key => $value): ?>
 				<dt><?= $value['nama'] ?></dt>
-				<dd><?= $value['masukan'] ?></dd>
+				<dd><?= $value['masukan_matkul'] ?></dd>
 			<?php endforeach ?>
 		</dl>
 	</div>
