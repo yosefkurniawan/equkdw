@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'usrs13ev4';
-$db['default']['password'] = 'sqrpyf8xs';
-$db['default']['database'] = 'db_ukdw';
+$db['default']['hostname'] = 'pinaple.co.vu';
+$db['default']['username'] = 'usrsieva';
+$db['default']['password'] = 'qwepoi123098';
+$db['default']['database'] = 'eQuiz';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

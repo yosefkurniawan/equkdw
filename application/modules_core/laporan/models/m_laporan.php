@@ -21,25 +21,32 @@ class M_laporan extends CI_Model {
 
 		// get hasil evaluasi
 		$sql	= "SELECT 
-					j.id_kelasb, m.nama, b.grup, m.kode,
+					k.id_kelasb, m.nama, k.grup, m.kode,
 					COUNT(j.`id_jawaban`) AS pengisi,
-					SUM(a1)*100/(COUNT(a1)*2) AS Q1,
-					SUM(a2)*100/(COUNT(a2)*2) AS Q2,
-					SUM(a3)*100/(COUNT(a3)*2) AS Q3,
-					SUM(a4)*100/(COUNT(a4)*2) AS Q4,
-					SUM(a5)*100/(COUNT(a5)*2) AS Q5,
-					SUM(a6)*100/(COUNT(a6)*2) AS Q6,
-					SUM(a7)*100/(COUNT(a7)*2) AS Q7,
-					SUM(a8)*100/(COUNT(a8)*2) AS Q8,
-					SUM(a9)*100/(COUNT(a9)*2) AS Q9,
-					SUM(a10)*100/(COUNT(a10)*2) AS Q10,
-					SUM(a11)*100/(COUNT(a11)*2) AS Q11, 
-					SUM(a12)*100/(COUNT(a12)*2) AS Q12
-					FROM `eva_jawaban_paket` j 
-					JOIN `ec_kelas_buka` b ON j.id_kelasb = b.id_kelasb
-					JOIN `ec_matkul` m ON b.kode = m.kode
-					WHERE j.`id_paket` = $id_paket AND j.nik = '$nik'
-					GROUP BY j.id_kelasb,m.nama,b.grup,m.kode";
+					IFNULL(SUM(a1)*100/(COUNT(a1)*2),'-') AS Q1,
+					IFNULL(SUM(a2)*100/(COUNT(a2)*2),'-') AS Q2,
+					IFNULL(SUM(a3)*100/(COUNT(a3)*2),'-') AS Q3,
+					IFNULL(SUM(a4)*100/(COUNT(a4)*2),'-') AS Q4,
+					IFNULL(SUM(a5)*100/(COUNT(a5)*2),'-') AS Q5,
+					IFNULL(SUM(a6)*100/(COUNT(a6)*2),'-') AS Q6,
+					IFNULL(SUM(a7)*100/(COUNT(a7)*2),'-') AS Q7,
+					IFNULL(SUM(a8)*100/(COUNT(a8)*2),'-') AS Q8,
+					IFNULL(SUM(a9)*100/(COUNT(a9)*2),'-') AS Q9,
+					IFNULL(SUM(a10)*100/(COUNT(a10)*2),'-') AS Q10,
+					IFNULL(SUM(a11)*100/(COUNT(a11)*2),'-') AS Q11, 
+					IFNULL(SUM(a12)*100/(COUNT(a12)*2),'-') AS Q12
+					#k.kode,k.id_kelasb,k.semester,k.thn_ajaran,k.grup,m.sks,k.waktu_mulai,k.waktu_selesai,waktu_mulai_2,k.waktu_selesai_2,k.diadakan_hari,k.diadakan_hari_2,m.nama AS nama_matkul,p.nik,d.nama AS nama_dosen 
+					FROM ec_kelas_buka k
+					JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb AND p.nik = '$nik'
+					JOIN ec_matkul m ON m.kode = k.kode
+					JOIN user_dosen_karyawan d ON d.nik = p.nik
+					LEFT JOIN `eva_jawaban_paket` j ON j.id_kelasb = k.id_kelasb AND j.`id_paket` = $id_paket 
+					AND j.nik = '$nik'
+					WHERE m.`eva_status` = 1
+					AND k.aktif = 1
+					AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))
+					AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))
+					GROUP BY j.id_kelasb,m.nama,k.grup,m.kode";
 		$result = $this->db->query($sql);
 
 		$hasil_evaluasi = array();
