@@ -1,3 +1,4 @@
+<?php date_default_timezone_set('Asia/Jakarta');?>
 <div class="col-md-12">
 
 <h1>Form Kuisioner Evaluasi Dosen Matakuliah </h1>

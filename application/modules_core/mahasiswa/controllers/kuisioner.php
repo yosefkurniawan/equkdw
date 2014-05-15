@@ -11,6 +11,7 @@ class Kuisioner extends CI_Controller {
 			$this->load->model('m_kuisioner');
 			$this->load->model('m_mahasiswa');
 			$this->load->model('m_kelas');
+			date_default_timezone_set('Asia/Jakarta');
 
 	}
 
@@ -65,7 +66,8 @@ class Kuisioner extends CI_Controller {
 			// fetch data presensi
 			$pertemuan			= $this->m_kelas->getPertemuan($id_kelasb);
 			$kehadiran 			= $this->m_kelas->getKehadiranKelas($id_kelasb,$this->session->userdata('username'));
-			$presensi			= $kehadiran->num_rows() / $pertemuan->num_rows();
+			$presensi			= $kehadiran->num_rows() / $pertemuan->num_rows() * 100;
+			$presensi 			= (float)number_format($presensi,2,'.','');
 			// echo  $kehadiran->num_rows() . " / " . $pertemuan->num_rows() . " = " . $presensi ; die;
 
 			/* -- Render Layout -- */
