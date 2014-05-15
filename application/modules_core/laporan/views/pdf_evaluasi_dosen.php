@@ -47,10 +47,10 @@ ob_start();
 	}
 
 	if (empty($hasil_evaluasi)){
-		$data_masukan_matkul = '<tr><td colspan="18" class="center"><span class="italic">Tidak ada masukan</span></td></tr>';
+		$data_masukan_matkul = '<span class="italic">Tidak ada matakuliah</span></td>';
 	}else{
 		foreach ($hasil_evaluasi as $key => $value){
-			$data_masukan_matkul .= '<dt>'.$value["nama"].'</dt><dd>'.$value["masukan_matkul"].'</dd>';
+			$data_masukan_matkul .= $value["nama"].'<br/>'.$value["masukan_matkul"].'<br/>';
 		}
 	}
 
