@@ -66,17 +66,26 @@ class Kuisioner extends CI_Controller {
 			// fetch data presensi
 			$pertemuan			= $this->m_kelas->getPertemuan($id_kelasb);
 			$kehadiran 			= $this->m_kelas->getKehadiranKelas($id_kelasb,$this->session->userdata('username'));
-			$presensi			= $kehadiran->num_rows() / $pertemuan->num_rows() * 100;
+			$kehadiranDosen 	= $this->m_kelas->getKehadiranKelasDosen($id_kelasb);
+			if ($kehadiranDosen->num_rows() != 0)
+			{
+				$presensi			= $kehadiran->num_rows() / $kehadiranDosen->num_rows() * 100;
+			}
+			else
+			{
+				$presensi			= 0;				
+			}
 			$presensi 			= (float)number_format($presensi,2,'.','');
 			// echo  $kehadiran->num_rows() . " / " . $pertemuan->num_rows() . " = " . $presensi ; die;
 
 			/* -- Render Layout -- */
-			$data['left_bar']			= 'mahasiswa/left_bar_jawab';
+			$data['left_bar']		= 'mahasiswa/left_bar_jawab';
 			$data['row_matakuliah']	= $row_matakuliah;
 			$data['list_dosen']	= $list_dosen;
 			$data['list_soal']	= $list_soal;
 			$data['pertemuan']  = $pertemuan;
 			$data['kehadiran']	= $kehadiran;
+			$data['kehadiranDosen']	= $kehadiranDosen;
 			$data['presensi']	= $presensi;
 			$data['title'] 		= 'Kuisioner Dosen';
 			$data['content'] 	= 'mahasiswa/kuisioner';
@@ -93,7 +102,7 @@ class Kuisioner extends CI_Controller {
 	public function save_jawaban_kuisioner()
 	{
         $this->load->helper('date');
-        $datestring = '%Y-%m-%d %h:%i:%a';
+        $datestring = '%Y-%m-%d %H:%i:%s';
         $time = time();
         $now = mdate($datestring, $time);
 

@@ -25,7 +25,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="col-md-12">
-			Anda hadir dalam <?=$kehadiran->num_rows()?> dari <?=$pertemuan->num_rows()?> yang diselenggarakan (<?=$presensi?>%)
+			Anda hadir dalam <?=$kehadiran->num_rows()?> dari <?=$kehadiranDosen->num_rows()?> yang diselenggarakan (<?=$presensi?>%)
 		</div>
 	</div>
 <div>

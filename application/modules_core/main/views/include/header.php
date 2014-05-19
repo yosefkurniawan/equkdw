@@ -54,7 +54,7 @@
 <header>
  <!-- LOGO -->
   <div class="container-fluid clearfix">
-    <a href="index.html" title="eQuiz" class="pull-left">
+    <a href="<?=base_url()?>" title="eQuiz" class="pull-left">
       <img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz">
     </a>
 
