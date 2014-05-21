@@ -23,12 +23,12 @@
     <!--[if lt IE 9]><script src="assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->
 </head>
 
-<body class="blue-bg">
+<body class="red-bg">
     <div class="signin">
         <div class="signin-body">
               <img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz">
               <hr>
-              <h4>Login Pengguna</h4>
+              <h4>Login Admin</h4>
             <form id="basic-validation" action="<?php echo base_url().$form_action ?>" method="POST">
                 <?php if ($this->session->flashdata('admin_login_failed')): ?>
                     <div class="alert alert-danger fade in">
@@ -42,7 +42,7 @@
                     <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                 </div>
                 <div class="form-group clearfix">
-                    <input type="submit" class="btn btn-med blue-bg pull-right" value="Login">
+                    <input type="submit" class="btn btn-med red-bg pull-right" value="Login">
                 </div>
                 <hr>
                 <h4>Lupa password ?</h4>

@@ -38,6 +38,27 @@ class M_kelas extends CI_Model {
         }
 	}
 
+	public function getKehadiranKelasDosen($id_kelasb)
+	{
+		$sql = "SELECT DISTINCT pertemuan_id
+				FROM fp_presensi_dosen
+				WHERE kelas_buka_id = $id_kelasb
+				ORDER BY pertemuan_id
+				";
+
+        $query = $this->db->query($sql);
+
+        #kelas_buka_id
+        #pertemuannya berbeda
+        // echo '<pre>'; print_r($query->result()); die;
+
+        if ($query->num_rows() > 0) {
+            return $query;
+        } else {
+            return $query;
+        }
+	}
+
 	public function getMhsApakahTerdaftar($id_kelasb, $nim)
 	{
 		$sql = "SELECT *

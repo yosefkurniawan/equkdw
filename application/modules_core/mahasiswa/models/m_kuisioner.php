@@ -40,4 +40,29 @@ class M_kuisioner extends CI_Model {
 			return false;
 		}
 	}
+
+	public function getJawabanMahasiswa($id_kelasb,$nim)
+	{
+		// $sql = "SELECT * FROM eva_jawaban_paket WHERE id_kelasb = $id_kelasb AND nim = $nim";
+
+		$sql = "SELECT k.id_kelasb, d.nik, CONCAT(IF(IFNULL(d.gelar_prefix,'NULL')='NULL','',CONCAT(d.gelar_prefix,' ')),
+					d.nama,IF(IFNULL(d.gelar_suffix,'NULL')='NULL','',CONCAT(', ',d.gelar_suffix)))
+					AS nama_dosen, a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,masukan_dosen,masukan_matkul
+				FROM ec_kelas_buka k, user_dosen_karyawan d, ec_pengajar p, eva_jawaban_paket j
+				WHERE k.id_kelasb = p.id_kelasb
+				AND j.nik = d.nik
+				AND p.nik = d.nik
+				AND j.nim = '$nim'
+				AND k.id_kelasb = '$id_kelasb'";
+
+        $query = $this->db->query($sql);
+
+        // echo '<pre>'; print_r($query->result()); die;
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return array();
+        }		
+	}
 }

@@ -104,7 +104,9 @@
 									<a href="<?=base_url()?>mahasiswa/kuisioner/jawab/<?=$course->id_kelasb?>" 
 										class="blue-bg btn btn-xs showcase-btn"><i class="icon-pencil"></i></a>	
 								<?php elseif ($course->jawaban != '-') : ?>
-									Telah Diisi pada tanggal <br> <?= date('j F Y',strtotime($course->tanggal_pengisian)) ?>
+									<a href="<?=base_url()?>mahasiswa/kuisioner/lihat/<?=$course->id_kelasb?>" 
+										class="blue-bg btn btn-xs showcase-btn"><i class="icon-eye-open"></i></a> 
+									Tgl isi : <?= date('j F Y',strtotime($course->tanggal_pengisian)) ?>
 								<?php endif ?>
 
 							<?php else : ?>
