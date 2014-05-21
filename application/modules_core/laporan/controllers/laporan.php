@@ -104,6 +104,12 @@ class Laporan extends CI_Controller {
 
 	    $this->load->view('pdf_evaluasi_dosen', $data);
 	}
+
+	public function lihat()
+	{
+		$this->m_mahasiswa->lihatjawaban('72120003');
+		// $this->m_mahasiswa->getKRS3('72120003');
+	}
 }
 
 /* End of file laporan.php */

@@ -143,6 +143,7 @@ class Kuisioner extends CI_Controller {
 
 	public function lihat($id_kelasb)
 	{	
+
 		$authorize = FALSE;
 
 		$row_status		= $this->m_mahasiswa->getKelasStatus($id_kelasb,$this->session->userdata('username'));
