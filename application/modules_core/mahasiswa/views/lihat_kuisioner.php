@@ -22,9 +22,8 @@
 <!-- <div class="panel colored">
 	<div class="panel-heading green-bg">
 		<h3 class="panel-title">Kehadiran di Kelas</h3>
-	</div
+	</div>
 	<div class="panel-body">
-		<
 		<div class="col-md-12">
 			Anda hadir dalam <?=$kehadiran->num_rows()?> dari <?=$kehadiranDosen->num_rows()?> yang diselenggarakan (<?=$presensi?>%)
 		</div>
@@ -32,11 +31,6 @@
 <div>
 
 <br><br> -->
-
-<?php if (validation_errors() != NULL) : ?>
-	<div class="alert alert-danger"><strong>Attention Message</strong> : <br> <?php echo validation_errors(); ?> </div>
-<?php endif; ?>
-
 
 
 <input type="hidden" value="<?= count($list_dosen) ?>" id="jumlah_dosen">
@@ -56,11 +50,6 @@
 		</div>
 		
 		<!-- HIDDEN VALUE -->
-			<input type="hidden" name="input[<?=$dosen->nik?>][nik]" class="nik" value="<?=$dosen->nik?>">		
-			<input type="hidden" name="input[<?=$dosen->nik?>][id_kelasb]" class="id_kelasb" value="<?=$row_matakuliah->id_kelasb?>">		
-			<input type="hidden" name="input[<?=$dosen->nik?>][nim]" class="nim" value="<?=$this->session->userdata('username')?>">				
-			<input type="hidden" name="input[<?=$dosen->nik?>][presensi]" class="presensi" value="<?=$presensi?>">				
-
 			<div class="panel-body no-padding">
 
 			<table class="table table-hover">
@@ -88,7 +77,6 @@
 					<tr class="q<?=$pertanyaan->no?>">
 						<td>
 							<?=$pertanyaan->pertanyaan?><br/>
-							<span class="pertanyaan-error-notif" style="display:none">Jawaban tidak boleh kosong!</span>
 						</td>
 						<td> 
 							<i class="tooltip-demo"
@@ -97,21 +85,30 @@
 	                            title=""><i class="icon-question-sign"></i></i> 
 								
 						</td>
+						<?php $jwb = 'a'.$x; ?>
 						<td style="text-align:center">
-							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="2" class="a<?=$pertanyaan->no?>"/>
+							<?php if($dosen->$jwb == "2") : ?> 
+							<i class="icon-ok"></i>					
+							<?php else : ?>
+							<i class="icon-remove"></i>					
+							<?php endif; ?>
 						</td>
 						<td style="text-align:center">
-							<input type="radio" id="" 
-							name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="1" class="a<?=$pertanyaan->no?>" />
+							<?php if($dosen->$jwb == "1") : ?> 
+							<i class="icon-ok"></i>					
+							<?php else : ?>
+							<i class="icon-remove"></i>					
+							<?php endif; ?>
 						</td>
 						<td style="text-align:center">
-								<input type="radio" id="" 
-								name="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" value="0" class="a<?=$pertanyaan->no?>" />
+							<?php if($dosen->$jwb == "0") : ?> 
+							<i class="icon-ok"></i>					
+							<?php else : ?>
+							<i class="icon-remove"></i>					
+							<?php endif; ?>
 						</td>
 
 						<!-- <span class="help-block has-error" for="input[<?=$dosen->nik?>][a<?=$pertanyaan->no?>]" generated="false">Harus diisi</span> -->
-						<input type="hidden" name="input[<?=$dosen->nik?>][id_paket]" class="id_paket" value="<?=$pertanyaan->kode?>">		
 					</tr>
 					<?php $x = $x + 1 ?>
 					<?php endforeach ?>
@@ -122,17 +119,13 @@
 				<div class="form-group">
 					<label class="col-lg-2 control-label"><strong>Masukan untuk Dosen</strong></label>
 					<div class="col-lg-10">
-						<textarea class="form-control masukan_dosen isi_masukan" name="input[<?=$dosen->nik?>][masukan_dosen]"></textarea>
-						<span class="pertanyaan-error-notif"></span>
-						<span class="help-block">Masukan yang berhubungan dengan dosen misal : cara mengajar. <br>Berikan tanda "-" bila tidak ada</span>
+							<?= $dosen->masukan_dosen ?>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-lg-2 control-label"><strong>Masukan mengenai Materi Perkuliahan</strong></label>
 					<div class="col-lg-10">
-						<textarea class="form-control masukan_matkul isi_masukan" name="input[<?=$dosen->nik?>][masukan_matkul]"></textarea>
-						<span class="pertanyaan-error-notif"></span>
-						<span class="help-block">Masukan yang berhubungan dengan materi yang diberikan misal : kurang update, dsb. <br>Berikan tanda "-" bila tidak ada</span>
+							<?= $dosen->masukan_matkul ?>
 					</div>
 				</div>
 			</div>
@@ -151,19 +144,12 @@
 				<div class="row">
 					<div class="col-lg-offset-2 col-lg-10">
 					<!-- <a href="javascript:void(0)" class="blue-bg btn" id="submit-kuisioner">Simpan</a> -->
-						<a href="javascript:void(0)" class="blue-bg btn" id="save-jawaban">Simpan</a>
-						<div id="save-jawaban-loading">
-							<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
-						</div>
-						<a href="<?=base_url()?>mahasiswa/dashboard" class="btn btn-med gray-bg">Batal</a>
+						<a href="<?=base_url()?>mahasiswa/dashboard" class="btn btn-med blue-bg">Kembali</a>
 					</div>
 				</div>
-
-				<div class="jawaban-error-notif"></div>
-
+				<br><br><br>
 
 </div>
-
 
 
 

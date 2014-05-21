@@ -14,6 +14,7 @@ class Laporan extends CI_Controller {
 		$this->load->model('soal/m_soal');
 		$this->load->model('m_laporan');
 		$this->load->model('mahasiswa/m_kuisioner');
+		$this->load->model('mahasiswa/m_mahasiswa');
 	}
 
 	public function index()
@@ -41,6 +42,32 @@ class Laporan extends CI_Controller {
 		$data['active']		= 'hasil evaluasi';
 		$this->load->view('main/render_layout',$data);
 	}
+
+	public function status_pengisian(){
+
+		// echo "laporan yang menampilkan semua status pengisian"; die;
+
+		$list_pengisian = $this->m_mahasiswa->getStatusPengisianMahasiswa();
+
+		// $listDosenByProdi = array();
+		// foreach ($listProdi as $key => $prodi) {
+		// 	$listDosenByProdi[$key]['id_unit'] 	= $prodi['id_unit'];
+		// 	$listDosenByProdi[$key]['unit'] 	= $prodi['unit'];
+
+		// 	$listDosen = $this->m_laporan->getListDosenByIdUnit($prodi['id_unit']);
+		// 	$listDosenByProdi[$key]['listDosen']= $listDosen;
+		// }
+
+		/* -- Render Layout -- */
+		$data['list_pengisian']	= $list_pengisian;
+		$data['message']	= $this->session->flashdata('message');
+		$data['title'] 		= 'Laporan - List Status Pengisian Kuisioner';
+		$data['content'] 	= 'laporan/list_pengisian';
+		$data['left_bar']	= 'laporan/left_bar_admin';
+		$data['active']		= 'status pengisian';
+		$this->load->view('main/render_layout',$data);
+	}
+
 
 	public function hasil_evaluasi_dosen($nik){
 		$dosen 			= $this->m_laporan->getDetailDosen($nik);

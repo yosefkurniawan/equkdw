@@ -140,4 +140,90 @@ class Kuisioner extends CI_Controller {
 		// $this->session->set_flashdata('message', 'kuisioner berhasil diisi');
 		// redirect('mahasiswa/dashboard');
 	}
+
+	public function lihat($id_kelasb)
+	{	
+		$authorize = FALSE;
+
+		$row_status		= $this->m_mahasiswa->getKelasStatus($id_kelasb,$this->session->userdata('username'));
+
+		// check wheter user registered in this class or not
+		if ($registered = $this->m_kelas->getMhsApakahTerdaftar($id_kelasb,$this->session->userdata('username'))) {	
+			//apakah ada kusionernya
+			if ($row_status->eva_status == 1) {
+
+				$today = date("Y-m-d");
+				
+				//apakah sudah boleh mengisi
+				if ($today >= $row_status->mulai AND $today <= $row_status->akhir) {
+
+					//apakah sudah mengisi
+					if ($row_status->jawaban == '-') {
+						$authorize = FALSE;
+						$alamat  = 'kuisioner/jawab/'.$id_kelasb;						
+						redirect($alamat); //sudah terisi
+					}
+					else {
+						$authorize = TRUE;
+					}
+				}
+				else {
+					$authorize = FALSE;
+					$pesan = "kuisioner pada matakuliah ini belum waktunya diisi"; //belum waktunya mengisi
+				}
+			}
+			else {
+				$authorize = FALSE;
+				$pesan = "matakuliah ini tidak memiliki kuisioner yang perlu untuk anda isi"; //tidak ada kuisioner
+			}
+		} 
+		else {
+			$authorize = FALSE;
+			$pesan = "anda tidak terdaftar" ; //tidak terdaftar
+		} 
+
+		if ($authorize == TRUE) {
+
+			// fetch data
+			$row_matakuliah 	= $this->m_mahasiswa->getKelas($id_kelasb);
+			// $list_dosen			= $this->m_mahasiswa->getDosenKelas($id_kelasb);
+			$list_dosen			= $this->m_kuisioner->getJawabanMahasiswa($id_kelasb,$this->session->userdata('username'));
+			$list_soal			= $this->m_kuisioner->getPertanyaan();
+			// fetch data presensi
+			$pertemuan			= $this->m_kelas->getPertemuan($id_kelasb);
+			$kehadiran 			= $this->m_kelas->getKehadiranKelas($id_kelasb,$this->session->userdata('username'));
+			$kehadiranDosen 	= $this->m_kelas->getKehadiranKelasDosen($id_kelasb);
+			//get jawaban
+			if ($kehadiranDosen->num_rows() != 0)
+			{
+				$presensi			= $kehadiran->num_rows() / $kehadiranDosen->num_rows() * 100;
+			}
+			else
+			{
+				$presensi			= 0;				
+			}
+			$presensi 			= (float)number_format($presensi,2,'.','');
+			// echo  $kehadiran->num_rows() . " / " . $pertemuan->num_rows() . " = " . $presensi ; die;
+
+			/* -- Render Layout -- */
+			$data['left_bar']		= 'mahasiswa/left_bar_jawab';
+			$data['row_matakuliah']	= $row_matakuliah;
+			$data['list_dosen']	= $list_dosen;
+			$data['list_soal']	= $list_soal;
+			$data['pertemuan']  = $pertemuan;
+			$data['kehadiran']	= $kehadiran;
+			$data['kehadiranDosen']	= $kehadiranDosen;
+			$data['presensi']	= $presensi;
+			$data['title'] 		= 'Lihat Jawaban Kuisioner Dosen';
+			$data['content'] 	= 'mahasiswa/lihat_kuisioner';
+			$this->load->view('main/render_layout',$data);		
+
+		}
+		else {
+			$pesan = $pesan . " silahkan kembali ke <a href='" . base_url() ."mahasiswa/dashboard'> halaman dashboard </a>" ;
+			echo $pesan;
+			die;
+		} 	
+	}
+
 }

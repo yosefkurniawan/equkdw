@@ -187,5 +187,58 @@ class M_mahasiswa extends CI_Model {
             return array();
         }			
 	}
+
+	public function getStatusPengisianMahasiswa()
+	{
+		$sql = "SELECT mhs.nim,mhs.nama_lengkap,mhs.unit,mhs.matakuliah_diambil,mhs.matakuliah_berkuisioner,mhs.kuisioner_terisi,h.hadiah FROM (SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+						SUM(foo.eva_status) as matakuliah_berkuisioner, COUNT(j.id_jawaban) as kuisioner_terisi 
+					FROM (SELECT s.nim, u.nama_lengkap, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+					WHERE k.id_kelasb = s.id_kelasb
+					AND s.nim = u.nim
+					AND u.id_unit = r.id_unit
+					AND k.kode = m.kode
+					AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) as thn_ajaran FROM ec_kelas_buka))
+					AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) as thn_ajaran FROM ec_kelas_buka))) as foo
+					LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+					GROUP BY nim) as mhs LEFT JOIN eva_hadiah h ON mhs.nim = h.nim
+					";
+
+        $query = $this->db->query($sql);
+
+		// echo '<pre>'; print_r($query->result()); die;
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return array();
+        }		
+	}
+
+	public function getStatusPengisianMahasiswaIndividu($nim)
+	{
+		$sql = "SELECT mhs.nim,mhs.nama_lengkap,mhs.unit,mhs.matakuliah_diambil,mhs.matakuliah_berkuisioner,mhs.kuisioner_terisi,h.hadiah FROM (SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+						SUM(foo.eva_status) as matakuliah_berkuisioner, COUNT(j.id_jawaban) as kuisioner_terisi 
+					FROM (SELECT s.nim, u.nama_lengkap, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+					WHERE k.id_kelasb = s.id_kelasb
+					AND s.nim = u.nim
+					AND u.id_unit = r.id_unit
+					AND k.kode = m.kode
+					AND s.nim = '$nim'
+					AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) as thn_ajaran FROM ec_kelas_buka))
+					AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) as thn_ajaran FROM ec_kelas_buka))) as foo
+					LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+					GROUP BY nim) as mhs LEFT JOIN eva_hadiah h ON mhs.nim = h.nim
+					";
+
+        $query = $this->db->query($sql);
+
+		// echo '<pre>'; print_r($query->result()); die;
+
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        } else {
+            return array();
+        }		
+	}
 }
 
