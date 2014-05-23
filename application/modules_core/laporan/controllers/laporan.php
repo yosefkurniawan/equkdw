@@ -107,8 +107,9 @@ class Laporan extends CI_Controller {
 
 	public function lihat()
 	{
-		$this->m_mahasiswa->lihatjawaban('72120003');
-		// $this->m_mahasiswa->getKRS3('72120003');
+		// $krs = $this->m_mahasiswa->lihatjawaban('72120010');
+		$krs = $this->m_mahasiswa->getKRS('72110007');
+		echo '<pre>'; print_r($krs); die;
 	}
 }
 
