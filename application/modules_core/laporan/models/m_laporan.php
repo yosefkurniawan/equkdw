@@ -14,10 +14,18 @@ class M_laporan extends CI_Model {
 		return $dosen;
 	}
 
-	public function getHasilEvaluasi($nik){
+	# NOTE: $showAllMatkul = false --> hide all subjects that do not have questionnaire
+	public function getHasilEvaluasi($nik, $showAllMatkul=false){
 		// get latest paket
 		$sql_latest_paket = "SELECT id_paket FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC LIMIT 1";
 		$id_paket 		  = $this->db->query($sql_latest_paket)->row()->id_paket;
+
+		if (!$showAllMatkul) {
+			$sql_showAllMatkul = "AND m.`eva_status` = 1";
+		}
+		else{
+			$sql_showAllMatkul = "";
+		}
 
 		// get hasil evaluasi
 		$sql	= "SELECT 
@@ -35,20 +43,21 @@ class M_laporan extends CI_Model {
 					IFNULL(SUM(a10)*100/(COUNT(a10)*2),'-') AS Q10,
 					IFNULL(SUM(a11)*100/(COUNT(a11)*2),'-') AS Q11, 
 					IFNULL(SUM(a12)*100/(COUNT(a12)*2),'-') AS Q12,
-					IFNULL(j.masukan_matkul, '-') as masukan_matkul
+					IFNULL(j.masukan_dosen, '-') as masukan_dosen,
+					IFNULL(j.masukan_matkul, '-') as masukan_matkul,
+					IF(m.`eva_status`,'Ada','Tidak Ada') as status_kuisioner
 					FROM ec_kelas_buka k
 					JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb AND p.nik = '$nik'
 					JOIN ec_matkul m ON m.kode = k.kode
 					JOIN user_dosen_karyawan d ON d.nik = p.nik
 					LEFT JOIN `eva_jawaban_paket` j ON j.id_kelasb = k.id_kelasb AND j.`id_paket` = $id_paket 
 					AND j.nik = '$nik'
-					WHERE m.`eva_status` = 1
-					AND k.aktif = 1
+					WHERE k.aktif = 1
+					$sql_showAllMatkul
 					AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))
 					AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))
 					GROUP BY j.id_kelasb,m.nama,k.grup,m.kode";
 		$result = $this->db->query($sql);
-
 		$hasil_evaluasi = array();
 		if ($result->num_rows() > 0 ) {
 			$hasil_evaluasi = $result->result_array();

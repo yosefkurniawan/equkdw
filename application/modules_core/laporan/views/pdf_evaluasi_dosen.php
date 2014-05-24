@@ -47,9 +47,11 @@ ob_start();
 	}
 
 	if (empty($hasil_evaluasi)){
-		$data_masukan_matkul = '<span class="italic">Tidak ada matakuliah</span></td>';
+		$data_masukan_matkul = '<span class="italic">Tidak ada masukan</span></td>';
+		$data_masukan_dosen = '<span class="italic">Tidak ada masukan</span></td>';
 	}else{
 		foreach ($hasil_evaluasi as $key => $value){
+			$data_masukan_dosen .= $value["nama"].'<br/>'.$value["masukan_dosen"].'<br/>';
 			$data_masukan_matkul .= $value["nama"].'<br/>'.$value["masukan_matkul"].'<br/>';
 		}
 	}
@@ -125,14 +127,18 @@ ob_start();
 	}
 
 	$content .= '</div>
+	<br pagebreak="true"/>
 	<!-- Masukan Dosen -->
 	<div class="masukan_dosen">
 		<h2>Masukan Untuk Dosen</h2>
 		<div class="panel-body">
-				'.$masukan_dosen.'
+			<dl>
+			'.$data_masukan_dosen.'
+			</dl>
 		</div>
 	</div>
-
+	
+	<br pagebreak="true"/>
 	<!-- Masukan Matkul -->
 	<div class="masukan_matkul">
 		<h2>Masukan Untuk Matakuliah</h2>
