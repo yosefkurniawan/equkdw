@@ -24,6 +24,7 @@
 				<tr>
 					<th>Kode</th>
 					<th>Matakuliah</th>
+					<th>Kuisioner</th>
 					<th>Grup</th>
 					<th>Terisi</th>
 					<th>Pengisi</th>
@@ -86,6 +87,7 @@
 					<tr>
 						<td><?= $hasil['kode'] ?></td>
 						<td><?= $hasil['nama'] ?></td>
+						<td><span class="label <?= ($hasil['status_kuisioner']=='Ada')?'label-success':'label-danger' ?>"><?= $hasil['status_kuisioner'] ?></span></td>
 						<td><?= $hasil['grup'] ?></td>
 						<td><?= $hasil['terisi'] ?></td>
 						<td><?= $hasil['pengisi'] ?></td>
@@ -113,7 +115,12 @@
 <div class="panel colored">
 	<div class="panel-heading green-bg"><h3 class="panel-title">Masukan Untuk Dosen</h3></div>
 	<div class="panel-body">
-		<p><?= $masukan_dosen ?></p>
+		<dl>
+			<?php foreach ($hasil_evaluasi as $key => $value): ?>
+				<dt><?= $value['nama'] ?></dt>
+				<dd><?= $value['masukan_dosen'] ?></dd>
+			<?php endforeach ?>
+		</dl>
 	</div>
 </div>
 
@@ -129,5 +136,4 @@
 		</dl>
 	</div>
 </div>
-
 <?php echo $btn_print; ?>

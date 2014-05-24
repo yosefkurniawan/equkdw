@@ -71,7 +71,7 @@ class Laporan extends CI_Controller {
 
 	public function hasil_evaluasi_dosen($nik){
 		$dosen 			= $this->m_laporan->getDetailDosen($nik);
-		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik);
+		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik,true);
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 
