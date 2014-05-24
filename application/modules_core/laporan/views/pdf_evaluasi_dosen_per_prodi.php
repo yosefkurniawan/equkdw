@@ -17,13 +17,17 @@ $obj_pdf->SetFont('helvetica', '', 9);
 $obj_pdf->setFontSubsetting(false);
 $obj_pdf->AddPage();
 ob_start();
+$content = '';
+foreach ($data_evaluasi as $key => $evaluasi) {
     // we can have any view part here like HTML, PHP etc
-	if (empty($hasil_evaluasi)){	
+	if (empty($evaluasi['hasil_evaluasi'])){	
+		$data_masukan_matkul = '<span class="italic">Tidak ada masukan</span></td>';
+		$data_masukan_dosen = '<span class="italic">Tidak ada masukan</span></td>';
 		$data_hasil_kelas = '<tr><td colspan="18" class="center"><span class="italic">Belum ada hasil evaluasi</span></td></tr>';
 	}
 	else{
-		foreach ($hasil_evaluasi as $key => $hasil){
-			$data_hasil_kelas .= "<tr>
+		foreach ($evaluasi['hasil_evaluasi'] as $key => $hasil){
+			$data_hasil_kelas = "<tr>
 				<td width='5%'>".$hasil['kode']."</td>
 				<td width='27%'>".$hasil['nama']."</td>
 				<td width='5%'>".$hasil['grup']."</td>
@@ -43,31 +47,23 @@ ob_start();
 				<td width='4%'>".$hasil['Q11']."</td>
 				<td width='4%'>".$hasil['Q12']."</td>
 			</tr>";
-		}
-	}
-
-	if (empty($hasil_evaluasi)){
-		$data_masukan_matkul = '<span class="italic">Tidak ada masukan</span></td>';
-		$data_masukan_dosen = '<span class="italic">Tidak ada masukan</span></td>';
-	}else{
-		foreach ($hasil_evaluasi as $key => $value){
-			$data_masukan_dosen .= $value["nama"].'<br/>'.$value["masukan_dosen"].'<br/>';
-			$data_masukan_matkul .= $value["nama"].'<br/>'.$value["masukan_matkul"].'<br/>';
+			$data_masukan_dosen = $hasil["nama"].'<br/>'.$hasil["masukan_dosen"].'<br/>';
+			$data_masukan_matkul = $hasil["nama"].'<br/>'.$hasil["masukan_matkul"].'<br/>';
 		}
 	}
 
 	// set dosen content
 	$dsn = '';
-	if (!empty($dosen->gelar_prefix)) {
-		$dsn .= $dosen->gelar_prefix.' ';
+	if (!empty($evaluasi['dosen']['gelar_prefix'])) {
+		$dsn .= $evaluasi['dosen']['gelar_prefix'].' ';
 	}
-	$dsn .= $dosen->nama;
-	if (!empty($dosen->gelar_suffix)) {
-		$dsn .= ', '.$dosen->gelar_suffix;
+	$dsn .= $evaluasi['dosen']['nama'];
+	if (!empty($evaluasi['dosen']['gelar_suffix'])) {
+		$dsn .= ', '.$evaluasi['dosen']['gelar_suffix'];
 	}
-	$dsn .= ' / '. $dosen->nik;
+	$dsn .= ' / '. $evaluasi['dosen']['nik'];
 
-    $content = '
+    $content .= '
     <style>
     	.grup-pertanyaan {
 			text-align: center;
@@ -99,8 +95,8 @@ ob_start();
 		}
     </style>
 	<br/>
+	
 	<strong>Dosen : '.$dsn.'</strong>
-
 	<!-- Hasil Evaluasi Kelas -->
 	<div class="hasil_kelas">
 		<h2>Hasil Kuisioner Kelas</h2>
@@ -166,8 +162,10 @@ ob_start();
 			'.$data_masukan_matkul.'
 			</dl>
 		</div>
-	</div>';
+	</div>
+	<br pagebreak="true"/>';
+}
 ob_end_clean();
 $obj_pdf->writeHTML($content, true, false, true, false, '');
-$obj_pdf->Output('hasil_evaluasi_dosen_'.$dosen->nik.'.pdf', 'I');
+$obj_pdf->Output('hasil_evaluasi_dosen_'.$id_unit.'.pdf', 'I');
  ?>

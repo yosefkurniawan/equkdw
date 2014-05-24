@@ -4,7 +4,9 @@
 #list_prodi>div.panel-heading:first-child {
 	margin-top: 0;
 }
-
+#hasil-evaluasi-dosen {
+	font-size: 11.5px;
+}
 #hasil-evaluasi-dosen .grup-pertanyaan {
 	text-align: center;
 	border: solid 1px #ddd;
@@ -12,4 +14,8 @@
 #hasil-evaluasi-dosen th i {
 	font-style: normal;
 	cursor: help;
+}
+
+.list_dosen.list-unstyled {
+	overflow: hidden;
 }
