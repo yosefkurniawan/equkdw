@@ -34,7 +34,7 @@ class Dosen extends CI_Controller {
 		$data['title'] 		= "Laporan - $nik";
 		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
 		$data['active']		= 'hasil evaluasi';
-		$data['btn_print']	= "<a href='".base_url()."laporan/dosen/pdf_hasil_evaluasi_dosen/".$dosen->nik."' class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Print</a>";
+		$data['btn_print']	= "<a href='".base_url()."laporan/dosen/pdf_hasil_evaluasi_dosen/".$dosen->nik."' class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>";
 		$this->load->view('main/render_layout',$data);
 	}
 

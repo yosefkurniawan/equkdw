@@ -32,6 +32,8 @@ class Laporan extends CI_Controller {
 
 			$listDosen = $this->m_laporan->getListDosenByIdUnit($prodi['id_unit']);
 			$listDosenByProdi[$key]['listDosen']= $listDosen;
+			
+			$data['btn_print'][$prodi['id_unit']]	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$prodi['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$prodi['unit']."'><i class='icon-print'></i> Cetak</a>";
 		}
 
 		/* -- Render Layout -- */
@@ -84,8 +86,30 @@ class Laporan extends CI_Controller {
 		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
 		$data['left_bar']	= 'laporan/left_bar_admin';
 		$data['active']		= 'hasil evaluasi';
-		$data['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen/".$dosen->nik."' class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Print</a>";
+		$data['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen/".$dosen->nik."' class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>";
 		$this->load->view('main/render_layout',$data);
+	}
+
+	function pdf_hasil_evaluasi_dosen_per_prodi($id_unit)
+	{
+	    $this->load->helper('pdf_helper');
+
+	    $data_evaluasi = array();
+	    $list_dosen_by_prodi = $this->m_laporan->getListDosenByIdUnit($id_unit);
+	    if (!empty($list_dosen_by_prodi)) {
+	    	foreach ($list_dosen_by_prodi as $key => $dsn) {
+				$data_evaluasi[$dsn['nik']]['dosen'] 			= $dsn;
+				$data_evaluasi[$dsn['nik']]['hasil_evaluasi'] 	= $this->m_laporan->getHasilEvaluasi($dsn['nik']);
+	    	}
+	    }
+		
+		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
+
+		$data['data_evaluasi']		= $data_evaluasi;
+		$data['pertanyaan']			= $pertanyaan;
+		$data['id_unit']			= $id_unit;
+
+	    $this->load->view('pdf_evaluasi_dosen_per_prodi', $data);
 	}
 
 	function pdf_hasil_evaluasi_dosen($nik)

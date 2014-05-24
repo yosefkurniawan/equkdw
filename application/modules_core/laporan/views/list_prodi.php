@@ -25,6 +25,7 @@
 							</li>
 						<?php endforeach ?>
 					</ul>
+					<?php echo $btn_print[$prodi['id_unit']]; ?>
 				</div>
 			</div>
 			<?php endforeach ?>
