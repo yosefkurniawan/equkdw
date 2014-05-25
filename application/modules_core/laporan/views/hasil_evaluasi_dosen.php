@@ -1,5 +1,8 @@
 <div class="page-header">
-	<h1>Hasil Evaluasi</h1>
+	<h1>
+		Hasil Evaluasi
+		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?></small>
+	</h1>
 </div>
 
 <ol class="breadcrumb">
