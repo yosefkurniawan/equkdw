@@ -5,7 +5,7 @@ $obj_pdf->SetCreator(PDF_CREATOR);
 $obj_pdf->setPageOrientation('L');
 $title = "HASIL EVALUASI";
 $obj_pdf->SetTitle($title);
-$obj_pdf->SetHeaderData('logo.png', '10px', $title, date('d-m-Y'));
+$obj_pdf->SetHeaderData('logo.png', '10px', $title, 'PERIODE '.strtoupper($periode['semester']).' - '.$periode['thn_ajaran']);
 $obj_pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $obj_pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 $obj_pdf->SetDefaultMonospacedFont('helvetica');

@@ -11,6 +11,7 @@ class Dosen extends CI_Controller {
 			redirect('main/page404');	
 		} 
 
+		$this->load->model('main/m_general');
 		$this->load->model('m_laporan');
 		$this->load->model('mahasiswa/m_kuisioner');
 	}
@@ -26,11 +27,22 @@ class Dosen extends CI_Controller {
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 
+		// set periode
+		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+		}
+		else {
+			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
+			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+		}
+
 		/* -- Render Layout -- */
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;
 		$data['masukan_dosen']		= $masukan_dosen;
 		$data['pertanyaan']			= $pertanyaan;
+		$data['periode']			= $periode;
 		$data['title'] 		= "Laporan - $nik";
 		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
 		$data['active']		= 'hasil evaluasi';
@@ -46,7 +58,18 @@ class Dosen extends CI_Controller {
 		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik);
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
+		
+		// set periode
+		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+		}
+		else {
+			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
+			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+		}
 
+		$data['periode']			= $periode;
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;
 		$data['masukan_dosen']		= $masukan_dosen;

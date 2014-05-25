@@ -27,6 +27,16 @@ class M_laporan extends CI_Model {
 			$sql_showAllMatkul = "";
 		}
 
+		// set periode
+		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
+			$thn_ajaran	= "'".$this->session->userdata['periode_laporan_evaluasi']['thn_ajaran']."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+
 		// get hasil evaluasi
 		$sql	= "SELECT 
 					k.id_kelasb, m.nama, k.grup, m.kode,
@@ -54,8 +64,8 @@ class M_laporan extends CI_Model {
 					AND j.nik = '$nik'
 					WHERE k.aktif = 1
 					$sql_showAllMatkul
-					AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))
-					AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))
+					AND k.semester = $semester
+					AND k.thn_ajaran = $thn_ajaran
 					GROUP BY j.id_kelasb,m.nama,k.grup,m.kode";
 		$result = $this->db->query($sql);
 		$hasil_evaluasi = array();

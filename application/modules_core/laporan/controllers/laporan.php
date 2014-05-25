@@ -11,6 +11,7 @@ class Laporan extends CI_Controller {
 			redirect('admin');	
 		} 
 
+		$this->load->model('main/m_general');
 		$this->load->model('soal/m_soal');
 		$this->load->model('m_laporan');
 		$this->load->model('mahasiswa/m_kuisioner');
@@ -36,12 +37,24 @@ class Laporan extends CI_Controller {
 			$data['btn_print'][$prodi['id_unit']]	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$prodi['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$prodi['unit']."'><i class='icon-print'></i> Cetak</a>";
 		}
 
+		// set periode
+		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+		}
+		else {
+			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
+			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+		}
+
 		/* -- Render Layout -- */
 		$data['listDosenByProdi']	= $listDosenByProdi;
 		$data['title'] 		= 'Laporan - List Prodi';
 		$data['content'] 	= 'laporan/list_prodi';
 		$data['left_bar']	= 'laporan/left_bar_admin';
 		$data['active']		= 'hasil evaluasi';
+		$data['periode']	= $periode;
+		$data['last_periode']	= $this->m_general->getLastPeriode();
 		$this->load->view('main/render_layout',$data);
 	}
 
@@ -77,11 +90,22 @@ class Laporan extends CI_Controller {
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 
+		// set periode
+		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+		}
+		else {
+			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
+			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+		}
+
 		/* -- Render Layout -- */
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;
 		$data['masukan_dosen']		= $masukan_dosen;
 		$data['pertanyaan']			= $pertanyaan;
+		$data['periode']	= $periode;
 		$data['title'] 		= "Laporan - $nik";
 		$data['content'] 	= 'laporan/hasil_evaluasi_dosen';
 		$data['left_bar']	= 'laporan/left_bar_admin';
@@ -103,8 +127,19 @@ class Laporan extends CI_Controller {
 	    	}
 	    }
 		
+		// set periode
+		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+		}
+		else {
+			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
+			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+		}
+
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 
+		$data['periode']			= $periode;
 		$data['data_evaluasi']		= $data_evaluasi;
 		$data['pertanyaan']			= $pertanyaan;
 		$data['id_unit']			= $id_unit;
@@ -121,6 +156,17 @@ class Laporan extends CI_Controller {
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 
+		// set periode
+		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+		}
+		else {
+			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
+			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+		}
+
+		$data['periode']			= $periode;
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;
 		$data['masukan_dosen']		= $masukan_dosen;
@@ -129,11 +175,11 @@ class Laporan extends CI_Controller {
 	    $this->load->view('pdf_evaluasi_dosen', $data);
 	}
 
-	public function lihat()
+	public function setPeriode()
 	{
-		// $krs = $this->m_mahasiswa->lihatjawaban('72120010');
-		$krs = $this->m_mahasiswa->getKRS('72110007');
-		echo '<pre>'; print_r($krs); die;
+		$new_periode['thn_ajaran'] 	= $_POST['thn_ajaran'];
+		$new_periode['semester'] 	= $_POST['semester'];
+		$this->session->set_userdata('periode_laporan_evaluasi', $new_periode);
 	}
 }
 

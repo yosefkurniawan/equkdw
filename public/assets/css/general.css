@@ -1,4 +1,4 @@
-/* TYPOGRAPHY */
+
 .center {
 	text-align: center;
 }
@@ -17,6 +17,13 @@
 }
 .stats li>div>i {
 	padding-top: 20px;
+}
+
+#notif-box {
+	display: none;
+}
+.page-header h1 small {
+	font-weight: bold;
 }
 
 /* ---------------  <= 640 px layout -------------------- */
