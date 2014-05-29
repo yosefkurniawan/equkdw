@@ -17,53 +17,7 @@ $obj_pdf->SetFont('helvetica', '', 9);
 $obj_pdf->setFontSubsetting(false);
 $obj_pdf->AddPage();
 ob_start();
-$content = '';
-foreach ($data_evaluasi as $key => $evaluasi) {
-    // we can have any view part here like HTML, PHP etc
-	if (empty($evaluasi['hasil_evaluasi'])){	
-		$data_masukan_matkul = '<span class="italic">Tidak ada masukan</span></td>';
-		$data_masukan_dosen = '<span class="italic">Tidak ada masukan</span></td>';
-		$data_hasil_kelas = '<tr><td colspan="18" class="center"><span class="italic">Belum ada hasil evaluasi</span></td></tr>';
-	}
-	else{
-		foreach ($evaluasi['hasil_evaluasi'] as $key => $hasil){
-			$data_hasil_kelas = "<tr>
-				<td width='5%'>".$hasil['kode']."</td>
-				<td width='27%'>".$hasil['nama']."</td>
-				<td width='5%'>".$hasil['grup']."</td>
-				<td width='5%'>".$hasil['terisi']."</td>
-				<td width='5%'>".$hasil['pengisi']."</td>
-				<td width='5%'>".$hasil['baik']."</td>
-				<td width='4%'>".$hasil['Q1']."</td>
-				<td width='4%'>".$hasil['Q2']."</td>
-				<td width='4%'>".$hasil['Q3']."</td>
-				<td width='4%'>".$hasil['Q4']."</td>
-				<td width='4%'>".$hasil['Q5']."</td>
-				<td width='4%'>".$hasil['Q6']."</td>
-				<td width='4%'>".$hasil['Q7']."</td>
-				<td width='4%'>".$hasil['Q8']."</td>
-				<td width='4%'>".$hasil['Q9']."</td>
-				<td width='4%'>".$hasil['Q10']."</td>
-				<td width='4%'>".$hasil['Q11']."</td>
-				<td width='4%'>".$hasil['Q12']."</td>
-			</tr>";
-			$data_masukan_dosen = $hasil["nama"].'<br/>'.$hasil["masukan_dosen"].'<br/>';
-			$data_masukan_matkul = $hasil["nama"].'<br/>'.$hasil["masukan_matkul"].'<br/>';
-		}
-	}
-
-	// set dosen content
-	$dsn = '';
-	if (!empty($evaluasi['dosen']['gelar_prefix'])) {
-		$dsn .= $evaluasi['dosen']['gelar_prefix'].' ';
-	}
-	$dsn .= $evaluasi['dosen']['nama'];
-	if (!empty($evaluasi['dosen']['gelar_suffix'])) {
-		$dsn .= ', '.$evaluasi['dosen']['gelar_suffix'];
-	}
-	$dsn .= ' / '. $evaluasi['dosen']['nik'];
-
-    $content .= '
+$content = '
     <style>
     	.grup-pertanyaan {
 			text-align: center;
@@ -93,7 +47,57 @@ foreach ($data_evaluasi as $key => $evaluasi) {
 		.italic {
 			font-style:italic;
 		}
-    </style>
+    </style>';
+foreach ($data_evaluasi as $key => $evaluasi) {
+	$data_hasil_kelas = '';
+	$data_masukan_dosen = '';
+	$data_masukan_matkul = '';
+	
+    // we can have any view part here like HTML, PHP etc
+	if (empty($evaluasi['hasil_evaluasi'])){	
+		$data_masukan_matkul = '<span class="italic">Tidak ada masukan</span></td>';
+		$data_masukan_dosen = '<span class="italic">Tidak ada masukan</span></td>';
+		$data_hasil_kelas = '<tr><td colspan="18" class="center"><span class="italic">Belum ada hasil evaluasi</span></td></tr>';
+	}
+	else{
+		foreach ($evaluasi['hasil_evaluasi'] as $key => $hasil){
+			$data_hasil_kelas .= '<tr>
+				<td width="5%">'.$hasil['kode'].'</td>
+				<td width="27%">'.$hasil['nama'].'</td>
+				<td width="5%">'.$hasil['grup'].'</td>
+				<td width="5%">'.$hasil['terisi'].'</td>
+				<td width="5%">'.$hasil['pengisi'].'</td>
+				<td width="5%">'.$hasil['baik'].'</td>
+				<td width="4%">'.$hasil['Q1'].'</td>
+				<td width="4%">'.$hasil['Q2'].'</td>
+				<td width="4%">'.$hasil['Q3'].'</td>
+				<td width="4%">'.$hasil['Q4'].'</td>
+				<td width="4%">'.$hasil['Q5'].'</td>
+				<td width="4%">'.$hasil['Q6'].'</td>
+				<td width="4%">'.$hasil['Q7'].'</td>
+				<td width="4%">'.$hasil['Q8'].'</td>
+				<td width="4%">'.$hasil['Q9'].'</td>
+				<td width="4%">'.$hasil['Q10'].'</td>
+				<td width="4%">'.$hasil['Q11'].'</td>
+				<td width="4%">'.$hasil['Q12'].'</td>
+			</tr>';
+			$data_masukan_dosen .= $hasil["nama"].' GROUP '.$hasil["grup"].'<br/>'.$hasil["masukan_dosen"].'<br/>';
+			$data_masukan_matkul .= $hasil["nama"].' GROUP '.$hasil["grup"].'<br/>'.$hasil["masukan_matkul"].'<br/>';
+		}
+	}
+
+	// set dosen content
+	$dsn = '';
+	if (!empty($evaluasi['dosen']['gelar_prefix'])) {
+		$dsn .= $evaluasi['dosen']['gelar_prefix'].' ';
+	}
+	$dsn .= $evaluasi['dosen']['nama'];
+	if (!empty($evaluasi['dosen']['gelar_suffix'])) {
+		$dsn .= ', '.$evaluasi['dosen']['gelar_suffix'];
+	}
+	$dsn .= ' / '. $evaluasi['dosen']['nik'];
+
+    $content .= '
 	<br/>
 	
 	<strong>Dosen : '.$dsn.'</strong>

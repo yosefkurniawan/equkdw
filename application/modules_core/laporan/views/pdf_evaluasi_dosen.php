@@ -51,8 +51,8 @@ ob_start();
 		$data_masukan_dosen = '<span class="italic">Tidak ada masukan</span></td>';
 	}else{
 		foreach ($hasil_evaluasi as $key => $value){
-			$data_masukan_dosen .= $value["nama"].'<br/>'.$value["masukan_dosen"].'<br/>';
-			$data_masukan_matkul .= $value["nama"].'<br/>'.$value["masukan_matkul"].'<br/>';
+			$data_masukan_dosen .= $value["nama"].' GROUP '.$hasil["grup"].'<br/>'.$value["masukan_dosen"].'<br/>';
+			$data_masukan_matkul .= $value["nama"].' GROUP '.$hasil["grup"].'<br/>'.$value["masukan_matkul"].'<br/>';
 		}
 	}
 
