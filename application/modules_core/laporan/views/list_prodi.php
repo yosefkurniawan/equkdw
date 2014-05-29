@@ -46,10 +46,6 @@
 							<?php
 								$tahun = $last_periode->thn_ajaran;
 								for ($i=1; $i <=10 ; $i++) {
-									$tahun_exp = explode('/', $tahun);
-									$new_thn_awal = (int)$tahun_exp[0]-1;
-									$new_thn_akhir= (int)$tahun_exp[1]-1;
-									$tahun = $new_thn_awal.'/'.$new_thn_akhir;
 									if ($tahun == $periode['thn_ajaran']) {
 										$selected = 'selected';
 									}
@@ -57,6 +53,11 @@
 										$selected = '';
 									}
 									echo "<option value='$tahun' $selected>$tahun</option>";
+									
+									$tahun_exp = explode('/', $tahun);
+									$new_thn_awal = (int)$tahun_exp[0]-1;
+									$new_thn_akhir= (int)$tahun_exp[1]-1;
+									$tahun = $new_thn_awal.'/'.$new_thn_akhir;
 								}
 							?>
 							</select>

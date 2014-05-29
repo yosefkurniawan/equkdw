@@ -41,20 +41,56 @@ class M_laporan extends CI_Model {
 		$sql	= "SELECT 
 					k.id_kelasb, m.nama, k.grup, m.kode,
 					COUNT(j.`id_jawaban`) AS pengisi,
-					IFNULL(SUM(a1)*100/(COUNT(a1)*2),'-') AS Q1,
-					IFNULL(SUM(a2)*100/(COUNT(a2)*2),'-') AS Q2,
-					IFNULL(SUM(a3)*100/(COUNT(a3)*2),'-') AS Q3,
-					IFNULL(SUM(a4)*100/(COUNT(a4)*2),'-') AS Q4,
-					IFNULL(SUM(a5)*100/(COUNT(a5)*2),'-') AS Q5,
-					IFNULL(SUM(a6)*100/(COUNT(a6)*2),'-') AS Q6,
-					IFNULL(SUM(a7)*100/(COUNT(a7)*2),'-') AS Q7,
-					IFNULL(SUM(a8)*100/(COUNT(a8)*2),'-') AS Q8,
-					IFNULL(SUM(a9)*100/(COUNT(a9)*2),'-') AS Q9,
-					IFNULL(SUM(a10)*100/(COUNT(a10)*2),'-') AS Q10,
-					IFNULL(SUM(a11)*100/(COUNT(a11)*2),'-') AS Q11, 
-					IFNULL(SUM(a12)*100/(COUNT(a12)*2),'-') AS Q12,
-					IFNULL(j.masukan_dosen, '-') as masukan_dosen,
-					IFNULL(j.masukan_matkul, '-') as masukan_matkul,
+					IFNULL(	case (SUM(a1)*100/(COUNT(a1)*2) mod 1 > 0)  
+							  when true then round(SUM(a1)*100/(COUNT(a1)*2), 2)   
+							  else round(SUM(a1)*100/(COUNT(a1)*2),0) 
+							end,'-') AS Q1,
+					IFNULL(	case (SUM(a2)*100/(COUNT(a2)*2) mod 1 > 0)  
+							  when true then round(SUM(a2)*100/(COUNT(a2)*2), 2)   
+							  else round(SUM(a2)*100/(COUNT(a2)*2),0) 
+							end,'-') AS Q2,
+					IFNULL(	case (SUM(a3)*100/(COUNT(a3)*2) mod 1 > 0)  
+							  when true then round(SUM(a3)*100/(COUNT(a3)*2), 2)   
+							  else round(SUM(a3)*100/(COUNT(a3)*2),0) 
+							end,'-') AS Q3,
+					IFNULL(	case (SUM(a4)*100/(COUNT(a4)*2) mod 1 > 0)  
+							  when true then round(SUM(a4)*100/(COUNT(a4)*2), 2)   
+							  else round(SUM(a4)*100/(COUNT(a4)*2),0) 
+							end,'-') AS Q4,
+					IFNULL(	case (SUM(a5)*100/(COUNT(a5)*2) mod 1 > 0)  
+							  when true then round(SUM(a5)*100/(COUNT(a5)*2), 2)   
+							  else round(SUM(a5)*100/(COUNT(a5)*2),0) 
+							end,'-') AS Q5,
+					IFNULL(	case (SUM(a6)*100/(COUNT(a6)*2) mod 1 > 0)  
+							  when true then round(SUM(a6)*100/(COUNT(a6)*2), 2)   
+							  else round(SUM(a6)*100/(COUNT(a6)*2),0) 
+							end,'-') AS Q6,
+					IFNULL(	case (SUM(a7)*100/(COUNT(a7)*2) mod 1 > 0)  
+							  when true then round(SUM(a7)*100/(COUNT(a7)*2), 2)   
+							  else round(SUM(a7)*100/(COUNT(a7)*2),0) 
+							end,'-') AS Q7,
+					IFNULL(	case (SUM(a8)*100/(COUNT(a8)*2) mod 1 > 0)  
+							  when true then round(SUM(a8)*100/(COUNT(a8)*2), 2)   
+							  else round(SUM(a8)*100/(COUNT(a8)*2),0) 
+							end,'-') AS Q8,
+					IFNULL(	case (SUM(a9)*100/(COUNT(a9)*2) mod 1 > 0)  
+							  when true then round(SUM(a9)*100/(COUNT(a9)*2), 2)   
+							  else round(SUM(a9)*100/(COUNT(a9)*2),0) 
+							end,'-') AS Q9,
+					IFNULL(	case (SUM(a10)*100/(COUNT(a10)*2) mod 1 > 0)  
+							  when true then round(SUM(a10)*100/(COUNT(a10)*2), 2)   
+							  else round(SUM(a10)*100/(COUNT(a10)*2),0) 
+							end,'-') AS Q10,
+					IFNULL(	case (SUM(a11)*100/(COUNT(a11)*2) mod 1 > 0)  
+							  when true then round(SUM(a11)*100/(COUNT(a11)*2), 2)   
+							  else round(SUM(a11)*100/(COUNT(a11)*2),0) 
+							end,'-') AS Q11,
+					IFNULL(	case (SUM(a12)*100/(COUNT(a12)*2) mod 1 > 0)  
+							  when true then round(SUM(a12)*100/(COUNT(a12)*2), 2)   
+							  else round(SUM(a12)*100/(COUNT(a12)*2),0) 
+							end,'-') AS Q12,
+					GROUP_CONCAT( j.`masukan_dosen` ORDER BY RAND() SEPARATOR ';') as masukan_dosen,
+					GROUP_CONCAT( j.`masukan_matkul` ORDER BY RAND() SEPARATOR ';') as masukan_matkul,
 					IF(m.`eva_status`,'Ada','Tidak Ada') as status_kuisioner
 					FROM ec_kelas_buka k
 					JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb AND p.nik = '$nik'
@@ -66,7 +102,7 @@ class M_laporan extends CI_Model {
 					$sql_showAllMatkul
 					AND k.semester = $semester
 					AND k.thn_ajaran = $thn_ajaran
-					GROUP BY j.id_kelasb,m.nama,k.grup,m.kode";
+					GROUP BY j.id_kelasb,m.nama,k.grup,m.kode,status_kuisioner";
 		$result = $this->db->query($sql);
 		$hasil_evaluasi = array();
 		if ($result->num_rows() > 0 ) {
