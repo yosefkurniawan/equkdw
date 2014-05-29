@@ -89,8 +89,8 @@ class M_laporan extends CI_Model {
 							  when true then round(SUM(a12)*100/(COUNT(a12)*2), 2)   
 							  else round(SUM(a12)*100/(COUNT(a12)*2),0) 
 							end,'-') AS Q12,
-					GROUP_CONCAT( j.`masukan_dosen` ORDER BY RAND() SEPARATOR ';') as masukan_dosen,
-					GROUP_CONCAT( j.`masukan_matkul` ORDER BY RAND() SEPARATOR ';') as masukan_matkul,
+					IFNULL(GROUP_CONCAT( j.`masukan_dosen` ORDER BY RAND() SEPARATOR ';'), 'Tidak ada masukan') as masukan_dosen,
+					IFNULL(GROUP_CONCAT( j.`masukan_matkul` ORDER BY RAND() SEPARATOR ';'), 'Tidak ada masukan') as masukan_matkul,
 					IF(m.`eva_status`,'Ada','Tidak Ada') as status_kuisioner
 					FROM ec_kelas_buka k
 					JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb AND p.nik = '$nik'

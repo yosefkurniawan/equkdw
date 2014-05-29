@@ -155,7 +155,7 @@ class Laporan extends CI_Controller {
 		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik);
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
 		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
-echo "<pre>";print_r($hasil_evaluasi);die;
+
 		// set periode
 		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
 			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
