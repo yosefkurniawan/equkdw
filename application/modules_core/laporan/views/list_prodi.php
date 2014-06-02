@@ -78,22 +78,22 @@
 <div class="panel-body">
 	<div class="panel-group" id="accordion">
 		<div class="panel colored" id="list_prodi">
-			<?php foreach ($listDosenByProdi as $key => $prodi): ?>
+			<?php foreach ($listDosenPerUnit as $key => $unit): ?>
 			<div class="panel-heading green-bg">
 				<h4 class="panel-title">
-					<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key ?>"><?= $prodi['unit'] ?></a>
+					<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key ?>"><?= $unit['unit'] ?></a>
 				</h4>
 			</div>
 			<div id="collapse<?= $key ?>" class="panel-collapse collapse" style="height: 0px;">
 				<div class="panel-body">
 					<ul class="list_dosen list-unstyled">
-						<?php foreach ($prodi['listDosen'] as $dosen): ?>
+						<?php foreach ($unit['listDosen'] as $dosen): ?>
 							<li class="col-md-4">
 								<a href="<?= base_url().'laporan/hasil_evaluasi_dosen/'.$dosen['nik'] ?>"><?= $dosen['gelar_prefix'].$dosen['nama'].$dosen['gelar_suffix'] ?></a>
 							</li>
 						<?php endforeach ?>
 					</ul>
-					<?php echo $btn_print[$prodi['id_unit']]; ?>
+					<?php echo $unit['btn_print']; ?>
 				</div>
 			</div>
 			<?php endforeach ?>

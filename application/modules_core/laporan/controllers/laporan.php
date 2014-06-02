@@ -24,18 +24,8 @@ class Laporan extends CI_Controller {
 	}
 
 	public function hasil_evaluasi(){
-		$listProdi = $this->m_soal->getProdi();
 
-		$listDosenByProdi = array();
-		foreach ($listProdi as $key => $prodi) {
-			$listDosenByProdi[$key]['id_unit'] 	= $prodi['id_unit'];
-			$listDosenByProdi[$key]['unit'] 	= $prodi['unit'];
-
-			$listDosen = $this->m_laporan->getListDosenByIdUnit($prodi['id_unit']);
-			$listDosenByProdi[$key]['listDosen']= $listDosen;
-			
-			$data['btn_print'][$prodi['id_unit']]	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$prodi['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$prodi['unit']."'><i class='icon-print'></i> Cetak</a>";
-		}
+		$listDosenPerUnit = $this->m_laporan->getListDosenAktifPerUnit();
 
 		// set periode
 		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
@@ -48,7 +38,7 @@ class Laporan extends CI_Controller {
 		}
 
 		/* -- Render Layout -- */
-		$data['listDosenByProdi']	= $listDosenByProdi;
+		$data['listDosenPerUnit']	= $listDosenPerUnit;
 		$data['title'] 		= 'Laporan - List Prodi';
 		$data['content'] 	= 'laporan/list_prodi';
 		$data['left_bar']	= 'laporan/left_bar_admin';
@@ -120,6 +110,7 @@ class Laporan extends CI_Controller {
 
 	    $data_evaluasi = array();
 	    $list_dosen_by_prodi = $this->m_laporan->getListDosenByIdUnit($id_unit);
+
 	    if (!empty($list_dosen_by_prodi)) {
 	    	foreach ($list_dosen_by_prodi as $key => $dsn) {
 				$data_evaluasi[$dsn['nik']]['dosen'] 			= $dsn;

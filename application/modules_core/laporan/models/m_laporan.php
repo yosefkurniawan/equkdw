@@ -3,7 +3,26 @@
 class M_laporan extends CI_Model {
 
 	public function getListDosenByIdUnit($id_unit){
-		$sql 	= "SELECT * FROM user_dosen_karyawan WHERE id_unit = '$id_unit' ORDER BY nama ASC";
+		// set periode
+		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
+			$thn_ajaran	= "'".$this->session->userdata['periode_laporan_evaluasi']['thn_ajaran']."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+
+		$sql 	= "SELECT d.*, IFNULL(u.unit,'Tidak Terdaftar') as unit
+						FROM user_dosen_karyawan d
+						LEFT JOIN ref_unit u ON u.id_unit = d.id_unit
+						JOIN ec_pengajar p ON p.nik = d.nik
+						JOIN ec_kelas_buka k ON k.id_kelasb = p.id_kelasb
+						WHERE k.semester = $semester
+						AND k.thn_ajaran = $thn_ajaran
+						AND d.id_unit = '$id_unit'
+						GROUP BY d.nik
+						ORDER BY unit,d.nama ASC";
 		$result = $this->db->query($sql);
 
 		$dosen = array();
@@ -12,6 +31,70 @@ class M_laporan extends CI_Model {
 		}
 
 		return $dosen;
+	}
+
+	public function getListDosenAktifPerUnit(){	
+		// set periode
+		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
+			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
+			$thn_ajaran	= "'".$this->session->userdata['periode_laporan_evaluasi']['thn_ajaran']."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+
+		$sql_listDosen 	= "SELECT d.*, IFNULL(u.unit,'zzz') as unit
+						FROM user_dosen_karyawan d
+						LEFT JOIN ref_unit u ON u.id_unit = d.id_unit
+						JOIN ec_pengajar p ON p.nik = d.nik
+						JOIN ec_kelas_buka k ON k.id_kelasb = p.id_kelasb
+						WHERE k.semester = $semester
+						AND k.thn_ajaran = $thn_ajaran
+						GROUP BY d.nik
+						ORDER BY unit,d.nama ASC";
+		$_listDosen = $this->db->query($sql_listDosen);
+
+		$listDosen = array();
+		if ($_listDosen->num_rows() > 0) {
+			$listDosen = $_listDosen->result_array();
+		}
+
+		$_result = array();
+		// Listing the units
+		if ($listDosen) {
+			foreach ($listDosen as $key => $dosen) {
+				// rename unit if empty
+				$id_unit 	= $dosen['id_unit'];
+				$unit 		= $dosen['unit'];
+				if ($dosen['unit']=='zzz') {
+					$id_unit 	= '-';
+					$unit 		= 'Tidak Terdaftar';
+					$listDosen[$key]['id_unit'] = $id_unit;
+					$listDosen[$key]['unit'] 	= $unit;
+				}
+
+				$_result[$id_unit]['id_unit'] 	= $id_unit; 
+				$_result[$id_unit]['unit'] 		= $unit; 
+				$_result[$id_unit]['listDosen']	= array();
+
+				// create button print laporan per unit
+				$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
+			}
+		}
+
+		// Move dosen into unit one by one
+		if ($_result) {
+			foreach ($_result as $key => $value) {
+				foreach ($listDosen as $dosen) {
+					if ($dosen['id_unit'] == $value['id_unit']) {
+						$_result[$key]['listDosen'][] = $dosen;
+					}
+				}
+			}
+		}
+
+		return $_result;
 	}
 
 	# NOTE: $showAllMatkul = false --> hide all subjects that do not have questionnaire
