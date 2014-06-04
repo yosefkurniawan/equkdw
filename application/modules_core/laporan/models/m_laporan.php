@@ -13,15 +13,16 @@ class M_laporan extends CI_Model {
 			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}
 
-		$sql 	= "SELECT d.*, IFNULL(u.unit,'Tidak Terdaftar') as unit
-						FROM user_dosen_karyawan d
-						LEFT JOIN ref_unit u ON u.id_unit = d.id_unit
-						JOIN ec_pengajar p ON p.nik = d.nik
-						JOIN ec_kelas_buka k ON k.id_kelasb = p.id_kelasb
+		$sql 	= "SELECT d.nik,d.nama,d.gelar_suffix,d.gelar_prefix,m.id_unit, IFNULL(u.unit,'zzz') as unit
+						FROM ec_kelas_buka k
+						JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb
+						JOIN user_dosen_karyawan d ON d.nik = p.nik
+						JOIN ec_matkul m ON m.kode = k.kode 
+						LEFT JOIN ref_unit u ON u.id_unit = m.id_unit
 						WHERE k.semester = $semester
 						AND k.thn_ajaran = $thn_ajaran
-						AND d.id_unit = '$id_unit'
-						GROUP BY d.nik
+						AND m.id_unit = '$id_unit'
+						GROUP BY nik, nama, gelar_suffix, gelar_prefix, id_unit,unit
 						ORDER BY unit,d.nama ASC";
 		$result = $this->db->query($sql);
 
@@ -44,14 +45,15 @@ class M_laporan extends CI_Model {
 			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}
 
-		$sql_listDosen 	= "SELECT d.*, IFNULL(u.unit,'zzz') as unit
-						FROM user_dosen_karyawan d
-						LEFT JOIN ref_unit u ON u.id_unit = d.id_unit
-						JOIN ec_pengajar p ON p.nik = d.nik
-						JOIN ec_kelas_buka k ON k.id_kelasb = p.id_kelasb
+		$sql_listDosen 	= "SELECT d.nik,d.nama,d.gelar_suffix,d.gelar_prefix,m.id_unit, IFNULL(u.unit,'zzz') as unit
+						FROM ec_kelas_buka k
+						JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb
+						JOIN user_dosen_karyawan d ON d.nik = p.nik
+						JOIN ec_matkul m ON m.kode = k.kode 
+						LEFT JOIN ref_unit u ON u.id_unit = m.id_unit
 						WHERE k.semester = $semester
 						AND k.thn_ajaran = $thn_ajaran
-						GROUP BY d.nik
+						GROUP BY nik, nama, gelar_suffix, gelar_prefix, id_unit,unit
 						ORDER BY unit,d.nama ASC";
 		$_listDosen = $this->db->query($sql_listDosen);
 
