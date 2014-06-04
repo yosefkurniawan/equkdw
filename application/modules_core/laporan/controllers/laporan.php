@@ -171,6 +171,11 @@ class Laporan extends CI_Controller {
 		$new_periode['thn_ajaran'] 	= $_POST['thn_ajaran'];
 		$new_periode['semester'] 	= $_POST['semester'];
 		$this->session->set_userdata('periode_laporan_evaluasi', $new_periode);
+
+		$this->session->set_flashdata('message', 'Peride berhasil diubah.');
+		$this->session->set_flashdata('message_class', 'alert-success block-important');
+
+		redirect('laporan/hasil_evaluasi');
 	}
 }
 
