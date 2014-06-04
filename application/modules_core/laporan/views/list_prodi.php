@@ -11,14 +11,14 @@
 	<li class="active">Hasil Evaluasi</li>
 </ol>
 
-<div class="alert fade in" id="notif-box">
+<div class="alert fade in <?=$this->session->flashdata('message_class') ?>" id="notif-box">
 	<button data-dismiss="alert" class="close" type="button">×</button>
-	<p></p>
+	<p><?= $this->session->flashdata('message'); ?></p>
 </div>
 
 <a data-toggle="modal" href="#modal-setPeriode" class='btn btn-med blue-bg' title='Ubah periode'><i class='icon-calendar'></i> Ubah Periode</a>
 <div class="modal fade" id="modal-setPeriode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-	<form id="form-setPeriode">
+	<form id="form-setPeriode" method="POST" action="<?= base_url() ?>laporan/setPeriode">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -66,7 +66,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn gray-bg btn-close" data-dismiss="modal">Kembali</button>
-					<button type="button" class="btn blue-bg btn-submit">Simpan</button>
+					<button type="submit" class="btn blue-bg btn-submit" onsubmit="return confirm('Anda yakin akan mengubah periode?')">Simpan</button>
 					<div class="loading" style="display:none;">
 						<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
 					</div>
@@ -100,55 +100,3 @@
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-	jQuery(document).ready(function($){
-		$('#form-setPeriode .btn-submit').click(function(){
-			var items 		= $('#form-setPeriode').serialize();
-			
-			$('#form-setPeriode .modal-footer button').hide();
-			$('#form-setPeriode .loading').show();
-
-			// Send the AJAX request
-			$.ajax({
-			    url : CI_ROOT+"laporan/setPeriode",
-			    type: "POST",
-			    data : items,
-			    success: function(data, textStatus, jqXHR)
-			    {
-			    	/* change periode on header */
-			    	$('.page-header h1 small').text('Periode '+$('#form-setPeriode select[name="semester"]').val()+' - '+$('#form-setPeriode select[name="thn_ajaran"]').val());
-
-					/* hide modal*/
-					$('#form-setPeriode .btn-close').click();
-
-					/* show message */
-					$('#notif-box').fadeIn(400);
-					$('#notif-box').addClass('alert-success');
-					$('#notif-box p').html('Periode berhasil diubah.');
-		
-					$('#form-setPeriode .modal-footer button').show();
-					$('#form-setPeriode .loading').hide();
-
-			    },
-			    error: function (jqXHR, textStatus, errorThrown)
-			    {
-			    	console.log(jqXHR);
-			    	console.log(textStatus);
-			    	console.log(errorThrown);
-					/* hide modal*/
-					$('#form-setPeriode .btn-close').click();
-
-					/* show message */
-					$('#notif-box').fadeIn(400);
-					$('#notif-box').addClass('alert-danger');
-					$('#notif-box p').html('Terjadi kesalahan.');
-
-					$('#form-setPeriode .modal-footer button').show();
-					$('#form-setPeriode .loading').hide();
-
-			    }
-			});
-		});
-	});
-</script>
