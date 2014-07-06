@@ -30,6 +30,10 @@
 	display: block !important;
 }
 
+.metro-table tbody tr td span {
+	min-height: 36px;
+}
+
 /* ---------------  <= 640 px layout -------------------- */
 @media only screen and (max-width: 640px) {
 	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {

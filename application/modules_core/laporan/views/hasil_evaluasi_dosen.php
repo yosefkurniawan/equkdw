@@ -33,51 +33,51 @@
 					<th>Pengisi</th>
 					<th>% Baik</th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[0]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[0]->pertanyaan))?$pertanyaan[0]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q1</i> </th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[1]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[1]->pertanyaan))?$pertanyaan[1]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q2</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[2]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[2]->pertanyaan))?$pertanyaan[2]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q3</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[3]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[3]->pertanyaan))?$pertanyaan[3]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q4</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[4]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[4]->pertanyaan))?$pertanyaan[4]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q5</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[5]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[5]->pertanyaan))?$pertanyaan[5]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q6</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[6]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[6]->pertanyaan))?$pertanyaan[6]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q7</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[7]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[7]->pertanyaan))?$pertanyaan[7]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q8</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[8]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[8]->pertanyaan))?$pertanyaan[8]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q9</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[9]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[9]->pertanyaan))?$pertanyaan[9]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q10</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[10]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[10]->pertanyaan))?$pertanyaan[10]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q11</i> </th></th>
 					<th><i class="tooltip-demo"
-	                            data-original-title="<?=$pertanyaan[11]->pertanyaan?>"
+	                            data-original-title="<?=(isset($pertanyaan[11]->pertanyaan))?$pertanyaan[11]->pertanyaan:''?>"
 	                            data-placement="left" data-toggle="tooltip" href="#"
 	                            title="">Q12</i> </th></th>
 				</tr>

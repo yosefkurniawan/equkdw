@@ -149,7 +149,7 @@ class M_soal extends CI_Model {
 		}else{
 			$tgl_mulai 		= '';
 		}
-		if (!empty($tgl_mulai)) {
+		if (!empty($tgl_akhir)) {
 			$tgl_akhir_expl = explode('/', $tgl_akhir);
 			$tgl_akhir 		= $tgl_akhir_expl[2].'-'.$tgl_akhir_expl[1].'-'.$tgl_akhir_expl[0];
 		}else{
