@@ -26,6 +26,7 @@ class Laporan extends CI_Controller {
 	public function hasil_evaluasi(){
 
 		$listDosenPerUnit = $this->m_laporan->getListDosenAktifPerUnit();
+		$pertanyaan	= $this->m_kuisioner->getPertanyaan();
 
 		// set periode
 		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
@@ -38,6 +39,7 @@ class Laporan extends CI_Controller {
 		}
 
 		/* -- Render Layout -- */
+		$data['pertanyaan']			= $pertanyaan;
 		$data['listDosenPerUnit']	= $listDosenPerUnit;
 		$data['title'] 		= 'Laporan - List Prodi';
 		$data['content'] 	= 'laporan/list_prodi';
