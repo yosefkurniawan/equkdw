@@ -36,9 +36,14 @@
 <!-- admin -->
 <link href="<?=base_url()?>public/assets/css/admin.css" rel="stylesheet"/>
 
-<link href="<?=base_url()?>public/assets/css/data-tables/data-table.css" rel="stylesheet" type=
-"text/css">
+<link href="<?=base_url()?>public/assets/css/data-tables/data-table.css" rel="stylesheet" type="text/css">
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+
+<?php if (isset($custom_css)): ?>
+  <?php foreach ($custom_css as $path): ?>
+    <link rel="stylesheet" type="text/css" href="<?= base_url().$path ?>">
+  <?php endforeach ?>
+<?php endif ?>
 
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
@@ -46,6 +51,12 @@
 <script src="<?=base_url()?>public/assets/js/scripts.js"></script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]><script src="<?=base_url()?>public/assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="<?=base_url()?>public/assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->
+
+<?php if (isset($custom_js)): ?>
+  <?php foreach ($custom_js as $path): ?>
+    <script src="<?= base_url().$path ?>"></script>
+  <?php endforeach ?>
+<?php endif ?>
 
 </head>
 <body>

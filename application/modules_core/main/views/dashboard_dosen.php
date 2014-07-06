@@ -11,7 +11,7 @@
 		<li class="col-md-6">
 		  <div class="blue-bg"><i class="icon-list-ol"></i>
 		    <h5>Kuisioner</h5>
-		    <a href="<?= base_url() ?>soal/custom">View Details <i class="icon-"></i></a></div>
+		    <a href="<?= base_url() ?>soal/soal_tambahan">View Details <i class="icon-"></i></a></div>
 		</li>
 	</ul>
 </div>
