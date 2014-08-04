@@ -6,9 +6,11 @@ class Ip extends MX_Controller
 	function index(){
 		$this->load->model('ip_model');
 		// $data['period'] = $this->ip_model->get_thn_ajaran_periode();
-		$data['dosen'] = $this->ip_model->get_dosen_list('2012/2013','GASAL');
-		// $this->load->view('ip/ip/list',$data);
 
+		// $data['dosen'] = $this->ip_model->updt_kelass_all();
+
+		$data['dosen'] = $this->ip_model->get_dosen_list('2013/2014','GENAP');
+		// $this->load->view('ip/ip/list',$data);
 		/* -- Render Layout -- */
 		$data['title'] 		= "IP Dosen";
 		$data['content'] 	= 'ip/ip/list';
@@ -30,6 +32,27 @@ class Ip extends MX_Controller
 	}
 
 	function detail_dosen_pdf($nik = NULL){
+
+		$this->load->model('ip_model');
+		$data['ajar'] = $this->ip_model->get_dosen_ajar($nik,'2013/2014','GENAP');
+
+		$data['dsn'] = $this->ip_model->get_dosen_info($nik);
+
+		$prodi = $data['dsn']->prodi;
+		// echo $prodi;die;
+		//query q1
+		$data['prodi_o1'] = $this->ip_model->get_prodi_o1($prodi,'2013/2014','GENAP');
+		$data['prodi_o2'] = $this->ip_model->get_prodi_o2($prodi,'2013/2014','GENAP');
+		$data['prodi_o3'] = $this->ip_model->get_prodi_o3($prodi,'2013/2014','GENAP');
+		$data['prodi_o4'] = $this->ip_model->get_prodi_o4($prodi,'2013/2014','GENAP');
+		$data['prodi_o5'] = $this->ip_model->get_prodi_o5($prodi,'2013/2014','GENAP');
+
+		$data['uni_o1'] = $this->ip_model->get_univ_o1('2013/2014','GENAP');
+		$data['uni_o2'] = $this->ip_model->get_univ_o2('2013/2014','GENAP');
+		$data['uni_o3'] = $this->ip_model->get_univ_o3('2013/2014','GENAP');
+		$data['uni_o4'] = $this->ip_model->get_univ_o4('2013/2014','GENAP');
+		$data['uni_o5'] = $this->ip_model->get_univ_o5('2013/2014','GENAP');
+
 		
 		/* -- Render Layout -- */
 		$data['title'] 		= "IP Dosen";
