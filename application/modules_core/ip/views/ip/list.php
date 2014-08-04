@@ -9,17 +9,27 @@
     <h1>Tahun Ajaran 2013/2014 "GENAP"</h1>
 </div>
 
-	<table class="table">
-		<thead>
-			<th><strong>Nama Dosen</strong></th>
-			<th><strong>Lihat Laporan</strong></th>
-		</thead>
-		<tbody>
-		<?php $i=0; while($i < count($dosen)) : ?>
-			<tr>
-				<td><?php echo $dosen[$i]->nama_dsn ?></td>
-				<td><a href ="<?php echo base_url(); ?>ip/ip/detail_dosen_pdf/<?php echo $dosen[$i]->nik_baru?>">Lihat Laporan</a> </td>
-			</tr>
-		<?php $i++; endwhile; ?>
-		</tbody>
-	</table>
+<div class="panel-body">
+	<div class="panel-group" id="accordion">
+		<div class="panel colored" id="list_prodi">
+			<?php foreach ($dosen as $key => $prodi): ?>
+			<div class="panel-heading green-bg">
+				<h4 class="panel-title">
+					<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key ?>"><?= $prodi['nama_prodi'] ?></a>
+				</h4>
+			</div>
+			<div id="collapse<?= $key ?>" class="panel-collapse collapse" style="height: 0px;">
+				<div class="panel-body">
+					<ul class="list_dosen list-unstyled">
+						<?php foreach ($prodi['listDosen'] as $dsn): ?>
+							<li class="col-md-4">
+								<?= $dsn['nama_dsn'] ?> <a href ="<?php echo base_url(); ?>ip/ip/detail_dosen_pdf/<?php echo $dsn['nik_baru']?>"><i class="icon-print"></i></a>
+							</li>
+						<?php endforeach ?>
+					</ul>
+				</div>
+			</div>
+			<?php endforeach ?>
+		</div>
+	</div>
+</div>
