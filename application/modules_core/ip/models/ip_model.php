@@ -237,19 +237,43 @@ class ip_model extends CI_Model
 
 	function get_dosen_list($th_ajaran,$semester)
 	{
-		$sql = "SELECT nik_baru, nama_dsn, COUNT(kode) as jumlah_matkul_ajar FROM kelas_all 
+		$sql = "SELECT nik_baru, nama_dsn, COUNT(kode) as jumlah_matkul_ajar,k.prodi,nama_prodi FROM kelas_all k
+				JOIN prodi p ON k.prodi = p.prodi
 				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'
 				GROUP BY nama_dsn";
 		$query = $this->db->query($sql);
-		// echo '<pre>'; print_r($query->result()); die;
-		if ($query->num_rows() > 0 ) 
-		{
-			return $query->result();
-		} // end of if
-		else 
-		{
-			return array();
-		}		
+		
+		$listDosen = array();
+		if ($query->num_rows() > 0) {
+			$listDosen = $query->result_array();
+		}
+
+		$_result = array();
+		// Listing the units
+		if ($listDosen) {
+			foreach ($listDosen as $key => $dosen) {
+				// rename unit if empty
+				$prodi 			= $dosen['prodi'];
+				$nama_prodi 	= $dosen['nama_prodi'];
+
+				$_result[$prodi]['prodi'] 		= $prodi; 
+				$_result[$prodi]['nama_prodi'] 	= $nama_prodi; 
+				$_result[$prodi]['listDosen']	= array();
+			}
+		}
+
+		// Move dosen into unit one by one
+		if ($_result) {
+			foreach ($_result as $key => $value) {
+				foreach ($listDosen as $dosen) {
+					if ($dosen['prodi'] == $value['prodi']) {
+						$_result[$key]['listDosen'][] = $dosen;
+					}
+				}
+			}
+		}
+		// echo '<pre>'; print_r($_result); die;
+		return $_result;
 	} // end of function get_dosen_list
 
 	function get_dosen_ajar($nik,$th_ajaran,$semester)
