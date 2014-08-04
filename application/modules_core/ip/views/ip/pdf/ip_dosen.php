@@ -130,8 +130,6 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_prodi_o4 = round($jmlh_prodi_o4 / count($prodi_o4),2) ?>
-        <?php echo "jumlah hitungan : " . $jmlh_prodi_o4 ?>
-        <?php echo "rata-rata : " . $avg_prodi_o4 ?>
 
         <!-- rata-rata prodi p5 -->
         <!-- foreach where prodi = prodi dosennya -->
