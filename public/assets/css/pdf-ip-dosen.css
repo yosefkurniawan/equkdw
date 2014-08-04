@@ -1,6 +1,6 @@
 @page { size: landscape; margin: 1cm; }
 body {
-	font-size: 10pt;
+	font-size: 7pt;
 }
 .page-break {page-break-after: always;}
 nav,header {
@@ -9,7 +9,10 @@ nav,header {
 #main_content{
 	padding: 0 !important;
 }
-.left,.right{
+.left{
+	width: 42%
+}
+.right{
 	width: 47%;
 }
 .left{
@@ -34,15 +37,22 @@ nav,header {
 	padding-top: 24px;
 }
 
+.box-description{
+	position: relative;
+}
 .box-description h3	{
 	margin-top: 0;
 }
-.box-description dl.periode{
-	float: left;
+.box-description .left{
+	width: 100%;
+}
+.box-description .right{
+	position: absolute;
+	right: 30px;
 }
 .box-description .logo-ukdw img{
 	float: right;
-	width: 80px;
+	height: 72px;
 }
 
 dt{
@@ -57,7 +67,9 @@ dd:before{
 	content: ':';
 	margin-right: 10px;
 }
-
+.box-chart{
+	margin-top: 40px;
+}
 .box-chart .keterangan{
 	padding: 0 40px;
 	font-size: 7pt;
@@ -83,5 +95,27 @@ dd:before{
 	border:none !important;
 }
 .table-resume tfoot{
+	font-weight: bold;
+}
+.highcharts-button, .highcharts-title{
+	display: none;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+	padding: 3px;
+}
+.box-pengesahan{
+	width: 260px;
+}
+.box-pengesahan table td{
+	height: 70px;
+}
+#container{
+	margin-bottom: 10px;
+	border: 1px solid #ddd;
+}
+
+.box-panduan-perhitungan .title{
+	font-size: 8px;
+	text-align: center;
 	font-weight: bold;
 }
