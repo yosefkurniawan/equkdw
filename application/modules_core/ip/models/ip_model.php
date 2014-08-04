@@ -32,8 +32,16 @@ class ip_model extends CI_Model
 	}
 
 	function get_prodi_o1($prodi,$th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, persen_hadir FROM o1_presensi 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester' AND prodi = '$prodi'";
+
+		// $sql = "SELECT o1.kode, dsn.prodi, o1.persen_hadir FROM o1_presensi o1, dosen_all dsn
+		// 		WHERE o1.th_ajaran = '$th_ajaran' AND o1.semester = '$semester' AND o1.nik_baru = dsn.nik_baru AND dsn.prodi = '$prodi'";
+		// $sql = "SELECT kode, prodi, persen_hadir FROM o1_presensi 
+
+		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o1.persen_hadir,kelas.semester, kelas.th_ajaran
+				FROM
+				(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.th_ajaran FROM kelas_all k
+				LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o1_presensi o1 
+				WHERE o1.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.th_ajaran = '$th_ajaran' ";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -47,8 +55,17 @@ class ip_model extends CI_Model
 	}
 
 	function get_prodi_o2($prodi,$th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, baik FROM o2_persenbaik 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester' AND prodi = '$prodi'";
+
+
+		// $sql = "SELECT o2.kode, dsn.prodi, o2.baik FROM o2_persenbaik o2, dosen_all dsn 
+		// 		WHERE o2.th_ajaran = '$th_ajaran' AND o2.semester = '$semester' AND dsn.prodi = '$prodi'";
+
+		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o2.baik,kelas.semester, kelas.th_ajaran
+					FROM
+					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.th_ajaran FROM kelas_all k
+					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o2_persenbaik o2
+					WHERE o2.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.th_ajaran = '$th_ajaran' ";
+		
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -62,8 +79,15 @@ class ip_model extends CI_Model
 	}
 
 	function get_prodi_o3($prodi,$th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, persen_lulus FROM o3_nilailulus 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester' AND prodi = '$prodi'";
+		// $sql = "SELECT o3.kode, dsn.prodi, o3.persen_lulus FROM o3_nilailulus o3, dosen_all dsn 
+		// 		WHERE o3.th_ajaran = '$th_ajaran' AND o3.semester = '$semester' AND dsn.prodi = '$prodi'";
+
+		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o3.persen_lulus,kelas.semester, kelas.th_ajaran
+					FROM
+					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.th_ajaran FROM kelas_all k
+					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o3_nilailulus o3
+					WHERE o3.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.th_ajaran = '$th_ajaran' ";
+
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -77,8 +101,15 @@ class ip_model extends CI_Model
 	}
 
 	function get_prodi_o4($prodi,$th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, flag_tepat FROM o4_nilaimasuk 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester' AND prodi = '$prodi'";
+		// $sql = "SELECT o4.kode, dsn.prodi, o4.flag_tepat FROM o4_nilaimasuk o4, dosen_all dsn
+		// 		WHERE o4.th_ajaran = '$th_ajaran' AND o4.semester = '$semester' AND dsn.prodi = '$prodi'";
+
+		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o4.flag_tepat,kelas.semester, kelas.th_ajaran
+					FROM
+					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.th_ajaran FROM kelas_all k
+					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o4_nilaimasuk o4
+					WHERE o4.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.th_ajaran = '$th_ajaran' ";
+
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -92,8 +123,15 @@ class ip_model extends CI_Model
 	}
 
 	function get_prodi_o5($prodi,$th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, eclass FROM o5_eclass 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester' AND prodi = '$prodi'";
+		// $sql = "SELECT o5.kode, dsn.prodi, o5.eclass FROM o5_eclass o5, dosen_all dsn 
+		// 		WHERE o5.th_ajaran = '$th_ajaran' AND o5.semester = '$semester' AND dsn.prodi = '$prodi'";
+
+		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o5.eclass,kelas.semester, kelas.th_ajaran
+					FROM
+					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.th_ajaran FROM kelas_all k
+					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o5_eclass o5
+					WHERE o5.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.th_ajaran = '$th_ajaran' ";
+
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
