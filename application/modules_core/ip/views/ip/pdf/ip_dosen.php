@@ -233,6 +233,7 @@
     
     <!-- box left -->
 	<div class="left box-panduan-perhitungan">
+        <h4 class="title">PARAMETER/INDIKATOR YANG DIGUNAKA DALAM EVALUASI<h4>
 		<table class="table table-bordered table-panduan-perhitungan">
             <thead>
                 <tr>
@@ -251,7 +252,7 @@
                 <tr>
                     <td>P1 (20%)</td>
                     <td>Kehadiran Dosen (%)</td>
-                    <td>jumlah kehadiran dosen di kelas selama 1 semester / jmlah pertemuan yang tersedia selama 1 semester * 100%</td>
+                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p1.png"></td>
                     <td>≥91%</td>
                     <td>81-90%</td>
                     <td>≤80%</td>
@@ -259,7 +260,7 @@
                 <tr>
                     <td>P2 (35%)</td>
                     <td>Kualitas Pengajaran (%)</td>
-                    <td>total % baik / jumlah kelas</td>
+                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p2.png"></td>
                     <td>≥91%</td>
                     <td>81-90%</td>
                     <td>≤80%</td>
@@ -267,7 +268,7 @@
                 <tr>
                     <td>P3 (10%)</td>
                     <td>Kelulusan Mahasiswa (%)</td>
-                    <td>jumlah dengan nilai <= C / total jumlah mahasiswa peserta * 100%</td>
+                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p3.png"></td>
                     <td>≥91%</td>
                     <td>81-90%</td>
                     <td>≤80%</td>
@@ -294,27 +295,29 @@
     
     <!-- box right -->
 	<div class="right box-description">
-        <dl class="periode">
-            <h3>INDEKS PRESTASI (IP) DOSEN</h3>
-            <dt>Semester</dt>
-            <dd>GENAP</dd>
-            <dt>Tahun Ajaran</dt>
-            <dd>2013/2014</dd>
-        </dl>
-        <div class="logo-ukdw">
+        <h3>INDEKS PRESTASI (IP) DOSEN</h3>
+        <div class="left">
+            <dl class="periode">
+                <dt>Semester</dt>
+                <dd>GENAP</dd>
+                <dt>Tahun Ajaran</dt>
+                <dd>2013/2014</dd>
+            </dl>
+            <dl>
+                <dt>Program Studi</dt>
+                <dd><?php echo $dsn->nama_prodi ?></dd>
+                <dt>NIK</dt>
+                <dd><?php echo $dsn->nik_baru?> / <?php echo $dsn->nik?>  </dd>
+                <dt>Nama</dt>
+                <dd><?php echo $dsn->nama_dsn?></dd>
+                <dt>IPK</dt>
+                <dd><?php echo $ipk; ?></dd>
+            </dl>
+        </div>
+        <div class="right logo-ukdw">
             <img src="<?php echo base_url() ?>public/assets/images/logo-UKDW.png">
         </div>
         <div class="clear"></div>
-        <dl>
-            <dt>Program Studi</dt>
-            <dd><?php echo $dsn->nama_prodi ?></dd>
-            <dt>NIK</dt>
-            <dd><?php echo $dsn->nik_baru?> / <?php echo $dsn->nik?>  </dd>
-            <dt>Nama</dt>
-            <dd><?php echo $dsn->nama_dsn?></dd>
-            <dt>IPK</dt>
-            <dd><?php echo $ipk; ?></dd>
-        </dl>
 
         <div class="clear"></div>
 
@@ -508,7 +511,28 @@
                 </tr>
             </tfoot>
         </table>
+        <div class="clear"></div>
+
+
+        <div class="box-pengesahan">
+            <p>Disahkan oleh :</p>
+            <table class="table table-bordered">
+                <thead>
+                    <th width="80px">Biro 1</th>
+                    <th width="80px">InQa</th>
+                    <th width="100px">Pejabat Prodi/Departemen</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 
 <script type="text/javascript">
@@ -521,15 +545,21 @@ jQuery(document).ready(function($j){
         xAxis: {
             categories: ['p1', 'p2', 'p3', 'p4', 'p5']
         },
+        yAxis:{
+            max: 4,
+            tickInterval: 0.5
+        },
         series: [{
             type: 'column',
             name: 'Saya',
             data: [ <?php echo $p1_avg ?>, <?php echo $p2_avg ?>, <?php echo $p3_avg ?>, <?php echo $p4_avg ?>, <?php echo $p5_avg ?> ],
             animation: {
                 complete: function () {
+                    $j('text:contains("Highcharts.com")').remove();
                     $('.loading > div').remove();
                     window.print();
                     window.history.back();  
+
                 }
             }
         }, {
@@ -553,9 +583,6 @@ jQuery(document).ready(function($j){
         }]
             
     });
-
-    
 });
-
 
 </script>
