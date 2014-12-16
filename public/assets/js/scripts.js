@@ -70,6 +70,8 @@
 
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/jquery.datetimepicker.js"></script>'); /*==== jQuery datetimepicker ====*/
 
+  document.writeln('<script src="'+CI_ROOT+'public/assets/js/select2.js"></script>'); /*==== select2 - autocomplete ====*/
+
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/custom.js"></script>'); /*==== Custom scripts ====*/
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/pinaple-soal.js"></script>'); /*==== JS soal ====*/

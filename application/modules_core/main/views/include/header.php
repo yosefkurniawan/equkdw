@@ -30,7 +30,8 @@
 <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/style.css">
 
 <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/jquery.fileupload.css">
-
+<!-- select2 - autocomplete -->
+<link rel="stylesheet" href="<?=base_url()?>public/assets/css/select2.css">
 
 <!-- general -->
 <link href="<?=base_url()?>public/assets/css/general.css" rel="stylesheet"/>

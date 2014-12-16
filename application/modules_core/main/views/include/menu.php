@@ -27,6 +27,9 @@
 	<?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
 			<li><a href="<?=base_url()?>mahasiswa/dashboard" title="Dashboard" ><i class="icon-">&#xf0ac;</i>Dashboard</a></li>
 	<?php endif ?>
+	<?php if ($this->session->userdata['is_biro1']): ?>
+			<li><a href="<?=base_url()?>ip/konfigurasi_o4" title="Konfiguras O4" >Input Tanggal Penyerahan Berkas</a></li>
+	<?php endif ?>
     </ul>
   </div>
 </nav>

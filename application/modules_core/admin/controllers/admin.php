@@ -24,6 +24,7 @@ class Admin extends MX_Controller
 				$this->session->set_userdata('is_super_admin', false);
 				$this->session->set_userdata('is_admin', false);
 				$this->session->set_userdata('is_kepala_unit', false);
+				$this->session->set_userdata('is_biro1', false);
 				$this->session->set_userdata('status', false);
 
 				# Set login session
@@ -33,6 +34,8 @@ class Admin extends MX_Controller
 					$this->session->set_userdata('is_admin', true);
 				}elseif($result['account']->role == 'super admin'){
 					$this->session->set_userdata('is_super_admin', true);
+				}elseif($result['account']->role == 'biro1'){
+					$this->session->set_userdata('is_biro1', true);
 				}
 				
 				unset($_POST);

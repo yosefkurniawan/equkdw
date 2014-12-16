@@ -29,8 +29,14 @@ class Main extends MX_Controller
 			elseif($this->session->userdata['is_super_admin']){
 				$data['content'] = 'dashboard_superadmin';
 			}
+			elseif($this->session->userdata['is_super_admin']){
+				$data['content'] = 'dashboard_superadmin';
+			}
+			elseif($this->session->userdata['is_biro1']){
+				$data['content'] = 'dashboard_biro1';
+			}
 			else{
-				$data['content'] = 'welcome';
+				$data['content'] = 'page404';
 			}
 			$data['title'] = 'eQuiz - Sistem Informasi Kuisioner dan Evaluasi';
 			$this->load->view('render_layout',$data);
