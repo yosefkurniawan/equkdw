@@ -46,13 +46,17 @@ class M_o4 extends CI_Model{
 			$grup 		= $mtk->grup;
 			$semester 	= $mtk->semester;
 			$thn_ajaran = $mtk->thn_ajaran;
+			
 			$tgl_masuk 	= $_POST['tgl_masuk'];
+			$tgl_masuk 	= explode('/', $tgl_masuk);
+			$tgl_masuk 	= $tgl_masuk[2].'-'.$tgl_masuk[1].'-'.$tgl_masuk[0];
+			
 			$flag_tepat = $_POST['flag_tepat'];
 			$mykey 		= $mtk->id_kelasb.$mtk->kode;
 
 			
 			// check is it exist already?
-			$sql_cek = "SELECT * FROM o4_nilaimasuk_copy WHERE mykey = '$mykey'";
+			$sql_cek = "SELECT * FROM o4_nilaimasuk WHERE mykey = '$mykey'";
 			$query_cek = $this->db->query($sql_cek);
 
 			// echo "<pre>";
@@ -61,7 +65,7 @@ class M_o4 extends CI_Model{
 
 			if (!$query_cek->num_rows() > 0) {
 				
-				$sql = "INSERT INTO o4_nilaimasuk_copy (kode,grup,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
+				$sql = "INSERT INTO o4_nilaimasuk (kode,grup,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
 						('$kode','$grup','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
 
 				$result = $this->db->query($sql);

@@ -31,31 +31,22 @@
 						<div class="form-group">
 							<div class="col-lg-3"><label>Batas Akhir</label></div>
 							<div class="col-lg-9">
-								<strong><?php echo $deadline ?></strong>
+								<strong><?php echo date('d-m-Y', $deadline) ?></strong>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<div class="col-lg-3"><label>Tgl Masuk</label></div>
 							<div class="col-lg-9">
-								<input type="text" class="form-control" name="tgl_mulai" id="deadline" value="<?php echo date('d/m/Y') ?>" />
+								<input type="text" class="form-control" name="tgl_masuk" id="deadline" value="<?php echo date('d/m/Y') ?>" onchange="cekFlagTepat(<?php echo $deadline; ?> , getTimeStamp(this.value))" />
 							</div>
 						</div>
 
-						<div class="form-group">
-							<?php
-								$timestampDeadline 	= strtotime($deadline);
-								$timestampNow 		= strtotime(date('Y-m-d'));
-							?>
+						<div class="form-group flag_status">
 							<div class="col-lg-3"><label>Status</label></div>
 							<div class="col-lg-9">
-								<?php if ($timestampNow > $timestampDeadline): ?>
-									<span class="label label-danger">Telat</span>
-									<input type="hidden" name="flag_tepat" value="F">
-								<?php else: ?>
-									<span class="label label-success">Tepat Waktu</span>
-									<input type="hidden" name="flag_tepat" value="T">
-								<?php endif ?>
+								<span class="label label-success">Tepat Waktu</span>
+								<input type="hidden" name="flag_tepat" value="T">
 							</div>
 						</div>
 						<div class="form-group">
@@ -68,8 +59,6 @@
 							    </select>
 							</div>
 						</div>
-
-						<input type="hidden" name="tgl_masuk" value="<?php echo date('Y-m-d') ?>">
 				</div>
 				<div class="panel-footer clearfix">
 					<div class="form-group">
@@ -84,10 +73,10 @@
 </div>
 
 <script>
-    jQuery(document).ready(function($) { 
-    	$("#select-matkul").select2(); 
+    jQuery(document).ready(function($j) { 
+    	jQuery("#select-matkul").select2(); 
 
-    	$('#deadline').datetimepicker({
+    	jQuery('#deadline').datetimepicker({
 	   		lang:'de',
 			 i18n:{
 			  de:{
@@ -98,6 +87,28 @@
 			 timepicker:false,
 			 format:'d/m/Y'
 	   });
-		
+
+
+    	// set status. compare deadline with today for default
+    	var now = new Date();
+		var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+		var timestampToday = today/1000;
+    	cekFlagTepat(<?php echo $deadline; ?>,timestampToday);
     });
+
+    function getTimeStamp(date) {
+    	var myDate = date.split("/");
+		var newDate = myDate[1]+"/"+myDate[0]+"/"+myDate[2];
+		return new Date(newDate)/1000;
+    }
+
+    function cekFlagTepat(deadline,tgl_masuk) {
+    	if(tgl_masuk > deadline) {
+    		jQuery('.form-group.flag_status .label').removeClass('label-success').addClass('label-danger').text('Telat');
+    		jQuery('.form-group.flag_status input').val('F');
+    	}else{
+    		jQuery('.form-group.flag_status .label').removeClass('label-danger').addClass('label-success').text('Tepat Waktu');
+    		jQuery('.form-group.flag_status input').val('T');
+    	}
+    }
 </script>
