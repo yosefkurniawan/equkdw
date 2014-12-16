@@ -24,7 +24,7 @@ class Konfigurasi_o4 extends MX_Controller {
 
 		/* Data */
 		$data['list_matkul']		= $this->m_o4->getListMtk();
-		$data['deadline']			= '2014-12-15';
+		$data['deadline']			= strtotime('2014-12-17');
 
 		/* Render Layout */
 		$data['title'] 				= "Input Tanggal Penyerahan Berkas";
