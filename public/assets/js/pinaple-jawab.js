@@ -25,12 +25,12 @@ $(document).ready(function(){
 	});
 	$('#nav-dosen-4').click(function(){
 		$('html, body').animate({
-	        scrollTop: $('#box-form-dosen-3').offset().top-80
+	        scrollTop: $('#box-form-dosen-4').offset().top-80
 	    }, 'slow');
 	});
 	$('#nav-dosen-5').click(function(){
 		$('html, body').animate({
-	        scrollTop: $('#box-form-dosen-3').offset().top-80
+	        scrollTop: $('#box-form-dosen-5').offset().top-80
 	    }, 'slow');
 	});
 
@@ -53,6 +53,10 @@ function submit_jawaban(){
 	var r=confirm("Anda yakin dengan isian anda?");
 	if (r==true)
 	{
+	
+		// show loading popup
+		$('#save-jawaban-loading-popup').css('display', 'block');
+		
 		$('.form-kuisioner').each(function(){
 			var id_form = '#'+$(this).attr('id');
 			for (var i = 1; i <= 12; i++) {
@@ -70,6 +74,7 @@ function submit_jawaban(){
 					$(id_form+' .q'+i+' .pertanyaan-error-notif').show();
 					$(id_form+' .q'+i).css('background','rgb(255, 244, 244)');
 					$('#save-jawaban-loading').css('display', 'none');
+					$('#save-jawaban-loading-popup').css('display', 'none');
 					$('#save-jawaban').show();
 					is_validate = false;
 				}
@@ -105,6 +110,7 @@ function submit_jawaban(){
 					is_scrolled = true;
 				}
 				$('#save-jawaban-loading').css('display', 'none');
+				$('#save-jawaban-loading-popup').css('display', 'none');
 				$('#save-jawaban').show();
 				is_validate = false;
 			}
@@ -151,6 +157,7 @@ function submit_jawaban(){
 			   error: function (jqXHR, textStatus, errorThrown)
 			   {
 			$('#save-jawaban-loading').css('display', 'none');
+			$('#save-jawaban-loading-popup').css('display', 'none');
 			$('#save-jawaban').show();
 
 			/* show message */
@@ -167,6 +174,7 @@ function submit_jawaban(){
 
 	}else{
 		$('#save-jawaban-loading').css('display', 'none');
+		$('#save-jawaban-loading-popup').css('display', 'none');
 		$('#save-jawaban').show();
 	} //end of confirmation
 	

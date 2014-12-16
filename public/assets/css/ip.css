@@ -1,0 +1,24 @@
+/* ============================================= */
+/* General
+/* ============================================= */
+
+#ip_form .section .form-box {
+	padding-left: 0;
+}
+
+#ip_form .section .status-box {
+	text-align: center;;
+}
+
+#ip_form .section .status-box i {
+	font-size: 70px;
+	color: #eee;
+}
+
+#ip_form .section.verified .status-box i {
+	color: #66c88d;
+}
+
+#ip_form .section:not(.periode) .panel-footer {
+	background: none;
+}

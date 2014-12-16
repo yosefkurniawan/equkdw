@@ -21,23 +21,30 @@ class Dosen extends CI_Controller {
 
 	}
 
-	public function hasil_evaluasi($nik){
+	public function hasil_evaluasi($nik,$id_paket = ''){
+
 		$dosen 			= $this->m_laporan->getDetailDosen($nik);
-		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik,true);
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
-		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 
 		// set periode
-		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+		if ($id_paket == '') {
+			$data['id_paket'] 	= "";
 			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
 			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+			$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik,true);
+			$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 		}
 		else {
-			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
-			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+			$data['id_paket'] = $id_paket;
+			$periode['thn_ajaran']	= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
+			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
+			$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik,true,$id_paket);
+			$pertanyaan		= $this->m_kuisioner->getPertanyaan_laporan($id_paket);
 		}
 
 		/* -- Render Layout -- */
+		$data['paket_list']			= $this->m_laporan->getPaketList();
+		$data['admin']				= 'tidak';
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;
 		$data['masukan_dosen']		= $masukan_dosen;
@@ -50,25 +57,28 @@ class Dosen extends CI_Controller {
 		$this->load->view('main/render_layout',$data);
 	}
 
-	function pdf_hasil_evaluasi_dosen($nik)
+	function pdf_hasil_evaluasi_dosen($nik,$id_paket='')
 	{
 	    $this->load->helper('pdf_helper');
 
 		$dosen 			= $this->m_laporan->getDetailDosen($nik);
-		$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik);
 		$masukan_dosen  = $this->m_laporan->getMasukanDosen($nik);
-		$pertanyaan		= $this->m_kuisioner->getPertanyaan();
-		
+
 		// set periode
-		if (!isset($this->session->userdata['periode_laporan_evaluasi'])) {
+		if ($id_paket == '') {
+			$data['id_paket'] 	= "";
 			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
 			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+			$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik,true);
+			$pertanyaan		= $this->m_kuisioner->getPertanyaan();
 		}
 		else {
-			$periode['thn_ajaran']	= $this->session->userdata['periode_laporan_evaluasi']['thn_ajaran'];
-			$periode['semester']	= $this->session->userdata['periode_laporan_evaluasi']['semester'];
+			$data['id_paket'] = $id_paket;
+			$periode['thn_ajaran']	= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
+			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
+			$hasil_evaluasi = $this->m_laporan->getHasilEvaluasi($nik,true,$id_paket);
+			$pertanyaan		= $this->m_kuisioner->getPertanyaan_laporan($id_paket);
 		}
-
 		$data['periode']			= $periode;
 		$data['dosen']				= $dosen;
 		$data['hasil_evaluasi']		= $hasil_evaluasi;

@@ -1,7 +1,17 @@
 <div class="page-header">
 	<h1>
 		Hasil Evaluasi
-		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?></small>
+		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?> &nbsp; <a href="" id="change-period"> <i class="icon-cog"></i></a> &nbsp;
+		<select id="id_paket" style="width:160px;display:none">
+			<?php foreach($paket_list as $item) : ?>
+				<option value="<?php echo $item['id_paket']?>">
+					<?php echo $item['thn_ajaran']?> <?php echo $item['semester']?></option>
+			<?php endforeach; ?>
+		</select>
+		&nbsp;&nbsp;<a href="#" id="change_period_process" style="display:none"><i class='icon-save'> </i></a>
+		&nbsp;&nbsp;<a href="#" id="tutup_period_form" style="display:none"><i class='icon-remove'> </i></a>
+
+		</small>
 	</h1>
 </div>
 
@@ -16,6 +26,7 @@
 	<p><?= $this->session->flashdata('message'); ?></p>
 </div>
 
+<!--
 <a data-toggle="modal" href="#modal-setPeriode" class='btn btn-med blue-bg' title='Ubah periode'><i class='icon-calendar'></i> Ubah Periode</a>
 <div class="modal fade" id="modal-setPeriode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 	<form id="form-setPeriode" method="POST" action="<?= base_url() ?>laporan/setPeriode">
@@ -72,9 +83,10 @@
 					</div>
 				</div>
 			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</form>
+		<!</div><!-- /.modal-dialog -->
+	<!--</form>
 </div>
+-->
 <div class="panel-body">
 	<div class="panel-group" id="accordion">
 		<div class="panel colored" id="list_prodi">
@@ -89,7 +101,9 @@
 					<ul class="list_dosen list-unstyled">
 						<?php foreach ($unit['listDosen'] as $dosen): ?>
 							<li class="col-md-4">
-								<a href="<?= base_url().'laporan/hasil_evaluasi_dosen/'.$dosen['nik'] ?>"><?= $dosen['gelar_prefix'].$dosen['nama'].$dosen['gelar_suffix'] ?></a>
+								<a href="<?= base_url().'laporan/hasil_evaluasi_dosen/'.$dosen['nik'] ?>
+								<?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" >
+								<?= $dosen['gelar_prefix']." ".$dosen['nama']." ".$dosen['gelar_suffix'] ?></a>
 							</li>
 						<?php endforeach ?>
 					</ul>
@@ -100,3 +114,31 @@
 		</div>
 	</div>
 </div>
+
+
+<script>
+	CI_ROOT = "<?php echo base_url() ?>";
+
+    jQuery(document).ready(function() {   
+		jQuery('#change-period').on('click',function(){
+			jQuery('#id_paket').show();
+			jQuery('#change_period_process').show();
+			jQuery('#tutup_period_form').show();
+			return false;
+		});	    
+		jQuery('#tutup_period_form').on('click',function(){
+			jQuery(this).hide();
+			jQuery('#change_period_process').hide();
+			jQuery('#id_paket').hide();
+			return false;
+		});	    
+		jQuery('#change_period_process').on('click',function(){
+			var nik = jQuery('#nik').val();
+			var id_paket = jQuery('#id_paket').val();
+			var admin = jQuery('#isAdmin').val();
+			window.location.replace(CI_ROOT+'laporan/hasil_evaluasi/'+id_paket);
+			return false;
+		});	    
+    });
+    
+</script>

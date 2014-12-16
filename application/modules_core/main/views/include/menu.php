@@ -22,7 +22,7 @@
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_kepala_unit'] || ($this->session->userdata['status'] == 'Dosen')) :?>
 			<li><a href="<?=base_url()?>laporan/dosen/hasil_evaluasi/<?= $this->session->userdata('username'); ?>" title="Laporan" >Laporan</a></li>
-			<li><a href="<?=base_url()?>soal/dosen" title="Kuisioner" >Kuisioner</a></li>
+			<li><a href="<?=base_url()?>soal/soal_tambahan" title="Kuisioner" >Kuisioner</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
 			<li><a href="<?=base_url()?>mahasiswa/dashboard" title="Dashboard" ><i class="icon-">&#xf0ac;</i>Dashboard</a></li>

@@ -61,11 +61,15 @@
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/pnotify/jquery.pnotify.min.js"></script>'); /*==== Pnotify ====*/
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/imgareaselect/jquery.imgareaselect.min.js"></script>'); /*==== Image Crop ====*/
-
+  
+  document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/chartjs/globalize.min.js"></script>'); /*==== chart js ====*/
+     
+  document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/chartjs/dx.chartjs.js"></script>'); /*==== chart js ====*/
+  
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/jquery.sortable.min.js"></script>'); /*==== sortable list ====*/
 
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/jquery.datetimepicker.js"></script>'); /*==== jQuery datetimepicker ====*/
-  
+
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/custom.js"></script>'); /*==== Custom scripts ====*/
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/pinaple-soal.js"></script>'); /*==== JS soal ====*/

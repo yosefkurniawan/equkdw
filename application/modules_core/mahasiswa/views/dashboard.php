@@ -4,10 +4,10 @@
 
 	$x = 0; $y = 0; $percent = 0;
 	foreach ($list_krs as $course) {
-		if ($course->jawaban != '-' AND $course->eva_status == 1) {
+		if ($course->jawaban != '-' AND ($course->eva_status == 1 OR $course->eva_status == 2)) {
 			$x = $x + 1;
 		}
-		if ($course->eva_status == 1) {
+		if ($course->eva_status == 1 OR $course->eva_status == 2) {
 			$y = $y + 1;
 		}
 	}
@@ -24,8 +24,12 @@
 <!-- <a href="<?php echo base_url(); ?>manajemen/user/tambah" class="blue-bg btn btn-med showcase-btn"><i class="icon-file">&nbsp;</i>Tambah User Baru</a> -->
 
 <?php if($message != NULL || $message !='') : ?>
-<div class="alert alert-info"> Info : <?php echo $message; ?> </div>
+<div class="alert alert-success"> Info : <?php echo $message; ?> </div>
 <?php endif ?>
+
+<div class="alert alert-info"><strong>Privacy Policy</strong><br>
+	Anda sebagai mahasiswa pengisi Kuisioner dan Jawaban Kuisioner yang diinputkan ke dalam sistem ini dijamin kerahasiaannya. <br>
+	Baik Dosen maupun admin hanya dapat mengakses hasil olahan yang telah disediakan sistem. Selamat mengisi kuisioner </div>
 
 <div class="panel colored">
 	<div class="panel-heading blue-bg">
@@ -72,7 +76,7 @@
 					<?php echo $course->nama_dosen ?></td>
 				<td><?php echo $course->grup ; ?></td>
 				<td>
-					<?php if ($course->eva_status == 1) : ?>
+					<?php if ($course->eva_status == 1 OR $course->eva_status == 2) : ?>
 						<!-- bila ada pengisian -->
 						<?php if ($course->jawaban != '-') : ?>
 							<span class="label label-success">sudah diisi</span>
@@ -97,7 +101,7 @@
 				</td>
 				<td>
 					<?php if ($course->status == 'public') : ?>
-						<?php if ($course->eva_status == 1) : ?>
+						<?php if ($course->eva_status == 1 || $course->eva_status == 2 ) : ?>
 							<?php if ($today >= $course->mulai AND $today <= $course->akhir) : ?>
 								<!-- bila sudah waktunya -->
 								<?php if ($course->jawaban == '-') : ?>

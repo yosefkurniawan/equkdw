@@ -84,6 +84,33 @@ class Soal extends CI_Controller {
 		$this->load->view('main/render_layout',$data);
 		
 	}
+	
+	public function edit_deadline($kode)
+	{
+		$info_paket 		= $this->m_soal->getPaketSoalByKode($kode);
+		$list_pertanyaan	= $this->m_soal->getPertanyaanByKode($kode);
+		$list_jadwal		= $this->m_soal->getjadwalByKode($kode);
+
+		$list_aspek 		= $this->m_soal->getAspek();			
+		$list_prodi 		= $this->m_soal->getProdi();			
+		$last_periode		= $this->m_general->getLastPeriode();
+
+		/* -- Render Layout -- */
+		$data['form_type']			= 'edit_deadline';
+		$data['left_bar']			= 'soal/left_bar_edit';
+		$data['info_paket']			= $info_paket;
+		$data['list_pertanyaan']	= $list_pertanyaan;
+		$data['list_jadwal']		= $list_jadwal;
+		$data['kode']			= $kode;
+		$data['last_periode']	= $last_periode;
+		$data['list_aspek']		= $list_aspek;
+		$data['list_prodi']		= $list_prodi;
+		$data['title'] 		= 'Edit Paket Soal';
+		$data['content'][] 	= 'soal/form_info';
+		$data['content'][] 	= 'soal/form_pertanyaan';
+		$data['content'][] 	= 'soal/form_jadwal';
+		$this->load->view('main/render_layout',$data);	
+	}
 
 	public function baru()
 	{

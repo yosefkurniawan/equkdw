@@ -2,11 +2,13 @@
 
 class M_laporan extends CI_Model {
 
-	public function getListDosenByIdUnit($id_unit){
+	public function getListDosenByIdUnit($id_unit,$id_paket=''){
 		// set periode
-		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
-			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
-			$thn_ajaran	= "'".$this->session->userdata['periode_laporan_evaluasi']['thn_ajaran']."'";
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
 		}
 		else{
 			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
@@ -34,8 +36,20 @@ class M_laporan extends CI_Model {
 		return $dosen;
 	}
 
-	public function getListDosenAktifPerUnit(){	
+	public function getListDosenAktifPerUnit($id_paket=''){	
 		// set periode
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+				
+		/*
 		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
 			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
 			$thn_ajaran	= "'".$this->session->userdata['periode_laporan_evaluasi']['thn_ajaran']."'";
@@ -44,6 +58,7 @@ class M_laporan extends CI_Model {
 			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}
+		*/
 
 		$sql_listDosen 	= "SELECT d.nik,d.nama,d.gelar_suffix,d.gelar_prefix,m.id_unit, IFNULL(u.unit,'zzz') as unit
 						FROM ec_kelas_buka k
@@ -80,8 +95,17 @@ class M_laporan extends CI_Model {
 				$_result[$id_unit]['unit'] 		= $unit; 
 				$_result[$id_unit]['listDosen']	= array();
 
-				// create button print laporan per unit
-				$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
+				if ($id_paket != '') {
+					// create button print laporan per unit
+					$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."/".$id_paket."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
+				}
+				else{
+					// create button print laporan per unit
+					$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
+
+				}
+				
+
 			}
 		}
 
@@ -98,13 +122,29 @@ class M_laporan extends CI_Model {
 
 		return $_result;
 	}
+	
+	public function getPaketList($id_paket = '') {
+		if ($id_paket == '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			return $query->result_array();			
+		} else {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			return $query->row();						
+		}
+	}
+
+
 
 	# NOTE: $showAllMatkul = false --> hide all subjects that do not have questionnaire
-	public function getHasilEvaluasi($nik, $showAllMatkul=false){
+	public function getHasilEvaluasi($nik, $showAllMatkul=false,$id_paket = ''){
 		// get latest paket
-		$sql_latest_paket = "SELECT id_paket FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC LIMIT 1";
-		$id_paket 		  = $this->db->query($sql_latest_paket)->row()->id_paket;
-
+		if ($id_paket == '') {
+			$sql_latest_paket = "SELECT id_paket FROM eva_paket ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC LIMIT 1";
+			$id_paket 		  = $this->db->query($sql_latest_paket)->row()->id_paket;			
+		}
+		
 		if (!$showAllMatkul) {
 			$sql_showAllMatkul = "AND m.`eva_status` = 1";
 		}
@@ -112,6 +152,20 @@ class M_laporan extends CI_Model {
 			$sql_showAllMatkul = "";
 		}
 
+
+		// set periode
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+
+/*
 		// set periode
 		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
 			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
@@ -121,6 +175,7 @@ class M_laporan extends CI_Model {
 			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}
+*/
 
 		// get hasil evaluasi
 		$sql	= "SELECT 
@@ -176,7 +231,7 @@ class M_laporan extends CI_Model {
 							end,'-') AS Q12,
 					IFNULL(GROUP_CONCAT( j.`masukan_dosen` ORDER BY RAND() SEPARATOR ';'), 'Tidak ada masukan') as masukan_dosen,
 					IFNULL(GROUP_CONCAT( j.`masukan_matkul` ORDER BY RAND() SEPARATOR ';'), 'Tidak ada masukan') as masukan_matkul,
-					IF(m.`eva_status`,'Ada','Tidak Ada') as status_kuisioner
+					IF(m.`eva_status` = 1,'Ada', IF(m.`eva_status` = 2,'Ada Tidak Wajib','Tidak Ada')) as status_kuisioner
 					FROM ec_kelas_buka k
 					JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb AND p.nik = '$nik'
 					JOIN ec_matkul m ON m.kode = k.kode
@@ -268,6 +323,291 @@ class M_laporan extends CI_Model {
 		}
 		return $masukan;
 	}
+
+
+	public function getStatusPengisianMahasiswa_row($search,$id_paket='')
+	{
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+	
+	
+		$unit_id = $search['unit_id'];
+		$nama = strtolower($search['nama']);
+		$eva_status = $search['eva_status'];
+
+		if ($eva_status == '') {
+
+			$sql = "SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+							sum(case when foo.eva_status = 1 THEN 1 ELSE 0 END)'matakuliah_berkuisioner', 
+							sum(case when foo.eva_status = 2 THEN 1 ELSE 0 END)'matakuliah_berkuisioner_opsional',
+							sum(case when (foo.eva_status = 1) AND (j.id_jawaban != '') THEN 1 ELSE 0 END)'kuisioner_terisi'
+						FROM (SELECT s.nim, u.nama_lengkap, u.id_unit, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+						WHERE k.id_kelasb = s.id_kelasb
+						AND s.nim = u.nim
+						AND u.id_unit = r.id_unit
+						AND k.kode = m.kode";
+				        if ($unit_id != '') {
+							$sql .= " AND u.id_unit LIKE '$unit_id'";
+				        }
+				        if ($nama != '') {
+							$sql .= " AND ( LCASE(u.nama_lengkap) LIKE '$nama' OR LCASE(s.nim) LIKE '$nama' )";
+				        }										
+						$sql .= " AND k.thn_ajaran = $thn_ajaran
+						AND k.semester = $semester) as foo
+						LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+						GROUP BY nim";
+
+		} else {
+
+			$sql = "SELECT * FROM (SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+							sum(case when foo.eva_status = 1 THEN 1 ELSE 0 END)'matakuliah_berkuisioner', 
+							sum(case when foo.eva_status = 2 THEN 1 ELSE 0 END)'matakuliah_berkuisioner_opsional',
+							sum(case when (foo.eva_status = 1) AND (j.id_jawaban != '') THEN 1 ELSE 0 END)'kuisioner_terisi'
+						FROM (SELECT s.nim, u.nama_lengkap, u.id_unit, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+						WHERE k.id_kelasb = s.id_kelasb
+						AND s.nim = u.nim
+						AND u.id_unit = r.id_unit
+						AND k.kode = m.kode";
+				        if ($unit_id != '') {
+							$sql .= " AND u.id_unit LIKE '$unit_id'";
+				        }
+				        if ($nama != '') {
+							$sql .= " AND ( LCASE(u.nama_lengkap) LIKE '$nama' OR LCASE(s.nim) LIKE '$nama' )";
+				        }										
+						$sql .= " AND k.thn_ajaran = $thn_ajaran
+						AND k.semester = $semester) as foo
+						LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+						GROUP BY nim) as x";
+				        if ($eva_status == '1') {
+							$sql .= " WHERE x.matakuliah_berkuisioner = x.kuisioner_terisi AND x.matakuliah_berkuisioner != 0";
+						}
+						elseif ($eva_status == '2') {							
+							$sql .= " WHERE x.matakuliah_berkuisioner > x.kuisioner_terisi";
+						}
+		}
+
+        $query = $this->db->query($sql);
+        return $query->num_rows();
+    }
+
+	public function getStatusPengisianMahasiswa_laporan($completion='all', $id_unit='',$id_paket='')
+	{
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+	
+		if ($completion == 'all') {
+
+			$sql = "SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+							sum(case when foo.eva_status = 1 THEN 1 ELSE 0 END)'matakuliah_berkuisioner', 
+							sum(case when foo.eva_status = 2 THEN 1 ELSE 0 END)'matakuliah_berkuisioner_opsional',
+							sum(case when (foo.eva_status = 1) AND (j.id_jawaban != '') THEN 1 ELSE 0 END)'kuisioner_terisi'
+						FROM (SELECT s.nim, u.nama_lengkap, u.id_unit, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status 
+						FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+						WHERE k.id_kelasb = s.id_kelasb
+						AND s.nim = u.nim
+						AND u.id_unit = r.id_unit
+						AND k.kode = m.kode";
+				        if ($id_unit != '') {
+							$sql .= " AND u.id_unit LIKE '$id_unit'";
+				        }
+						$sql .= " AND k.thn_ajaran = $thn_ajaran
+						AND k.semester = $semester) as foo
+						LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+						GROUP BY nim";
+
+		} else {
+			$sql = "SELECT * FROM (SELECT foo.nim, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+							sum(case when foo.eva_status = 1 THEN 1 ELSE 0 END)'matakuliah_berkuisioner', 
+							sum(case when foo.eva_status = 2 THEN 1 ELSE 0 END)'matakuliah_berkuisioner_opsional',
+							sum(case when (foo.eva_status = 1) AND (j.id_jawaban != '') THEN 1 ELSE 0 END)'kuisioner_terisi'
+						FROM (SELECT s.nim, u.id_unit, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status 
+						FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+						WHERE k.id_kelasb = s.id_kelasb
+						AND s.nim = u.nim
+						AND u.id_unit = r.id_unit
+						AND k.kode = m.kode";
+				        if ($id_unit != '') {
+							$sql .= " AND u.id_unit LIKE '$id_unit'";
+				        }
+						$sql .= " AND k.thn_ajaran = $thn_ajaran
+						AND k.semester = $semester) as foo
+						LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+						GROUP BY nim) as x";
+				        //complete
+				        if ($completion == 'complete') {
+							$sql .= " WHERE x.matakuliah_berkuisioner = x.kuisioner_terisi AND x.matakuliah_berkuisioner != 0";
+						}
+						//don't have 
+				        elseif ($completion == 'dont') {
+							$sql .= " WHERE x.matakuliah_berkuisioner = 0";
+						}
+						//ongoing
+						elseif ($completion == 'ongoing') {							
+							$sql .= " WHERE x.matakuliah_berkuisioner > x.kuisioner_terisi";
+						}
+		}
+
+        $query = $this->db->query($sql);
+        return $query->num_rows();
+    }
+
+
+	public function getStatusPengisianMahasiswa($start,$limit,$search,$id_paket='')
+	{
+	
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+	
+		$unit_id = $search['unit_id'];
+		$nama = strtolower($search['nama']);
+		$eva_status = $search['eva_status'];
+
+		// echo $eva_status; die;
+
+		if ($eva_status == '') {
+
+			$sql = "SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+							sum(case when foo.eva_status = 1 THEN 1 ELSE 0 END)'matakuliah_berkuisioner', 
+							sum(case when foo.eva_status = 2 THEN 1 ELSE 0 END)'matakuliah_berkuisioner_opsional',
+							sum(case when (foo.eva_status = 1) AND (j.id_jawaban != '') THEN 1 ELSE 0 END)'kuisioner_terisi'
+						FROM (SELECT s.nim, u.nama_lengkap, u.id_unit, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+						WHERE k.id_kelasb = s.id_kelasb
+						AND s.nim = u.nim
+						AND u.id_unit = r.id_unit
+						AND k.kode = m.kode";
+				        if ($unit_id != '') {
+							$sql .= " AND u.id_unit LIKE '$unit_id'";
+				        }
+				        if ($nama != '') {
+							$sql .= " AND ( LCASE(u.nama_lengkap) LIKE '$nama' OR LCASE(s.nim) LIKE '$nama' )";
+				        }										
+						$sql .= " AND k.thn_ajaran = $thn_ajaran
+						AND k.semester = $semester) as foo
+						LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+						GROUP BY nim
+						LIMIT $start, $limit";
+
+		} else {
+
+			$sql = "SELECT * FROM (SELECT foo.nim, foo.nama_lengkap, foo.unit, COUNT(foo.nama_matkul) as matakuliah_diambil, 
+							sum(case when foo.eva_status = 1 THEN 1 ELSE 0 END)'matakuliah_berkuisioner', 
+							sum(case when foo.eva_status = 2 THEN 1 ELSE 0 END)'matakuliah_berkuisioner_opsional',
+							sum(case when (foo.eva_status = 1) AND (j.id_jawaban != '') THEN 1 ELSE 0 END)'kuisioner_terisi'
+						FROM (SELECT s.nim, u.nama_lengkap, u.id_unit, r.unit, k.id_kelasb, m.nama AS nama_matkul, m.eva_status FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r
+						WHERE k.id_kelasb = s.id_kelasb
+						AND s.nim = u.nim
+						AND u.id_unit = r.id_unit
+						AND k.kode = m.kode";
+				        if ($unit_id != '') {
+							$sql .= " AND u.id_unit LIKE '$unit_id'";
+				        }
+				        if ($nama != '') {
+							$sql .= " AND ( LCASE(u.nama_lengkap) LIKE '$nama' OR LCASE(s.nim) LIKE '$nama' )";
+				        }										
+						$sql .= " AND k.thn_ajaran = $thn_ajaran
+						AND k.semester = $semester) as foo
+						LEFT JOIN (SELECT p.id_jawaban,p.nim,p.nik,p.id_kelasb FROM eva_jawaban_paket p GROUP BY nim, id_kelasb) as j ON foo.id_kelasb = j.id_kelasb AND foo.nim = j.nim
+						GROUP BY nim) as x";
+				        if ($eva_status == '1') {
+							$sql .= " WHERE x.matakuliah_berkuisioner = x.kuisioner_terisi AND x.matakuliah_berkuisioner != 0";
+						}
+						elseif ($eva_status == '2') {							
+							$sql .= " WHERE x.matakuliah_berkuisioner > x.kuisioner_terisi";
+						}
+						$sql .= " LIMIT $start, $limit";
+		}
+
+
+        $query = $this->db->query($sql);
+/*         echo $query->num_rows(); die; */
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return array();
+        }		
+	}
+
+
+	public function getKRS($nim)
+	{							
+		$sql = "SELECT krs.nim,krs.nama_lengkap,krs.unit,krs.id_unit,krs.id_kelasb,krs.semester,krs.thn_ajaran,krs.kode,
+							krs.grup,krs.sks,krs.nama_matkul,krs.eva_status,krs.nama_dosen,krs.jawaban,krs.id_paket,krs.tanggal_pengisian,
+							dd.tgl_mulai AS mulai, dd.tgl_akhir AS akhir, pkt.status
+				FROM (SELECT foo.nim,foo.nama_lengkap,foo.unit,foo.id_unit,foo.id_kelasb,foo.semester,foo.thn_ajaran,foo.kode,
+							foo.grup,foo.sks,foo.nama_matkul,foo.eva_status,foo.nama_dosen,
+		 				IFNULL(
+		 					(GROUP_CONCAT(
+		 						DISTINCT j.id_jawaban
+		 					SEPARATOR ';')
+		 					),
+		 					'-'
+		 				) AS jawaban, j.id_paket, j.tanggal_pengisian
+		 			FROM (SELECT s.nim, u.nama_lengkap, r.unit, r.id_unit,
+					k.id_kelasb, k.semester, k.thn_ajaran, k.kode, IFNULL(k.grup,'-') as grup, m.sks, m.nama AS nama_matkul, m.eva_status, 
+						IFNULL(
+							(GROUP_CONCAT(DISTINCT
+								CONCAT(IF(IFNULL(d.gelar_prefix,'NULL')='NULL','',CONCAT(d.gelar_prefix,' ')),
+								d.nama,
+								', ',
+								d.gelar_suffix) 
+							SEPARATOR '; ')
+							),
+							'-'
+						) AS nama_dosen
+					FROM ec_peserta s, ec_kelas_buka k, ec_matkul m, user_mhs_alumni u, ref_unit r, ec_pengajar p, user_dosen_karyawan d
+					WHERE k.id_kelasb = s.id_kelasb
+					AND p.nik = d.nik
+					AND s.nim = u.nim
+					AND u.id_unit = r.id_unit
+					AND k.id_kelasb = p.id_kelasb
+					AND k.kode = m.kode
+					AND s.nim = '$nim'
+					AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) as thn_ajaran FROM ec_kelas_buka))
+					AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) as thn_ajaran FROM ec_kelas_buka))
+					GROUP BY k.kode) as foo 
+					LEFT JOIN eva_jawaban_paket j ON j.id_kelasb = foo.id_kelasb AND j.nim = '$nim'
+					GROUP BY foo.kode) as krs, eva_deadline dd, eva_paket pkt
+						WHERE krs.id_unit = dd.id_unit
+						AND dd.id_paket = pkt.id_paket
+						AND dd.id_paket = (SELECT MAX(id_paket) FROM eva_paket)
+					";
+
+        $query = $this->db->query($sql);
+
+		//echo '<pre>'; print_r($query->result()); die;
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return array();
+        }
+	}	
+
 }
 
 /* End of file m_laporan.php */

@@ -115,7 +115,7 @@ $(document).ready(function(){
 		 i18n:{
 		  de:{
 		   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
-		   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+		   dayOfWeek:['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
 		  }
 		 },
 		 timepicker:false,
@@ -135,7 +135,7 @@ $(document).ready(function(){
 		 i18n:{
 		  de:{
 		   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
-		   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+		   dayOfWeek:['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
 		  }
 		 },
 		 timepicker:false,

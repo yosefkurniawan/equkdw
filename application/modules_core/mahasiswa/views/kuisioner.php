@@ -19,20 +19,6 @@
 	</div>
 </div>
 
-<!-- <div class="panel colored">
-	<div class="panel-heading green-bg">
-		<h3 class="panel-title">Kehadiran di Kelas</h3>
-	</div
-	<div class="panel-body">
-		<
-		<div class="col-md-12">
-			Anda hadir dalam <?=$kehadiran->num_rows()?> dari <?=$kehadiranDosen->num_rows()?> yang diselenggarakan (<?=$presensi?>%)
-		</div>
-	</div>
-<div>
-
-<br><br> -->
-
 <?php if (validation_errors() != NULL) : ?>
 	<div class="alert alert-danger"><strong>Attention Message</strong> : <br> <?php echo validation_errors(); ?> </div>
 <?php endif; ?>
@@ -148,19 +134,29 @@
 <?php $y = $y + 1 ?>
 <?php endforeach ?>
 
-				<div class="row">
-					<div class="col-lg-offset-2 col-lg-10">
-					<!-- <a href="javascript:void(0)" class="blue-bg btn" id="submit-kuisioner">Simpan</a> -->
-						<a href="javascript:void(0)" class="blue-bg btn" id="save-jawaban">Simpan</a>
-						<div id="save-jawaban-loading">
-							<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
-						</div>
-						<a href="<?=base_url()?>mahasiswa/dashboard" class="btn btn-med gray-bg">Batal</a>
-					</div>
-				</div>
+	<div class="row">
+		<div class="col-lg-offset-2 col-lg-10">
+		<!-- <a href="javascript:void(0)" class="blue-bg btn" id="submit-kuisioner">Simpan</a> -->
+			<a href="javascript:void(0)" class="blue-bg btn" id="save-jawaban">Simpan</a>
+			<div id="save-jawaban-loading">
+				<img src="<?=base_url() ?>public/assets/images/spinner.gif" alt="Menyimpan..." title="Menyimpan..." />Menyimpan...
+			</div>
+			<a href="<?=base_url()?>mahasiswa/dashboard" class="btn btn-med gray-bg">Batal</a>
+		</div>
+	</div>
 
-				<div class="jawaban-error-notif"></div>
+	<div class="jawaban-error-notif"></div>
 
+	<div id="save-jawaban-loading-popup">
+		<div id="save-loading">
+			<div class="save-loading-bg"></div>
+		</div>
+		<div class="save-loading-content">
+			<span class="spinner-img">
+			</span>
+			Proses penyimpanan data. Mohon tidak menutup browser.
+		</div>
+	</div>
 
 </div>
 

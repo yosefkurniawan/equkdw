@@ -10,7 +10,7 @@
 	// $prev_thn_ajaran_end	= ((int)$explode_thn_ajaran[1])-1;
 	// $prev_thn_ajaran 		= $prev_thn_ajaran_start.'/'.$prev_thn_ajaran_end;
 
-	if ($form_type == 'edit') {
+	if ($form_type == 'edit' || $form_type == 'edit_deadline') {
 		$val_thn_ajaran 	= $info_paket->thn_ajaran;
 		$val_semester	 	= $info_paket->semester;
 		$val_status		 	= $info_paket->status;
@@ -87,7 +87,8 @@
 			<?php endif ?>
 		</div>
 	</form>
-	<?php if ($form_type != "view"): ?>
+	
+	<?php if ($form_type == "edit"): ?>
 		<div class="panel-footer clearfix">
 			<div class="form-group">
 				<div class="col-lg-12">

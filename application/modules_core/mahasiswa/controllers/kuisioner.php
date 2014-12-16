@@ -25,10 +25,10 @@ class Kuisioner extends CI_Controller {
 		// check wheter user registered in this class or not
 		if ($registered = $this->m_kelas->getMhsApakahTerdaftar($id_kelasb,$this->session->userdata('username'))) {	
 			//apakah ada kusionernya
-			if ($row_status->eva_status == 1) {
+			if ($row_status->eva_status == 1 OR $row_status->eva_status == 2) {
 
 				$today = date("Y-m-d");
-				
+
 				//apakah sudah boleh mengisi
 				if ($today >= $row_status->mulai AND $today <= $row_status->akhir) {
 
@@ -58,24 +58,29 @@ class Kuisioner extends CI_Controller {
 		} 
 
 		if ($authorize == TRUE) {
-
 			// fetch data
 			$row_matakuliah 	= $this->m_mahasiswa->getKelas($id_kelasb);
 			$list_dosen			= $this->m_mahasiswa->getDosenKelas($id_kelasb);
 			$list_soal			= $this->m_kuisioner->getPertanyaan();
+			// echo "<pre>";print_r($list_soal);die;
 			// fetch data presensi
 			$pertemuan			= $this->m_kelas->getPertemuan($id_kelasb);
 			$kehadiran 			= $this->m_kelas->getKehadiranKelas($id_kelasb,$this->session->userdata('username'));
 			$kehadiranDosen 	= $this->m_kelas->getKehadiranKelasDosen($id_kelasb);
-			if ($kehadiranDosen->num_rows() != 0)
+			if ($kehadiranDosen['temu'] > 0)
 			{
-				$presensi			= $kehadiran->num_rows() / $kehadiranDosen->num_rows() * 100;
+				$hadirMhs = $kehadiran['hadir'];
+				$banyakPertemuan = $kehadiranDosen['temu'];
+				// echo $hadirMhs;echo$banyakPertemuan;
+				$presensi			= $hadirMhs / $banyakPertemuan * 100;
+				// $presensi2			= 20 / 13 * 100;
+				// echo $presensi; echo " ".$presensi2; die;
 			}
 			else
 			{
 				$presensi			= 0;				
 			}
-			$presensi 			= (float)number_format($presensi,2,'.','');
+			$presensi 			= round($presensi,2);
 			// echo  $kehadiran->num_rows() . " / " . $pertemuan->num_rows() . " = " . $presensi ; die;
 
 			/* -- Render Layout -- */
@@ -89,6 +94,7 @@ class Kuisioner extends CI_Controller {
 			$data['presensi']	= $presensi;
 			$data['title'] 		= 'Kuisioner Dosen';
 			$data['content'] 	= 'mahasiswa/kuisioner';
+			$data['custom_css'][] 	= 'public/assets/css/jawab.css';
 			$this->load->view('main/render_layout',$data);		
 
 		}
@@ -196,16 +202,20 @@ class Kuisioner extends CI_Controller {
 			$kehadiran 			= $this->m_kelas->getKehadiranKelas($id_kelasb,$this->session->userdata('username'));
 			$kehadiranDosen 	= $this->m_kelas->getKehadiranKelasDosen($id_kelasb);
 			//get jawaban
-			if ($kehadiranDosen->num_rows() != 0)
+			if ($kehadiranDosen['temu'] > 0)
 			{
-				$presensi			= $kehadiran->num_rows() / $kehadiranDosen->num_rows() * 100;
+				$hadirMhs = $kehadiran['hadir'];
+				$banyakPertemuan = $kehadiranDosen['temu'];
+				// echo $hadirMhs;echo$banyakPertemuan;
+				$presensi			= $hadirMhs / $banyakPertemuan * 100;
+				// $presensi2			= 20 / 13 * 100;
+				// echo $presensi; echo " ".$presensi2; die;
 			}
 			else
 			{
 				$presensi			= 0;				
 			}
-			$presensi 			= (float)number_format($presensi,2,'.','');
-			// echo  $kehadiran->num_rows() . " / " . $pertemuan->num_rows() . " = " . $presensi ; die;
+			$presensi 			= round($presensi,2);
 
 			/* -- Render Layout -- */
 			$data['left_bar']		= 'mahasiswa/left_bar_jawab';
@@ -251,7 +261,7 @@ class Kuisioner extends CI_Controller {
 		// check wheter user registered in this class or not
 		if ($registered = $this->m_kelas->getMhsApakahTerdaftar($id_kelasb,'72110007')) {	
 			//apakah ada kusionernya
-			if ($row_status->eva_status == 1) {
+			if ($row_status->eva_status == 1 OR $row_status->eva_status == 2) {
 
 				$today = date("Y-m-d");
 				

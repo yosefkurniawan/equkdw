@@ -13,7 +13,12 @@ $(document).ready(function(){
 	// Check whether view mode or not
 	if (form_type=="view") {
 		$(":input").attr("disabled","disabled");
-	};
+	}else if(form_type=='edit_deadline') {
+		$('.panel').not('#box-form-jadwal').find(':input').attr('disabled','disabled');
+		$('html, body').animate({
+	        scrollTop: $('#box-form-jadwal').offset().top-55
+	    }, 'fast');
+	}
 
 	// Init
 	if (form_type=='new') {
@@ -66,7 +71,7 @@ $(document).ready(function(){
 		 i18n:{
 		  de:{
 		   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
-		   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+		   dayOfWeek:['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
 		  }
 		 },
 		 timepicker:false,
@@ -86,7 +91,7 @@ $(document).ready(function(){
 		 i18n:{
 		  de:{
 		   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
-		   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+		   dayOfWeek:['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
 		  }
 		 },
 		 timepicker:false,
@@ -131,28 +136,40 @@ function getLatestQuestions(){
 
 		    		$('#pertanyaan1 .aspek').val(data[0].id_aspek);
 		    		$('#pertanyaan1 .isi_pertanyaan').val(data[0].isi_pertanyaan);
+		    		$('#pertanyaan1 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan2 .aspek').val(data[1].id_aspek);
 		    		$('#pertanyaan2 .isi_pertanyaan').val(data[1].isi_pertanyaan);
+		    		$('#pertanyaan2 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan3 .aspek').val(data[2].id_aspek);
 		    		$('#pertanyaan3 .isi_pertanyaan').val(data[2].isi_pertanyaan);
+		    		$('#pertanyaan3 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan4 .aspek').val(data[3].id_aspek);
 		    		$('#pertanyaan4 .isi_pertanyaan').val(data[3].isi_pertanyaan);
+		    		$('#pertanyaan4 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan5 .aspek').val(data[4].id_aspek);
 		    		$('#pertanyaan5 .isi_pertanyaan').val(data[4].isi_pertanyaan);
+		    		$('#pertanyaan5 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan6 .aspek').val(data[5].id_aspek);
 		    		$('#pertanyaan6 .isi_pertanyaan').val(data[5].isi_pertanyaan);
+		    		$('#pertanyaan6 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan7 .aspek').val(data[6].id_aspek);
 		    		$('#pertanyaan7 .isi_pertanyaan').val(data[6].isi_pertanyaan);
+		    		$('#pertanyaan7 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan8 .aspek').val(data[7].id_aspek);
 		    		$('#pertanyaan8 .isi_pertanyaan').val(data[7].isi_pertanyaan);
+		    		$('#pertanyaan8 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan9 .aspek').val(data[8].id_aspek);
 		    		$('#pertanyaan9 .isi_pertanyaan').val(data[8].isi_pertanyaan);
+		    		$('#pertanyaan19 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan10 .aspek').val(data[9].id_aspek);
 		    		$('#pertanyaan10 .isi_pertanyaan').val(data[9].isi_pertanyaan);
+		    		$('#pertanyaan10 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan11 .aspek').val(data[10].id_aspek);
 		    		$('#pertanyaan11 .isi_pertanyaan').val(data[10].isi_pertanyaan);
+		    		$('#pertanyaan11 .keterangan').val(data[0].keterangan);
 		    		$('#pertanyaan12 .aspek').val(data[11].id_aspek);
 		    		$('#pertanyaan12 .isi_pertanyaan').val(data[11].isi_pertanyaan);
+		    		$('#pertanyaan12 .keterangan').val(data[0].keterangan);
 		    },
 		    error: function (jqXHR, textStatus, errorThrown)
 		    {

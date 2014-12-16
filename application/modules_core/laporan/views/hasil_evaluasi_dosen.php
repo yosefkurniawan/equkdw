@@ -1,7 +1,33 @@
 <div class="page-header">
 	<h1>
 		Hasil Evaluasi
-		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?></small>
+		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?> &nbsp; <a href="" id="change-period"> <i class="icon-cog"></i></a> &nbsp;
+		<input type="hidden" id="nik" value="<?php echo $dosen->nik?>" />
+		
+		<select id="id_paket" style="width:160px;display:none">
+			<?php foreach($paket_list as $item) : ?>
+				<option value="<?php echo $item['id_paket']?>">
+					<?php echo $item['thn_ajaran']?> <?php echo $item['semester']?></option>
+			<?php endforeach; ?>
+		</select>
+		&nbsp;&nbsp;<a href="#" id="change_period_process" style="display:none"><i class='icon-save'> </i></a>
+		&nbsp;&nbsp;<a href="#" id="tutup_period_form" style="display:none"><i class='icon-remove'> </i></a>
+		</small> 
+	<div class="pull-right">
+		<?php if ($admin == 'ya') : ?>
+			<a href="<?php echo base_url() ?>laporan/pdf_hasil_evaluasi_dosen/<?php echo $dosen->nik?>
+					<?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
+					class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>		
+			<a href="<?php echo base_url() ?>laporan/hasil_evaluasi
+					<?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
+			 class="btn btn-danger"><i class='icon-undo'> </i>Kembali</a>
+		<?php else : ?>
+			<a href="<?php echo base_url() ?>laporan/dosen/pdf_hasil_evaluasi_dosen/<?php echo $dosen->nik?>
+					<?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
+					class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>		
+		<?php endif; ?>		
+	</div>
+		
 	</h1>
 </div>
 
@@ -12,7 +38,7 @@
 	<li class="active"><?= $dosen->nama ?></li>
 </ol>
 
-<h4>Dosen : <?= $dosen->gelar_prefix.$dosen->nama.$dosen->gelar_suffix ?> / <?= $dosen->nik ?></h4>
+<h4>Dosen : <?= $dosen->gelar_prefix.$dosen->nama.$dosen->gelar_suffix ?> / <?= $dosen->nik ?> &nbsp;&nbsp;&nbsp;</h4>
 
 <!-- Hasil evaluasi kelas -->
 <div class="panel colored">
@@ -90,7 +116,13 @@
 					<tr>
 						<td><?= $hasil['kode'] ?></td>
 						<td><?= $hasil['nama'] ?></td>
-						<td><span class="label <?= ($hasil['status_kuisioner']=='Ada')?'label-success':'label-danger' ?>"><?= $hasil['status_kuisioner'] ?></span></td>
+						<td><span class="label <?php 
+							if ($hasil['status_kuisioner'] == 'Ada') : echo "label-success"; 
+							elseif ($hasil['status_kuisioner'] == 'Ada Tidak Wajib') : echo "label-info"; 
+							else : echo 'label-danger'; 
+							endif; ?>
+							">
+							<?= $hasil['status_kuisioner'] ?></span></td>
 						<td><?= $hasil['grup'] ?></td>
 						<td><?= $hasil['terisi'] ?></td>
 						<td><?= $hasil['pengisi'] ?></td>
@@ -139,4 +171,34 @@
 		</dl>
 	</div>
 </div>
-<?php echo $btn_print; ?>
+
+<script>
+	CI_ROOT = "<?php echo base_url() ?>";
+
+    jQuery(document).ready(function() {   
+		jQuery('#change-period').on('click',function(){
+			jQuery('#id_paket').show();
+			jQuery('#change_period_process').show();
+			jQuery('#tutup_period_form').show();
+			return false;
+		});	    
+		jQuery('#tutup_period_form').on('click',function(){
+			jQuery(this).hide();
+			jQuery('#change_period_process').hide();
+			jQuery('#id_paket').hide();
+			return false;
+		});	    
+		jQuery('#change_period_process').on('click',function(){
+			var nik = jQuery('#nik').val();
+			var id_paket = jQuery('#id_paket').val();
+			var admin = jQuery('#isAdmin').val();
+			if (admin == 'tidak') {			
+				window.location.replace(CI_ROOT+'laporan/dosen/hasil_evaluasi/'+nik+'/'+id_paket);
+			} else {			
+				window.location.replace(CI_ROOT+'laporan/hasil_evaluasi_dosen/'+nik+'/'+id_paket);			
+			}
+			return false;
+		});	    
+    });
+    
+</script>
