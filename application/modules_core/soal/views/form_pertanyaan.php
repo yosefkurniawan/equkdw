@@ -51,7 +51,7 @@
 		</ul>
 
 	</div>
-	<?php if ($form_type != "view"): ?>
+	<?php if ($form_type == "edit"): ?>
 		<div class="panel-footer">
 			<a href="javascript:void(0)" class="blue-bg btn" id="save-pertanyaan">Simpan</a>
 			<div id="save-pertanyaan-loading">

@@ -229,11 +229,11 @@
         <!-- rata rata : jumlah / count -->
         <?php $avg_uni_o5 = round($jmlh_prodi_o5 / count($uni_o5),2) ?>
 
-<div class="printable-area">
+<div class="printable-area" sytle="font-type:calibri">
     
     <!-- box left -->
 	<div class="left box-panduan-perhitungan">
-        <h4 class="title">PARAMETER/INDIKATOR YANG DIGUNAKA DALAM EVALUASI<h4>
+        <h4 class="title">PARAMETER/INDIKATOR YANG DIGUNAKAN DALAM EVALUASI<h4>
 		<table class="table table-bordered table-panduan-perhitungan">
             <thead>
                 <tr>
@@ -253,38 +253,38 @@
                     <td>P1 (20%)</td>
                     <td>Kehadiran Dosen (%)</td>
                     <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p1.png"></td>
-                    <td>≥91%</td>
-                    <td>81-90%</td>
+                    <td>≥90%</td>
+                    <td>80-90%</td>
                     <td>≤80%</td>
                 </tr>
                 <tr>
                     <td>P2 (35%)</td>
                     <td>Kualitas Pengajaran (%)</td>
-                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p2.png"></td>
-                    <td>≥91%</td>
-                    <td>81-90%</td>
+                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p2-baru.png"></td>
+                    <td>≥90%</td>
+                    <td>80-90%</td>
                     <td>≤80%</td>
                 </tr>
                 <tr>
                     <td>P3 (10%)</td>
                     <td>Kelulusan Mahasiswa (%)</td>
-                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p3.png"></td>
-                    <td>≥91%</td>
-                    <td>81-90%</td>
-                    <td>≤80%</td>
+                    <td><img src="<?php echo base_url() ?>public/assets/images/pdf-ip-dosen/rumus-p3-baru.png"></td>
+                    <td>≥60%</td>
+                    <td>50-60%</td>
+                    <td>≤50%</td>
                 </tr>
                 <tr>
                     <td>P4 (15%)</td>
-                    <td>Waktu Penyerahan Nilai</td>
+                    <td>Ketepatan Waktu Penyerahan Nilai</td>
                     <td>Sebelum atau setelah tanggal 25 Juli 2014</td>
                     <td>Sebelum atau tepat tanggal 25 Juli 2014</td>
                     <td></td>
-                    <td>Setelah 3 Januari 2012</td>
+                    <td>Setelah 25 Juli 2014</td>
                 </tr>
                 <tr>
                     <td>P5 (20%)</td>
-                    <td>e-Class</td>
-                    <td>Silabus (1 point) + Materi (1 point) + Tugas (1 point) + Nilai (1 point)</td>
+                    <td>Pemanfaatan e-Class</td>
+                    <td>Silabus (1 point) <br> Materi (1 point) <br> Tugas (1 point) <br> Nilai (1 point)</td>
                     <td>4</td>
                     <td>3</td>
                     <td>2</td>
@@ -400,9 +400,9 @@
                     <td><?php echo $i ?></td>
                     <td><?php echo $mtk->kode ?></td>
                     <td><?php echo $mtk->nama_mtk ?></td>
-                    <td><?php echo $mtk->grup ?></td>
-                    <td><?php echo $mtk->persen_hadir ?></td>
-                    <td>
+                    <td style="text-align:center"><?php echo $mtk->grup ?></td>
+                    <td style="text-align:right"><?php echo $mtk->persen_hadir ?>%</td>
+                    <td style="text-align:right">
                         <?php $p1 = 0 ; ?>
                         <!-- p1 -->
                         <?php if ($mtk->persen_hadir > 90) : ?>
@@ -416,8 +416,8 @@
                             <?php echo $p1; ?>
                         <?php endif ?>
                     </td>
-                    <td><?php echo $mtk->baik ?></td>
-                    <td>
+                    <td style="text-align:right"><?php echo $mtk->baik ?>%</td>
+                    <td style="text-align:right">
                         <?php $p2 = 0 ; ?>
                         <!-- p2 -->
                         <?php if ($mtk->baik > 90) : ?>
@@ -431,8 +431,8 @@
                             <?php echo $p2; ?>
                         <?php endif ?>
                     </td>
-                    <td><?php echo $mtk->persen_lulus ?></td>
-                    <td>
+                    <td style="text-align:right"><?php echo $mtk->persen_lulus ?>%</td>
+                    <td style="text-align:right">
                         <?php $p3 = 0 ; ?>
                         <!-- p3 -->
                         <?php if ($mtk->persen_lulus > 60) : ?>
@@ -446,7 +446,7 @@
                             <?php echo $p3; ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td style="text-align:center">
                         <!-- p4 -->
                         <?php if ($mtk->flag_tepat == 'T') : ?>
                             Y
@@ -454,7 +454,7 @@
                             T
                         <?php endif ?>                                                
                     </td>
-                    <td>
+                    <td style="text-align:right">
                         <?php $p4 = 0 ; ?>
                         <!-- p4 -->
                         <?php if ($mtk->flag_tepat == 'T') : ?>
@@ -465,15 +465,15 @@
                             <?php echo $p4; ?>
                         <?php endif ?>                        
                     </td>
-                    <td><?php echo $mtk->silabus ?></td>
-                    <td><?php echo $mtk->materi ?></td>
-                    <td><?php echo $mtk->tugas ?></td>
-                    <td><?php echo $mtk->nilai ?></td>
-                    <td>
+                    <td style="text-align:center"><?php echo $mtk->silabus ?></td>
+                    <td style="text-align:center"><?php echo $mtk->materi ?></td>
+                    <td style="text-align:center"><?php echo $mtk->tugas ?></td>
+                    <td style="text-align:center"><?php echo $mtk->nilai ?></td>
+                    <td style="text-align:center">
                         <?php $p5 = $mtk->eclass ?>
                         <?php echo $mtk->eclass ?>
                     </td>
-                    <td><?php echo $ip_mtk = (0.2 * $p1) + (0.35 * $p2) + (0.10 * $p3) + (0.15 * $p4) + (0.20 * $p5) ?></td>
+                    <td style="text-align:right"><?php echo $ip_mtk = (0.2 * $p1) + (0.35 * $p2) + (0.10 * $p3) + (0.15 * $p4) + (0.20 * $p5) ?></td>
 
 
                     <?php $i++ ?>
@@ -496,18 +496,18 @@
         <table class="table table-resume">
             <tbody>
                 <tr>
-                        <td>Total IPS</td>
-                        <td>: <?php echo $ips_tot ?></td>
+                        <td style="text-align:right">Total IPS : </td>
+                        <td style="text-align:right"><?php echo $ips_tot ?></td>
                 </tr>
                 <tr>
-                        <td>Jumlah Kelas</td>
-                        <td>: <?php echo $i ?></td>
+                        <td style="text-align:right">Jumlah Kelas : </td>
+                        <td style="text-align:right"><?php echo $i ?></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                        <td>IPK</td>
-                        <td>: <?php echo round($ips_tot / $i, 2); ?></td>
+                        <td style="text-align:right">IPK : </td>
+                        <td style="text-align:right"><?php echo round($ips_tot / $i, 2); ?></td>
                 </tr>
             </tfoot>
         </table>
@@ -519,7 +519,7 @@
             <table class="table table-bordered">
                 <thead>
                     <th width="80px">Biro 1</th>
-                    <th width="80px">InQa</th>
+                    <th width="80px">InQA</th>
                     <th width="100px">Pejabat Prodi/Departemen</th>
                 </thead>
                 <tbody>
@@ -547,8 +547,8 @@ jQuery(document).ready(function($j){
         },
         yAxis:{
             max: 4,
-            tickInterval: 0.5
-        },
+            tickInterval: 0.2
+        },       
         series: [{
             type: 'column',
             name: 'Saya',

@@ -1,0 +1,36 @@
+
+#save-jawaban-loading-popup {
+	display: none;
+}
+
+#save-jawaban-loading-popup .save-loading-bg {
+	background: #000;
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+
+#save-jawaban-loading-popup .save-loading-content {
+	background: #fff;
+	font-size: 15px;
+	position: fixed;
+	width: 300px;
+	top: 50%;
+	left: 50%;
+	margin-left: -150px;
+	border: 1px solid #cbcbcb;
+	padding: 30px;
+	text-align: center;
+}
+
+#save-jawaban-loading-popup .save-loading-content .spinner-img {
+	background: url(../images/spinner.gif);
+	width: 16px;
+	height: 16px;
+	display: block;
+	margin: 0 auto 10px;
+}

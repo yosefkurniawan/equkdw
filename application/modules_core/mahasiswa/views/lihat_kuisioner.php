@@ -19,20 +19,6 @@
 	</div>
 </div>
 
-<!-- <div class="panel colored">
-	<div class="panel-heading green-bg">
-		<h3 class="panel-title">Kehadiran di Kelas</h3>
-	</div>
-	<div class="panel-body">
-		<div class="col-md-12">
-			Anda hadir dalam <?=$kehadiran->num_rows()?> dari <?=$kehadiranDosen->num_rows()?> yang diselenggarakan (<?=$presensi?>%)
-		</div>
-	</div>
-<div>
-
-<br><br> -->
-
-
 <input type="hidden" value="<?= count($list_dosen) ?>" id="jumlah_dosen">
 
 <?php $y = 1 ?>

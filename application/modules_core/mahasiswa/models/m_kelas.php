@@ -23,7 +23,7 @@ class M_kelas extends CI_Model {
 
 	public function getKehadiranKelas($id_kelasb, $nim)
 	{
-		$sql = "SELECT *
+		$sql = "SELECT count(kelas_buka_id)'hadir'
 				FROM fp_presensi_mhs
 				WHERE kelas_buka_id = $id_kelasb AND user_id = $nim
 				";
@@ -32,30 +32,31 @@ class M_kelas extends CI_Model {
         // echo '<pre>'; print_r($query->result()); die;
 
         if ($query->num_rows() > 0) {
-            return $query;
+            return $query->row_array();
         } else {
-            return $query;
+            return 0;
         }
 	}
 
 	public function getKehadiranKelasDosen($id_kelasb)
 	{
-		$sql = "SELECT DISTINCT pertemuan_id
+		$sql = "SELECT COUNT(kelas_buka_id)'temu' FROM (SELECT kelas_buka_id
 				FROM fp_presensi_dosen
 				WHERE kelas_buka_id = $id_kelasb
-				ORDER BY pertemuan_id
+				GROUP BY pertemuan_id, sesi_id
+				ORDER BY pertemuan_id) x
 				";
 
         $query = $this->db->query($sql);
 
         #kelas_buka_id
         #pertemuannya berbeda
-        // echo '<pre>'; print_r($query->result()); die;
+        // echo '<pre>'; print_r($query->result_array()); die;
 
         if ($query->num_rows() > 0) {
-            return $query;
+            return $query->row_array();
         } else {
-            return $query;
+            return 0;
         }
 	}
 

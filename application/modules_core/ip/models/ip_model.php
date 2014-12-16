@@ -31,6 +31,57 @@ class ip_model extends CI_Model
 		}
 	}
 
+	function get_info_prodi($prodi) {
+		$sql = "SELECT * FROM prodi WHERE prodi.prodi = '$prodi' LIMIT 1";
+		$query = $this->db->query($sql);
+		// echo '<pre>'; print_r($query->row()); die;
+		if ($query->num_rows() == 1 ) 
+		{
+			return $query->row();
+		} // end of if
+		else 
+		{
+			return array();
+		}		
+	}
+
+	function get_ip_list($prodi,$th_ajaran,$semester) {
+		$sql = "SELECT dsn.nik_baru,dsn.nidn,dsn.nama_dsn,dsn.prodi,p.nama_prodi,
+				SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
+				IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
+				IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
+				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
+				o5.eclass*0.2) as total_ip, 
+				COUNT(dsn.nik_baru) as jmlh_mtk,
+				ROUND(SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
+				IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
+				IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
+				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
+				o5.eclass*0.2) / COUNT(dsn.nik_baru),2) as ip_dosen
+				FROM (SELECT * FROM kelas_all
+				WHERE semester = '$semester' AND th_ajaran = '$th_ajaran') kls
+				LEFT JOIN dosen_all dsn ON kls.nik_baru = dsn.nik_baru
+				LEFT JOIN prodi p ON dsn.prodi = p.prodi
+				LEFT JOIN o1_presensi o1 ON kls.mykey = o1.mykey
+				LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey
+				LEFT JOIN o3_nilailulus o3 ON kls.mykey = o3.mykey
+				LEFT JOIN o4_nilaimasuk o4 ON kls.mykey = o4.mykey
+				LEFT JOIN o5_eclass o5 ON kls.mykey = o5.mykey
+				WHERE dsn.prodi = '$prodi'
+				GROUP BY dsn.nik_baru
+				ORDER BY ip_dosen DESC, jmlh_mtk DESC";
+			$query = $this->db->query($sql);
+			// echo '<pre>'; print_r($query->result()); die;
+			if ($query->num_rows() > 0 ) 
+			{
+				return $query->result();
+			} // end of if
+			else 
+			{
+				return array();
+			}					
+	}
+
 	function get_prodi_o1($prodi,$th_ajaran,$semester) {
 
 		// $sql = "SELECT o1.kode, dsn.prodi, o1.persen_hadir FROM o1_presensi o1, dosen_all dsn
@@ -237,11 +288,21 @@ class ip_model extends CI_Model
 
 	function get_dosen_list($th_ajaran,$semester)
 	{
-		$sql = "SELECT nik_baru, nama_dsn, COUNT(kode) as jumlah_matkul_ajar,k.prodi,nama_prodi FROM kelas_all k
-				JOIN prodi p ON k.prodi = p.prodi
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'
-				GROUP BY nama_dsn";
+		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,COUNT(kelas.mykey) as jumlah_matkul_ajar, p.prodi, p.nama_prodi, kelas.semester, kelas.th_ajaran
+					FROM
+					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.th_ajaran FROM kelas_all k
+					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, prodi p
+					WHERE p.prodi = kelas.prodi_dosen AND kelas.semester = '$semester' AND kelas.th_ajaran = '$th_ajaran' 
+					GROUP BY nama_dsn
+					ORDER BY p.prodi ASC";
+
+		// $sql = "SELECT nik_baru, nama_dsn, COUNT(kode) as jumlah_matkul_ajar,k.prodi,nama_prodi FROM kelas_all k
+		// 		JOIN prodi p ON k.prodi = p.prodi
+		// 		WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'
+		// 		GROUP BY nama_dsn";
+
 		$query = $this->db->query($sql);
+		// echo '<pre>'; print_r($query->result()); die;
 		
 		$listDosen = array();
 		if ($query->num_rows() > 0) {

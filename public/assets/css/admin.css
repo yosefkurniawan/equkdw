@@ -1,7 +1,19 @@
+/* ============================================= */
+/* Dashboard
+/* ============================================= */
+
 .admin-center {
 	margin: 0 auto;
-	width: 50%;
-	margin-top: 10%;
+	width: 460px;
+	margin-top: 5%;
+}
+
+.admin-center h2 {
+	font-size: 16px;
+	border-bottom: 1px solid #ccc;
+	font-weight: bold;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 
