@@ -33,6 +33,7 @@ class Konfigurasi extends MX_Controller {
 			$data['kelas_all']			= $this->m_olahan->getKelasAll();		
 			$data['o5_data']			= $this->m_olahan->getEClassData();		
 			$data['o2_persenbaik']		= $this->m_olahan->getPersenBaikData();
+			$data['o1_raw']				= $this->m_olahan->getPresensiDosenRaw();
 		}
 		else {
 			$data['id_paket'] 			= $id_paket;
@@ -42,10 +43,12 @@ class Konfigurasi extends MX_Controller {
 			$data['kelas_all']			= $this->m_olahan->getKelasAll($id_paket);		
 			$data['o5_data']			= $this->m_olahan->getEClassData($id_paket);		
 			$data['o2_persenbaik']		= $this->m_olahan->getPersenBaikData($id_paket);
+			$data['o1_raw']				= $this->m_olahan->getPresensiDosenRaw($id_paket);
 		}
 
 		/* -- Render Layout -- */
 		$data['paket_list']			= $this->m_laporan->getPaketList();
+		$data['periode'] 			= $periode;
 		$data['title'] 				= "Konfigurasi IP Dosen";
 		$data['content'] 			= 'ip/konfigurasi/form';
 		$data['custom_css'][] 		= 'public/assets/css/ip.css';
@@ -77,37 +80,90 @@ class Konfigurasi extends MX_Controller {
 	}
 
 	public function upload_o1() {
-		$config['upload_path'] = './temp_upload/';
-        $config['allowed_types'] = 'jpg|jpeg|xls|csv|png';
-		// $config['max_size'] = 100000000;
- 		// ini_set('memory_limit', '-1');
-        $this->load->library('upload', $config);
-
-		if  (!$this->upload->do_upload())
+		$afterInsert = $_POST['o1'];
+	    $status = "";
+	    $msg = "";
+	    $file_element_name = 'userfile';
+	     
+	    if ($status != "error")
 	    {
-	        $data = $this->upload->display_errors('', '');
+	        $config['upload_path'] = './temp_upload/';
+	        $config['allowed_types'] = 'csv';
+	        $config['encrypt_name'] = TRUE;
+	 
+	        $this->load->library('upload', $config);
+	 
+	        if (!$this->upload->do_upload())
+	        {
+	            $status = 'error';
+	            $msg = $this->upload->display_errors('', '');
+	            $data = $this->upload->display_errors('', '');
+	        }
+	        else
+	        {
+
+	            $upload_data = $this->upload->data();
+	            $file =  $upload_data['full_path'];
+
+		        $this->load->library('csvreader');
+		        $result =   $this->csvreader->parse_file($file);
+		        $data['csvData'] =  $result;
+		        $validasi = true;
+		        $row = 0;
+		        foreach ($result as $key => $value) {
+		            if ( (!isset($value['kode'])) OR (!isset($value['grup'])) OR (!isset($value['prodi'])) OR
+		            	(!isset($value['tot_hadir'])) OR (!isset($value['semester'])) OR 
+		            	(!isset($value['th_ajaran']))) 
+			            {
+			            	$validasi = false;
+			                $status = "error";
+			                $msg = $row." Format CSV Salah (Harus terdiri dari : kode, grup, prodi, tot_hadir, semester, dan thn_ajaran";
+			            	break;
+			            }
+			         $row = $row + 1;
+		        }
+		        $simpan = 0;
+		        if ($validasi == true) {
+		        	// echo $_POST['thn_ajaran'].' '.$_POST['semester'] ; die;
+		        	//yang kurang
+		        	if ($_POST['method'] == '1') {
+		        		//delete all value
+		        		$this->m_olahan->delete_o1_raw($_POST['thn_ajaran'],$_POST['semester']);
+				        foreach ($result as $key => $value) {
+				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
+				        	{
+				        			$simpan = $simpan + 1;
+						            $this->m_olahan->save_input_presensi_dosen($value);
+				        	}				  
+				        }
+		                $status = "success";
+		                $msg = "Data berhasil disimpan di dalam database (".$simpan." dari ".$row." data)";
+				        $afterInsert = $simpan;
+		        	} elseif ($_POST['method'] == '0') {
+			        	//metode : delete all then insert / existing replace + insert
+				        foreach ($result as $key => $value) {
+				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
+				        	{
+				        			$simpan = $simpan + 1;
+						            $this->m_olahan->save_input_presensi_dosen($value,true);
+				        	}
+
+				        }
+		                $status = "success";
+		                $msg = "Data berhasil disimpan di dalam database (".$simpan." dari ".$row." data)";
+				        $afterInsert = $simpan;
+		        	}
+		        	else {
+		                $status = "error";
+		                $msg = "Metode Harus dipilih";
+		        	}
+			    }
+	        }
+	        @unlink($_FILES[$file_element_name]);
 	    }
-	    else
-	    {
-	    	$data['file_data'] = $this->upload->data();
-
-	   		$image_path = $data['file_data']['full_path'];
-
-		    if(file_exists($image_path))
-		    {
-		    	$data['status'] = "success";
-		      	$datap['msg'] = "File successfully uploaded";
-		 	}
-			else
-		 	{
-			    $data['status'] = "error";
-		    	$data['msg'] = "Something went wrong when saving the file, please try again.";
-		 	}
-		}
-			// @unlink($_FILES[$file_element_name]);
-
 		header('Content-Type: application/json');
-		echo json_encode($data);		
+	    echo json_encode(array('infox' => $data,'status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert));
+
 	}
 
 	// ajax request

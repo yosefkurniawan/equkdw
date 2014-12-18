@@ -1,7 +1,7 @@
 <div id="ip_form">
 
 	<div class="page-header">
-	    <h1><strong>Konfigurasi IP Dosen</strong></h1>
+	    <h1><strong>Konfigurasi IP Dosen</strong><small> &nbsp;&nbsp; <?php echo $periode['thn_ajaran']?> <?php echo $periode['semester']?></small></h1>
 	</div>
 	<ol class="breadcrumb">
 	    <li><a href="<?= base_url() ?>">Dashboard</a></li>
@@ -27,40 +27,48 @@
 			</div>
 		</div>
 
-
-
 		 <!-- O1 - Presensi -->
+		<form method="post" action="" id="upload_file">		
 		<div class="panel section presensi">
-			<div class="panel colored col-md-10 form-box">
+			<input type="hidden" id="semesteran" value="<?php echo $periode['semester']?>"/>
+			<input type="hidden" id="thnajaran" value="<?php echo $periode['thn_ajaran']?>"/>
+			<div class="panel colored col-md-12 form-box">
 				<div class="panel-heading red-bg">
 					<h4 class="panel-title">
 						O1 - Presensi
 					</h4>
 				</div>
 				<div class="panel-body">
-			    <br>
-			    <br>
-			    <!-- The global progress bar -->
-			    <div id="progress" class="progress" style="display:none">
-			        <div class="progress-bar progress-bar-success"></div>
-			    </div>
-			    <!-- The container for the uploaded files -->
+					<br/> Terdapat <strong><span id="o1_raw_count"><?php echo count($o1_raw) ?></span> o1 </strong>
+					<br/>
+					<br/>
+					<br/>
+					<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+						    <input type="radio" name="methods" value="1" checked> Delete all data then Insert &nbsp;&nbsp;
+						    <input type="radio" name="methods" value="0" > Replace If Existing and Insert The Unique Record<br><br>
+						</div>
+					</div>
+					</div>
+					<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label>Upload File CSV Untuk o1 Presensi Dosen</label>
+							<input id="userfile" type="file" name="userfile">
+						</div>
+					</div>
+					</div>
 			    <div id="files" class="files"></div>
-
+			    <br>
 				</div>
 				<div class="panel-footer clearfix">
-			    <span class="btn btn-success fileinput-button">
-			        <i class="icon icon-plus"></i>
-			        <span>Upload File CSV Untuk o1 Presensi Dosen</span>
-			        <!-- The file input field used as target for the file upload widget -->
-			        <input id="fileupload" type="file" name="userfile">
-			    </span>
+					<button type="submit" id="upload_o1" class="btn btn-success">Upload o1</button> &nbsp; &nbsp;
+					<span id="o1_error_message" class="text text-danger"></span>
 				</div>
 			</div>
-			<div id="" class="col-md-2 status-box">
-				<i class="icon-check"></i>
-			</div>
 		</div>
+		</form>
 
 		<!-- O2 - Kuisioner -->
 		<div class="panel section kuisioner">
@@ -240,19 +248,14 @@
 	</div>
 </div>
 
-
-
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="<?php echo base_url() ?>public/js/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
-<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<!-- <script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+<script src="<?php echo base_url()?>public/js/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="<?php echo base_url() ?>public/js/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="<?php echo base_url()?>public/js/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
-<script src="<?php echo base_url() ?>public/js/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
-<!-- The File Upload validation plugin -->
-<!-- <script src="<?php echo base_url() ?>public/js/plugins/jquery-file-upload/js/jquery.fileupload-validate.js"></script> -->
+<script src="<?php echo base_url()?>public/js/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
+
+<script src="<?php echo base_url()?>public/js/plugins/ajaxfileupload.js"></script>
 
 
 <script>
@@ -262,47 +265,61 @@
     		id_paket = jQuery(this).val();
 			window.location.replace(CI_ROOT+'ip/konfigurasi/data/'+id_paket);
     	});
-
     }); 
 
 </script>
 
 <script>
-/*jslint unparam: true */
-/*global window, $ */
+
+var url = CI_ROOT+"ip/konfigurasi/upload_o1";
+
+
 jQuery(function () {
     'use strict';
     // Change this to the location of your server-side upload handler:
-    var url = CI_ROOT+"ip/konfigurasi/upload_o1";
 
-    jQuery('#fileupload').fileupload({
-        url: url,
-        dataType: 'json',
-        autoUpload: true,
-        acceptFileTypes: /(\.|\/)(csv)$/i,
-        // maxFileSize: 10000000, // 10 MB
-        progressall: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            jQuery('#progress').show();
-            jQuery('#progress .progress-bar').css(
-                'width',
-                progress + '%'
-            );
-        },
-        done: function (e, data) {
-			// data.context.text('Upload finished.');        	
-            // jQuery.each(data.result.files, function (index, file) {
-            //     $('<p/>').text(file.name).appendTo('#files');
-            // });
-            console.log(data);
-            alert('berhasil');
-            jQuery('#progress').hide();
-            jQuery('#progress .progress-bar').css(
-                'width',
-                '0%'
-            );
-        }
-    }).prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+	jQuery('#upload_file').submit(function(e) {
+
+		document.getElementById('upload_o1').innerHTML = '<i class="icon-spinner icon-spin"></i> Uploading ... ';
+		jQuery('#upload_o1').attr('disabled','disabled');
+
+		e.preventDefault();
+		$.ajaxFileUpload({
+			url 			: url, 
+			secureuri		: false,
+			fileElementId	:'userfile',
+			dataType		:'json',
+			data			: {
+				'o1'			: $('#o1_raw_count').text(),
+				'method'		: $('input[name="methods"]:checked').val(),
+				'semester'		: $('#semesteran').val(),
+				'thn_ajaran'	: $('#thnajaran').val()
+			},			
+			success	: function (data,status)
+			{
+				if(data.status != 'error')
+				{
+					// console.log('berhasil');					
+					// console.log(data.infox);
+					jQuery('#upload_o1').removeAttr('disabled');
+					jQuery('#o1_error_message').removeClass('text-danger').addClass('text-success');
+				}
+				else {
+					// console.log('gagal');					
+					// console.log(data.infox);					
+					jQuery('#upload_o1').removeAttr('disabled');
+					jQuery('#o1_error_message').removeClass('text-success').addClass('text-danger');
+				}
+				document.getElementById('o1_error_message').innerHTML = data.msg;
+				document.getElementById('upload_o1').innerHTML = 'Upload o1 ';
+				jQuery('#userfile').val('');
+				jQuery('#o1_raw_count').text(data.rowCount);
+			}
+		});			
+
+		return false;
+	});
+
 });
+
 </script>
