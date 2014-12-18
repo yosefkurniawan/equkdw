@@ -27,7 +27,7 @@
 
 <link href="<?=base_url()?>public/assets/css/jquery.datetimepicker.css" rel="stylesheet"/>
 
-<link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/style.css">
+<!-- <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/style.css"> -->
 
 <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/jquery.fileupload.css">
 <!-- select2 - autocomplete -->
