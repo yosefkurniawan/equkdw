@@ -215,16 +215,16 @@ class Konfigurasi extends MX_Controller {
 		        	// echo "<pre>";
 		        	// $object = (object) $value;
 		        	// var_dump($object);
-		        	print_r($value['NIM']);
-		        	print_r($value['KODE']);
-		        	print_r($value['SKS']);
-		        	print_r($value['HARGA']);
-		        	print_r($value['GRUP']);
-		        	print_r($value['SEMESTER']);
-		        	var_dump($value['TH_AJARAN']);
-		            if ( !isset($value['NIM']) OR !isset($value['KODE']) OR !isset($value['SKS']) OR
-		            	!isset($value['HARGA']) OR !isset($value['GRUP']) OR 
-		            	!isset($value['SEMESTER']) OR !isset($value['TH_AJARAN']))
+		        	// print_r($value['nim']);
+		        	// print_r($value['kode']);
+		        	// print_r($value['sks']);
+		        	// print_r($value['harga']);
+		        	// print_r($value['grup']);
+		        	// print_r($value['semester']);
+		        	// var_dump($value['th_ajaran']);
+		            if ( !isset($value['nim']) OR !isset($value['kode']) OR !isset($value['sks']) OR
+		            	!isset($value['harga']) OR !isset($value['grup']) OR 
+		            	!isset($value['semester']) OR !isset($value['th_ajaran']))
 			            {
 			            	$validasi = false;
 			                $status = "error";
@@ -243,8 +243,8 @@ class Konfigurasi extends MX_Controller {
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
-					        		if (!isset($value['NILAI']) || $value['NILAI'] == '') {
-					        			$value['NILAI'] = 'F';
+					        		if (!isset($value['nilai']) || $value['nilai'] == '') {
+					        			$value['nilai'] = 'F';
 					        		}
 				        			$simpan = $simpan + 1;
 						            $this->m_olahan->save_input_nilai_kelulusan($value);
@@ -258,8 +258,8 @@ class Konfigurasi extends MX_Controller {
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
-				        			if (!isset($value['NILAI']) || $value['NILAI'] == '') {
-					        			$value['NILAI'] = 'F';
+				        			if (!isset($value['nilai']) || $value['nilai'] == '') {
+					        			$value['nilai'] = 'F';
 					        		}
 				        			$simpan = $simpan + 1;
 						            $this->m_olahan->save_input_nilai_kelulusan($value,true);

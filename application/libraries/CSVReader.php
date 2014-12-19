@@ -12,7 +12,6 @@ class CSVReader {
 
         $file = fopen($p_Filepath, 'r');
         $this->fields = fgetcsv($file, $this->max_row_size, $this->separator, $this->enclosure);
-        print_r($this->fields[0]);
         $keys_values = explode(',',$this->fields[0]);
 
         $content    =   array();
@@ -31,7 +30,6 @@ class CSVReader {
                             $arr[$keys[$j]] =   $new_values[$j];
                         }
                     }
-
                     $content[$i]=   $arr;
                     $i++;
                 }
@@ -44,8 +42,7 @@ class CSVReader {
     function escape_string($data){
         $result =   array();
         foreach($data as $row){
-            $order = array('\u0000','"');
-            $result[]   = str_replace($order, '',$row);
+            $result[]   =   str_replace('"', '',$row);
         }
         return $result;
     }   
