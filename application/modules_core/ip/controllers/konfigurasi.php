@@ -132,6 +132,12 @@ class Konfigurasi extends MX_Controller {
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
+						            $sks = $this->m_olahan->get_sks_info($value['kode']);
+						            if ($sks <= 3) {
+					        			$value['rencana'] = $_POST['rencana'];
+						            } else {
+					        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+						            }
 				        			$simpan = $simpan + 1;
 						            $this->m_olahan->save_input_presensi_dosen($value);
 				        	}				  
@@ -144,6 +150,13 @@ class Konfigurasi extends MX_Controller {
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
+						            $sks = $this->m_olahan->get_sks_info($value['kode']);
+						            if ($sks <= 3) {
+					        			$value['rencana'] = $_POST['rencana'];
+						            } else {
+					        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+						            }
+				        			$value['rencana'] = $_POST['rencana'];
 				        			$simpan = $simpan + 1;
 						            $this->m_olahan->save_input_presensi_dosen($value,true);
 				        	}
@@ -163,7 +176,6 @@ class Konfigurasi extends MX_Controller {
 	    }
 		header('Content-Type: application/json');
 	    echo json_encode(array('infox' => $data,'status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert));
-
 	}
 
 	// ajax request
@@ -198,5 +210,22 @@ class Konfigurasi extends MX_Controller {
 		header('Content-Type: application/json');
 	    echo json_encode($status);	    	
 	}
+
+	function get_o1() {
+		ini_set("memory_limit","512M");
+
+		// if ($this->_is_ajax()) {
+			$data = $this->m_olahan->getPresensiDosenList($_POST['thn_ajaran'],$_POST['semester']);
+			header('Content-Type: application/json');
+		    echo json_encode($data);	    				
+		// }
+	}
+
+	protected function _is_ajax()
+	{
+		if (!$this->input->is_ajax_request()) {
+		   exit('No direct script access allowed');
+		}
+	}	
 
 }

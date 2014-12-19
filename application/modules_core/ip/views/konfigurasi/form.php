@@ -16,15 +16,17 @@
 			<div class="col-md-12">
 				<select id="id_paket">
 					<?php foreach($paket_list as $item) : ?>
-						<option value="<?php echo $item['id_paket']?>">
+						<option value="<?php echo $item['id_paket']?>" 
+							<?php if($item['thn_ajaran'] == $periode['thn_ajaran'] AND $item['semester'] == $periode['semester']  ) : echo "selected"; endif; ?> >
 							<?php echo $item['thn_ajaran']?> <?php echo $item['semester']?></option>
 					<?php endforeach; ?>
-				</select>
+				</select>				
 				<br/> Terdapat <strong><?php echo count($kelas_all_check) ?> Kelas </strong> yang Bermasalah (nik dosen tidak dikenali / kelas tidak memiliki pengajar)
 				<br/> Terdapat <strong><?php echo count($kelas_all) ?> Kelas </strong> yang Diselenggarakan pada Semester ini (memiliki kuisioner)
 				<br/> Terdapat <strong><?php echo count($o2_persenbaik) ?> o2 </strong>
 				<br/> Terdapat <strong><?php echo count($o5_data) ?> o5 </strong>
 			</div>
+
 		</div>
 
 		 <!-- O1 - Presensi -->
@@ -39,8 +41,17 @@
 					</h4>
 				</div>
 				<div class="panel-body">
-					<br/> Terdapat <strong><span id="o1_raw_count"><?php echo count($o1_raw) ?></span> o1 </strong>
+					<br/> Terdapat <strong><span id="o1_raw_count"><?php echo count($o1_raw) ?></span> o1 </strong> 
+							<a href="#" data-toggle="modal" data-target="#o1_modal" id="o1_modal_show">Lihat Detail</a>
 					<br/>
+					<br/>
+					<br/>
+					<div class="row">
+					<div class="col-lg-4">
+						<label>Rencana Pertemuan</label>
+					    <input type="text" id="rencana_pertemuan" name="rencana_pertemuan" class="form-control" value="14">
+					</div>
+					</div>
 					<br/>
 					<br/>
 					<div class="row">
@@ -71,6 +82,7 @@
 		</form>
 
 		<!-- O2 - Kuisioner -->
+		<!--
 		<div class="panel section kuisioner">
 			<div class="panel colored col-md-10 form-box">
 				<div class="panel-heading gray-bg">
@@ -99,11 +111,12 @@
 				<i class="icon-check"></i>
 			</div>
 		</div>
+		-->
 
 		<!-- O3 - Nilai Lulus -->
 		<div class="panel section kelulusan">
-			<div class="panel colored col-md-10 form-box">
-				<div class="panel-heading gray-bg">
+			<div class="panel colored col-md-12 form-box">
+				<div class="panel-heading blue-bg">
 					<h4 class="panel-title">
 						O3 - Nilai Kelulusan
 					</h4>
@@ -136,12 +149,14 @@
 					</div>
 				</div>
 			</div>
+			<!--
 			<div id="" class="col-md-2 status-box">
 				<i class="icon-check"></i>
 			</div>
+			-->
 		</div>
-
 		<!-- O4 - Tepat Waktu -->
+		<!--
 		<div class="panel section deadline">
 			<div class="panel colored col-md-10 form-box">
 				<div class="panel-heading gray-bg">
@@ -177,7 +192,7 @@
 			</div>
 		</div>
 
-		<!-- o4 input modal -->
+		<!-- o4 input modal -->		
 		<div class="modal fade" id="o4-input-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
@@ -214,39 +229,42 @@
 		        </div><!-- /.modal-content -->
 		    </div><!-- /.modal-dialog -->
 		</div><!-- /.modal --><!-- Modal -->     
-
-		<!-- O5 - eClass -->
-		<div class="panel section eclass">
-			<div class="panel colored col-md-10 form-box">
-				<div class="panel-heading gray-bg">
-					<h4 class="panel-title">
-						O5 - eClass
-					</h4>
-				</div>
-				<div class="panel-body">
-					<form class="form-horizontal" id="form-eclass">
-						<div class="form-group jml-kelas">
-							<div class="col-lg-2"><label>Jumlah kelas</label></div>
-							<div class="col-lg-6">
-								#
-							</div>
-						</div>
-						<div class="form-group jml-kelas-inputan">
-							<div class="col-lg-2"><label>Jumlah kelas inputan</label></div>
-							<div class="col-lg-6">
-								-
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div id="" class="col-md-2 status-box">
-				<i class="icon-check"></i>
-			</div>
-		</div>
-
 	</div>
 </div>
+
+<!-- MODAL FOR o1 MANAGEMENT -->
+<div class="modal fade bs-example-modal-lg" id="o1_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">o1 Management</h4>
+        <small><?php echo $periode['thn_ajaran']; echo $periode['semester']; ?> </small>
+      </div>
+      <div class="modal-body">
+        <table class="table" id="table_o1">
+            <thead>
+                <tr>
+                    <td width="10%" style="font-size:12px;text-align:center" >Id</td>
+                    <td width="10%" style="font-size:12px;text-align:center">Kode</td>
+                    <td width="25%" style="font-size:12px;">Nama Mtk</td>
+                    <td width="5%" style="font-size:12px;text-align:center">Grup</td>
+                    <td width="5%" style="font-size:12px;text-align:center">Rencana</td>
+                    <td width="5%" style="font-size:12px;text-align:center">Terisi</td>
+                    <td width="5%" style="font-size:12px;text-align:center"></td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="<?php echo base_url()?>public/js/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
@@ -290,6 +308,7 @@ jQuery(function () {
 			fileElementId	:'userfile',
 			dataType		:'json',
 			data			: {
+				'rencana'		: $('#rencana_pertemuan').val(),
 				'o1'			: $('#o1_raw_count').text(),
 				'method'		: $('input[name="methods"]:checked').val(),
 				'semester'		: $('#semesteran').val(),
@@ -319,6 +338,138 @@ jQuery(function () {
 
 		return false;
 	});
+
+	var kode,grup,tot_hadir,index,nama,rencana,kelasb;
+	jQuery('#o1_modal_show').on('click',function(){
+
+		$.ajax({
+			url:CI_ROOT+'ip/konfigurasi/get_o1',
+			type:"POST",
+			data: {
+				'semester'		: $('#semesteran').val(),
+				'thn_ajaran'	: $('#thnajaran').val()
+			},
+			success : function(data) {
+				// console.log(data);
+				jQuery('#table_o1 tbody tr').remove();
+				for (index = 0; index < data.length; ++index) {
+					kelasb = data[index]['id_kelasb'];
+					kode = data[index]['kode'];
+					nama = data[index]['nama_mtk'];
+					grup = data[index]['grup'];
+					rencana = data[index]['rencana'];
+					tot_hadir = data[index]['tot_hadir'];
+					
+					if (tot_hadir == null || rencana == null) {
+						jQuery('#table_o1 > tbody:first').append(
+							'<tr class="warning">'+
+								'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
+								'<td style="font-size:12px;text-align:center">'+kode+'</td>'+
+								'<td style="font-size:12px">'+nama+'</td>'+
+								'<td style="font-size:12px;text-align:center">'+grup+'</td>'+
+								'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
+								'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
+								'</td>'+
+								'<td style="font-size:12px;text-align:center"><span class="realisasi-mtk">'+tot_hadir+'</span>'+
+								'<input type="text" class="form-control input-sm ubah-realisasi-mtk num" value="'+tot_hadir+'" style="display:none"/>'+								
+								'</td>'+
+								'<td style="font-size:12px">'+
+								'<a href="#" class="btn btn-xs btn-info ubah-presensi">Ubah<a>'+
+								'<a href="#" class="btn btn-xs btn-info batal-ubah-presensi" style="display:none">Batal<a>'+
+								'</td>'+
+							'</tr>'
+							);						
+					} else {
+						jQuery('#table_o1 > tbody:first').append(
+							'<tr>'+
+								'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
+								'<td style="font-size:12px;text-align:center">'+kode+'</td>'+
+								'<td style="font-size:12px">'+nama+'</td>'+
+								'<td style="font-size:12px;text-align:center">'+grup+'</td>'+
+								'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
+								'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
+								'</td>'+
+								'<td style="font-size:12px;text-align:center"><span class="realisasi-mtk">'+tot_hadir+'</span>'+
+								'<input type="text" class="form-control input-sm ubah-realisasi-mtk num" value="'+tot_hadir+'" style="display:none"/>'+								
+								'</td>'+
+								'<td style="font-size:12px">'+
+								'<a href="#" class="btn btn-xs btn-info ubah-presensi">Ubah<a>'+
+								'<a href="#" class="btn btn-xs btn-info batal-ubah-presensi" style="display:none">Batal<a>'+
+								'</td>'+
+							'</tr>'
+							);
+						
+					}
+
+				};
+			},
+			errors : function(data) {
+				console.log(data);
+			}
+		});
+	}); //end of jQuery('#o1_modal_show').on('click',function(){
+
+	jQuery('#table_o1').on('click','tbody tr td a.ubah-presensi',function(){
+		if (jQuery(this).closest('tr').find('td span.rencana-mtk').text() == 'null') {
+			jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val(0);			
+		} if (jQuery(this).closest('tr').find('td span.realisasi-mtk').text() == 'null') {
+			jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val(0);
+		}
+		jQuery(this).closest('tr').find('td span.rencana-mtk').hide();
+		jQuery(this).closest('tr').find('td span.realisasi-mtk').hide();
+		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').show();
+		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').show();
+		jQuery(this).closest('tr').find('td a.batal-ubah-presensi').show();
+		jQuery(this).text('Simpan').removeClass('ubah-presensi').addClass('simpan-presensi').removeClass('btn-info').addClass('btn-danger');
+		return false;
+	});
+
+	jQuery('#table_o1').on('click','tbody tr td a.simpan-presensi',function(){
+		jQuery(this).closest('tr').find('td span.rencana-mtk').show().text(jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val());
+		jQuery(this).closest('tr').find('td span.realisasi-mtk').show().text(jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val());
+		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').hide();
+		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').hide();
+		jQuery(this).closest('tr').find('td a.batal-ubah-presensi').hide();
+		jQuery(this).text('Ubah').removeClass('simpan-presensi').addClass('ubah-presensi').removeClass('btn-danger').addClass('btn-info');
+		if (jQuery(this).closest('tr').find('td span.realisasi-mtk').text() != 'null' || jQuery(this).closest('tr').find('td span.rencana-mtk').text() != 'null') {
+			jQuery(this).closest('tr').removeClass('warning').addClass('success');
+		}
+		return false;
+	});
+
+	jQuery('#table_o1').on('click','tbody tr td a.batal-ubah-presensi',function(){
+		jQuery(this).closest('tr').find('td span.rencana-mtk').show();
+		jQuery(this).closest('tr').find('td span.realisasi-mtk').show();
+		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').hide();
+		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').hide();
+		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val(jQuery(this).closest('tr').find('td span.rencana-mtk').text());
+		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val(jQuery(this).closest('tr').find('td span.realisasi-mtk').text());
+		jQuery(this).closest('tr').find('td a.simpan-presensi').text('Ubah').removeClass('simpan-presensi').addClass('ubah-presensi')		
+		.removeClass('btn-danger').addClass('btn-info');;
+		jQuery(this).hide();
+		return false;
+	});
+
+    jQuery('#table_o1').on('keydown','.num',function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) || 
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
+    jQuery('#table_o1').on('blur','.num',function() {
+    	$(this).val(parseInt($(this).val(), 10));
+    });   	
+
 
 });
 
