@@ -141,8 +141,8 @@ class M_olahan extends CI_Model
 	}
 
 	function delete_o1_raw($th_ajaran,$semester) {
-		$this->db->where('semester',$th_ajaran);
-		$this->db->where('th_ajaran',$semester);
+		$this->db->where('semester',$semester);
+		$this->db->where('th_ajaran',$th_ajaran);
 		$delete = $this->db->delete('o1_raw');
 		if ($delete) {
 		 	return false;
@@ -185,6 +185,32 @@ class M_olahan extends CI_Model
 			 	return true;
 			}				
 		}
+	}
+
+	function get_sks_info($kode) {
+		$this->db->where('kode',$kode);
+		$query = $this->db->get('ec_matkul');
+		if ($query->num_rows == 1) {
+			$data =  $query->row_array();
+			return $data['sks'];
+		} else {
+			return 0;
+		}
+	}
+
+	function getPresensiDosenList($th_ajaran,$semester) {
+		$sql = "SELECT k.*, o1.tot_hadir, o1.rencana, m.nama'nama_mtk'
+				FROM (SELECT * FROM kelas_all WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester' AND eva_status = 1
+					GROUP BY kode,grup) k
+				LEFT JOIN ec_matkul m ON k.kode = m.kode
+				LEFT JOIN o1_raw o1 ON k.kode = o1.kode AND k.grup = o1.grup AND k.thn_ajaran = o1.th_ajaran AND k.semester = o1.semester";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return array();
+		}
+
 	}
 }
 
