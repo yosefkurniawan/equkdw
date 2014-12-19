@@ -34,6 +34,7 @@ class Konfigurasi extends MX_Controller {
 			$data['o5_data']			= $this->m_olahan->getEClassData();		
 			$data['o2_persenbaik']		= $this->m_olahan->getPersenBaikData();
 			$data['o1_raw']				= $this->m_olahan->getPresensiDosenRaw();
+			$data['o3_raw']				= $this->m_olahan->getNilaiKelulusanRaw();
 		}
 		else {
 			$data['id_paket'] 			= $id_paket;
@@ -44,6 +45,7 @@ class Konfigurasi extends MX_Controller {
 			$data['o5_data']			= $this->m_olahan->getEClassData($id_paket);		
 			$data['o2_persenbaik']		= $this->m_olahan->getPersenBaikData($id_paket);
 			$data['o1_raw']				= $this->m_olahan->getPresensiDosenRaw($id_paket);
+			$data['o3_raw']				= $this->m_olahan->getNilaiKelulusanRaw($id_paket);
 		}
 
 		/* -- Render Layout -- */
@@ -176,6 +178,108 @@ class Konfigurasi extends MX_Controller {
 	    }
 		header('Content-Type: application/json');
 	    echo json_encode(array('infox' => $data,'status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert));
+	}
+
+	public function upload_o3() {
+		$afterInsert = $_POST['o3'];
+	    $status = "";
+	    $msg = "";
+	    $file_element_name = 'userfile_o3';
+
+	    if ($status != "error")
+	    {
+	        $config['upload_path'] = './temp_upload/';
+	        $config['allowed_types'] = 'csv';
+	        $config['encrypt_name'] = TRUE;
+	 
+	        $this->load->library('upload', $config);
+	 
+	        if (!$this->upload->do_upload($file_element_name))
+	        {
+	            $status = 'error';
+	            $msg = $this->upload->display_errors('', '');
+	            $data = $this->upload->display_errors('', '');
+	        }
+	        else
+	        {
+
+	            $upload_data = $this->upload->data();
+	            $file =  $upload_data['full_path'];
+
+		        $this->load->library('csvreader');
+		        $result =   $this->csvreader->parse_file($file);
+		        $data['csvData'] =  $result;
+		        $validasi = true;
+		        $row = 0;
+		        foreach ($result as $key => $value) {
+		        	// echo "<pre>";
+		        	// $object = (object) $value;
+		        	// var_dump($object);
+		        	print_r($value['NIM']);
+		        	print_r($value['KODE']);
+		        	print_r($value['SKS']);
+		        	print_r($value['HARGA']);
+		        	print_r($value['GRUP']);
+		        	print_r($value['SEMESTER']);
+		        	var_dump($value['TH_AJARAN']);
+		            if ( !isset($value['NIM']) OR !isset($value['KODE']) OR !isset($value['SKS']) OR
+		            	!isset($value['HARGA']) OR !isset($value['GRUP']) OR 
+		            	!isset($value['SEMESTER']) OR !isset($value['TH_AJARAN']))
+			            {
+			            	$validasi = false;
+			                $status = "error";
+			                $msg = $row." Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran";
+			            	break;
+			            }
+			         $row = $row + 1;
+		        }
+		        $simpan = 0;
+		        if ($validasi == true) {
+		        	// echo $_POST['thn_ajaran'].' '.$_POST['semester'] ; die;
+		        	//yang kurang
+		        	if ($_POST['method'] == '1') {
+		        		//delete all value
+		        		$this->m_olahan->delete_o3_raw($_POST['thn_ajaran'],$_POST['semester']);
+				        foreach ($result as $key => $value) {
+				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
+				        	{
+					        		if (!isset($value['NILAI']) || $value['NILAI'] == '') {
+					        			$value['NILAI'] = 'F';
+					        		}
+				        			$simpan = $simpan + 1;
+						            $this->m_olahan->save_input_nilai_kelulusan($value);
+				        	}				  
+				        }
+		                $status = "success";
+		                $msg = "Data berhasil disimpan di dalam database (".$simpan." dari ".$row." data)";
+				        $afterInsert = $simpan;
+		        	} elseif ($_POST['method'] == '0') {
+			        	//metode : delete all then insert / existing replace + insert
+				        foreach ($result as $key => $value) {
+				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
+				        	{
+				        			if (!isset($value['NILAI']) || $value['NILAI'] == '') {
+					        			$value['NILAI'] = 'F';
+					        		}
+				        			$simpan = $simpan + 1;
+						            $this->m_olahan->save_input_nilai_kelulusan($value,true);
+				        	}
+
+				        }
+		                $status = "success";
+		                $msg = "Data berhasil disimpan di dalam database (".$simpan." dari ".$row." data)";
+				        $afterInsert = $simpan;
+		        	}
+		        	else {
+		                $status = "error";
+		                $msg = "Metode Harus dipilih";
+		        	}
+			    }
+	        }
+	        @unlink($_FILES[$file_element_name]);
+	    }
+		// header('Content-Type: application/json');
+	    echo json_encode(array('status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert, 'infox' => $data));
 	}
 
 	// ajax request

@@ -114,7 +114,57 @@
 		-->
 
 		<!-- O3 - Nilai Lulus -->
+		<form method="post" action="" id="upload_file_o3">		
 		<div class="panel section kelulusan">
+			<input type="hidden" id="semesteran" value="<?php echo $periode['semester']?>"/>
+			<input type="hidden" id="thnajaran" value="<?php echo $periode['thn_ajaran']?>"/>
+			<div class="panel colored col-md-12 form-box">
+				<div class="panel-heading red-bg">
+					<h4 class="panel-title">
+						O3 - Nilai Kelulusan
+					</h4>
+				</div>
+				<div class="panel-body">
+					<br/> Terdapat <strong><span id="o3_raw_count"><?php echo count($o3_raw) ?></span> o3 </strong> 
+							<a href="#" data-toggle="modal" data-target="#o3_modal" id="o3_modal_show">Lihat Detail</a>
+					<br/>
+					<br/>
+					<br/>
+					<div class="row">
+					<div class="col-lg-4">
+						<label>Prodi</label>
+					    <input type="text" id="o3_prodi" name="o3_prodi" class="form-control">
+					</div>
+					</div>
+					<br/>
+					<br/>
+					<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+						    <input type="radio" name="methods_o3" value="1" checked> Delete all data then Insert &nbsp;&nbsp;
+						    <input type="radio" name="methods_o3" value="0" > Replace If Existing and Insert The Unique Record<br><br>
+						</div>
+					</div>
+					</div>
+					<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label>Upload File CSV Untuk o3 Nilai Kelulusan</label>
+							<input id="userfile_o3" type="file" name="userfile_o3">
+						</div>
+					</div>
+					</div>
+			    <div id="files" class="files"></div>
+			    <br>
+				</div>
+				<div class="panel-footer clearfix">
+					<button type="submit" id="upload_o3" class="btn btn-success">Upload o3</button> &nbsp; &nbsp;
+					<span id="o3_error_message" class="text text-danger"></span>
+				</div>
+			</div>
+		</div>
+		</form>
+		<!-- <div class="panel section kelulusan">
 			<div class="panel colored col-md-12 form-box">
 				<div class="panel-heading blue-bg">
 					<h4 class="panel-title">
@@ -154,7 +204,7 @@
 				<i class="icon-check"></i>
 			</div>
 			-->
-		</div>
+		<!-- </div> --> 
 		<!-- O4 - Tepat Waktu -->
 		<!--
 		<div class="panel section deadline">
@@ -295,6 +345,10 @@ var url = CI_ROOT+"ip/konfigurasi/upload_o1";
 jQuery(function () {
     'use strict';
     // Change this to the location of your server-side upload handler:
+
+    /* --------------------------------------------------- */
+    /* O1
+    /* --------------------------------------------------- */
 
 	jQuery('#upload_file').submit(function(e) {
 
@@ -469,6 +523,55 @@ jQuery(function () {
     jQuery('#table_o1').on('blur','.num',function() {
     	$(this).val(parseInt($(this).val(), 10));
     });   	
+
+
+    /* --------------------------------------------------- */
+    /* O3
+    /* --------------------------------------------------- */
+
+	jQuery('#upload_file_o3').submit(function(e) {
+		document.getElementById('upload_o3').innerHTML = '<i class="icon-spinner icon-spin"></i> Uploading ... ';
+		jQuery('#upload_o3').attr('disabled','disabled');
+
+		e.preventDefault();
+
+		$.ajaxFileUpload({
+			url 			: CI_ROOT+"ip/konfigurasi/upload_o3", 
+			secureuri		: false,
+			fileElementId	:'userfile_o3',
+			dataType		:'json',
+			data			: {
+				'prodi'			: $('#o3_prodi').val(),
+				'o3'			: $('#o3_raw_count').text(),
+				'method'		: $('input[name="methods_o3"]:checked').val(),
+				'semester'		: $('#semesteran').val(),
+				'thn_ajaran'	: $('#thnajaran').val()
+			},			
+			success	: function (data,status)
+			{
+				if(data.status != 'error')
+				{
+					// console.log('berhasil');					
+					// console.log(data.infox);
+					jQuery('#upload_o3').removeAttr('disabled');
+					jQuery('#o3_error_message').removeClass('text-danger').addClass('text-success');
+				}
+				else {
+					// console.log('gagal');					
+					// console.log(data.infox);					
+					jQuery('#upload_o3').removeAttr('disabled');
+					jQuery('#o3_error_message').removeClass('text-success').addClass('text-danger');
+				}
+				document.getElementById('o3_error_message').innerHTML = data.msg;
+				document.getElementById('upload_o3').innerHTML = 'Upload o3 ';
+				jQuery('#userfile').val('');
+				jQuery('#o3_raw_count').text(data.rowCount);
+			}
+		});			
+
+		return false;
+	});    
+
 
 
 });
