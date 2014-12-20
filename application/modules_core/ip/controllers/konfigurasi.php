@@ -181,9 +181,11 @@ class Konfigurasi extends MX_Controller {
 	}
 
 	public function upload_o3() {
+		header('Content-Type: application/json');
 		$afterInsert = $_POST['o3'];
 	    $status = "";
 	    $msg = "";
+	    $data = array();
 	    $file_element_name = 'userfile_o3';
 
 	    if ($status != "error")
@@ -202,7 +204,6 @@ class Konfigurasi extends MX_Controller {
 	        }
 	        else
 	        {
-
 	            $upload_data = $this->upload->data();
 	            $file =  $upload_data['full_path'];
 
@@ -212,25 +213,27 @@ class Konfigurasi extends MX_Controller {
 		        $validasi = true;
 		        $row = 0;
 		        foreach ($result as $key => $value) {
-		        	// echo "<pre>";
-		        	// $object = (object) $value;
-		        	// var_dump($object);
-		        	// print_r($value['nim']);
-		        	// print_r($value['kode']);
-		        	// print_r($value['sks']);
-		        	// print_r($value['harga']);
-		        	// print_r($value['grup']);
-		        	// print_r($value['semester']);
-		        	// var_dump($value['th_ajaran']);
 		            if ( !isset($value['nim']) OR !isset($value['kode']) OR !isset($value['sks']) OR
 		            	!isset($value['harga']) OR !isset($value['grup']) OR 
 		            	!isset($value['semester']) OR !isset($value['th_ajaran']))
 			            {
 			            	$validasi = false;
 			                $status = "error";
-			                $msg = $row." Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran";
+			                $msg = $row."Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran.)";
 			            	break;
 			            }
+
+		            if(empty($value['nim']) OR empty($value['kode']) OR empty($value['sks']) OR
+		            	empty($value['harga']) OR empty($value['grup']) OR 
+		            	empty($value['semester']) OR empty($value['th_ajaran']))
+				        {
+				        	{
+				            	$validasi = false;
+				                $status = "error";
+				                $msg = $row."Tidak boleh ada data kosong di nim, kode, sks, harga, grup, semester, dan tahun ajaran.";
+				            	break;
+				            }	
+				        }
 			         $row = $row + 1;
 		        }
 		        $simpan = 0;
@@ -278,7 +281,6 @@ class Konfigurasi extends MX_Controller {
 	        }
 	        @unlink($_FILES[$file_element_name]);
 	    }
-		// header('Content-Type: application/json');
 	    echo json_encode(array('status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert, 'infox' => $data));
 	}
 

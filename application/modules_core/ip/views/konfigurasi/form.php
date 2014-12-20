@@ -549,6 +549,8 @@ jQuery(function () {
 			},			
 			success	: function (data,status)
 			{
+				console.log(data);
+				console.log(data.msg);
 				if(data.status != 'error')
 				{
 					// console.log('berhasil');					
@@ -566,7 +568,12 @@ jQuery(function () {
 				document.getElementById('upload_o3').innerHTML = 'Upload o3 ';
 				jQuery('#userfile').val('');
 				jQuery('#o3_raw_count').text(data.rowCount);
+			},
+			errors: function(data) {
+				alert('qdsdsdweqw');
+				console.log(data);
 			}
+
 		});			
 
 		return false;
