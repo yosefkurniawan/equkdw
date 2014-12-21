@@ -355,6 +355,12 @@
   </div>
 </div>
 
+<!-- uploading popup -->
+<div id="uploading-popup">
+	<div class="bg"></div>
+	<div class="content"></div>
+</div>
+
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="<?php echo base_url()?>public/js/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
@@ -577,16 +583,28 @@ jQuery(function ($) {
 		 * 		2. upload presensi
 		 * - The 2nd proccess will be done once the 1st one is complete.
 		 */
+		
+		e.preventDefault();
+
+		// validation
+
+		if($('#userfile_o3_nilai').val() == '' || $('#userfile_o3_presensi').val() == ''){
+			alert('Input file CSV nilai dan presensi wajib diisi.');
+			return false;
+		}
+
 		jQuery('#upload_o3').html('<i class="icon-spinner icon-spin"></i> Uploading ... ');
 		jQuery('#upload_o3').attr('disabled','disabled');
-
-		e.preventDefault();
+		
+		// show uploading popup 
+		jQuery('#popup_uploading').show();
 
 		$.ajaxFileUpload({
 			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_nilai", 
 			secureuri		: false,
 			fileElementId	:'userfile_o3_nilai',
 			dataType		:'json',
+			async			: false,
 			data			: {
 				'prodi'			: $('#o3-prodi').val(),
 				'o3'			: $('#o3_raw_count').text(),
@@ -600,23 +618,14 @@ jQuery(function ($) {
 				console.log(data.msg);
 				if(data.status != 'error')
 				{
-					// console.log('berhasil');					
-					// console.log(data.infox);
-					// jQuery('#upload_o3').removeAttr('disabled');
 					jQuery('#o3_nilai_error_message').removeClass('alert-danger').addClass('alert-success').show();
-
-					// do the 2nd upload.
-					upload_o3_presensi();
 				}
 				else {
-					// console.log('gagal');					
-					// console.log(data.infox);					
-					// jQuery('#upload_o3').removeAttr('disabled');
-					jQuery('#upload_o3').removeAttr('disabled');
 					jQuery('#o3_nilai_error_message').removeClass('alert-success').addClass('alert-danger').show();
 				}
 				jQuery('#o3_nilai_error_message .content').html(data.msg);
-				// jQuery('#upload_o3').html('Upload o3');
+				jQuery('#upload_o3').html('Upload o3');
+				jQuery('#upload_o3').removeAttr('disabled');
 				jQuery('#userfile_o3_nilai').val('');
 				jQuery('#o3_raw_count').text(data.rowCount);
 			},
@@ -626,14 +635,11 @@ jQuery(function ($) {
 
 		});			
 
-		return false;
-	});    
-
-	function upload_o3_presensi() {
 		$.ajaxFileUpload({
 			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_presensi", 
 			secureuri		: false,
 			fileElementId	:'userfile_o3_presensi',
+			async			: false,
 			dataType		:'json',
 			data			: {
 				'prodi'			: $('#o3-prodi').val(),
@@ -665,8 +671,9 @@ jQuery(function ($) {
 			}
 
 		});	
-	}
 
+		return false;
+	});    
 
 });
 
