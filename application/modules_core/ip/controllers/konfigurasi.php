@@ -287,7 +287,6 @@ class Konfigurasi extends MX_Controller {
 	}
 
 	public function upload_o3_presensi() {
-		header('Content-Type: application/json');
 		$afterInsert = $_POST['o3'];
 		$prodi = $_POST['prodi'];
 	    $status = "";
@@ -377,6 +376,8 @@ class Konfigurasi extends MX_Controller {
 	        }
 	        @unlink($_FILES[$file_element_name]);
 	    }
+	    
+		header('Content-Type: application/json');
 	    echo json_encode(array('status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert, 'infox' => $data));
 	}
 

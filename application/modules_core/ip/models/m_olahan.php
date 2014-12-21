@@ -273,19 +273,19 @@ class M_olahan extends CI_Model
 			$this->db->where('nim',$value['nim']);
 			$this->db->where('kode',$value['kode']);
 			$this->db->where('grup',$value['grup']);
-			$query = $this->db->get('o3_raw_presensi');
+			$query = $this->db->get('o3_raw_kehadiran');
 			if ($query->num_rows == 1) {
 				$this->db->where('nim',$value['nim']);
 				$this->db->where('kode',$value['kode']);
 				$this->db->where('grup',$value['grup']);
-				$update = $this->db->update('o3_raw_nilai',$value);
+				$update = $this->db->update('o3_raw_kehadiran',$value);
 				if ($update) {
 				 	return false;
 				} else {
 				 	return true;
 				}				
 			} else {
-				$insert = $this->db->insert('o3_raw_nilai',$value);
+				$insert = $this->db->insert('o3_raw_kehadiran',$value);
 				if ($insert) {
 				 	return false;
 				} else {
@@ -295,7 +295,7 @@ class M_olahan extends CI_Model
 		}
 		else {
 			//insert
-			$insert = $this->db->insert('o3_raw_nilai',$value);
+			$insert = $this->db->insert('o3_raw_kehadiran',$value);
 			if ($insert) {
 			 	return false;
 			} else {
