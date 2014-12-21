@@ -115,15 +115,28 @@ class Konfigurasi extends MX_Controller {
 		        $validasi = true;
 		        $row = 0;
 		        foreach ($result as $key => $value) {
-		            if ( (!isset($value['kode'])) OR (!isset($value['grup'])) OR (!isset($value['prodi'])) OR
-		            	(!isset($value['tot_hadir'])) OR (!isset($value['semester'])) OR 
-		            	(!isset($value['th_ajaran']))) 
-			            {
-			            	$validasi = false;
-			                $status = "error";
-			                $msg = $row." Format CSV Salah (Harus terdiri dari : kode, grup, prodi, tot_hadir, semester, dan thn_ajaran";
-			            	break;
-			            }
+		        	if ($_POST['methodTerisi'] == '1') {
+			            if ( (!isset($value['kode'])) OR (!isset($value['grup'])) OR (!isset($value['prodi'])) OR
+			            	(!isset($value['tot_hadir'])) OR (!isset($value['semester'])) OR 
+			            	(!isset($value['th_ajaran']))) 
+				            {
+				            	$validasi = false;
+				                $status = "error";
+				                $msg = $row." Format CSV Salah (Harus terdiri dari : kode, grup, prodi, tot_hadir, semester, dan thn_ajaran";
+				            	break;
+				            }
+		        	} else {
+			            if ( (!isset($value['kode'])) OR (!isset($value['grup'])) OR (!isset($value['prodi'])) OR
+				            	(!isset($value['tot_hadir'])) OR (!isset($value['semester'])) OR 
+				            	(!isset($value['th_ajaran'])) OR (!isset($value['rencana']))) 
+					            {
+					            	$validasi = false;
+					                $status = "error";
+					                $msg = $row." Format CSV Salah (Harus terdiri dari : kode, grup, prodi, tot_hadir, rencana, semester, dan thn_ajaran";
+					            	break;
+					            }
+		        	}
+
 			         $row = $row + 1;
 		        }
 		        $simpan = 0;
@@ -137,11 +150,23 @@ class Konfigurasi extends MX_Controller {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
 						            $sks = $this->m_olahan->get_sks_info($value['kode']);
-						            if ($sks <= 3) {
-					        			$value['rencana'] = $_POST['rencana'];
-						            } else {
-					        			$value['rencana'] = $_POST['rencana'] * 2;						            	
-						            }
+						        	if ($_POST['methodTerisi'] == '1') {
+							            if ($sks <= 3) {						            	
+						        			$value['rencana'] = $_POST['rencana'];
+							            } else {
+						        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+							            }
+						        	} else {
+						        		if ($value['rencana'] != null) {
+						        			$value['rencana'] = $value['rencana'];
+						        		} else {
+								            if ($sks <= 3) {						            	
+							        			$value['rencana'] = $_POST['rencana'];
+								            } else {
+							        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+								            }						        			
+						        		}
+						        	}
 				        			$simpan = $simpan + 1;
 						            $this->m_olahan->save_input_presensi_dosen($value);
 				        	}				  
@@ -155,12 +180,24 @@ class Konfigurasi extends MX_Controller {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
 						            $sks = $this->m_olahan->get_sks_info($value['kode']);
-						            if ($sks <= 3) {
-					        			$value['rencana'] = $_POST['rencana'];
-						            } else {
-					        			$value['rencana'] = $_POST['rencana'] * 2;						            	
-						            }
-				        			$value['rencana'] = $_POST['rencana'];
+						        	if ($_POST['methodTerisi'] == '1') {
+							            if ($sks <= 3) {						            	
+						        			$value['rencana'] = $_POST['rencana'];
+							            } else {
+						        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+							            }
+						        	} else {
+						        		if ($value['rencana'] != null) {
+						        			$value['rencana'] = $value['rencana'];
+						        		} else {
+								            if ($sks <= 3) {						            	
+							        			$value['rencana'] = $_POST['rencana'];
+								            } else {
+							        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+								            }						        			
+						        		}
+						        	}				        			
+						        	$value['rencana'] = $_POST['rencana'];
 				        			$simpan = $simpan + 1;
 						            $this->m_olahan->save_input_presensi_dosen($value,true);
 				        	}
@@ -444,7 +481,26 @@ class Konfigurasi extends MX_Controller {
 		//masukan ke tabel siswa
 		header('Content-Type: application/json');
 	    echo json_encode($status);	    	
-		
+
+	}
+
+	function get_excel_o1($id_paket='') 
+	{
+		// set periode
+		if ($id_paket == '') {
+			$data['id_paket'] 	= '';
+			$periode['thn_ajaran'] 		= $this->m_general->getLastPeriode()->thn_ajaran;
+			$periode['semester']		= $this->m_general->getLastPeriode()->semester;
+			$data['o1_rekap']				= $this->m_olahan->getPresensiDosenRekap();
+		}
+		else {
+			$data['id_paket'] 			= $id_paket;
+			$periode['thn_ajaran']		= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
+			$periode['semester']		= $this->m_laporan->getPaketList($id_paket)->semester;
+			$data['o1_rekap']				= $this->m_olahan->getPresensiDosenRekap($id_paket);
+		}
+		$data['periode']			= $periode;
+		$this->load->view('konfigurasi/excel_rangkuman_o1',$data);
 	}
 
 

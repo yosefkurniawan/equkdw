@@ -42,12 +42,18 @@
 				</div>
 				<div class="panel-body">
 					<br/> Terdapat <strong><span id="o1_raw_count"><?php echo count($o1_raw) ?></span> o1 </strong> 
-							<a href="#" data-toggle="modal" data-target="#o1_modal" id="o1_modal_show">Lihat Detail</a>
+							<a href="#" data-toggle="modal" data-target="#o1_modal" id="o1_modal_show">Lihat Detail</a>&nbsp;|&nbsp;
+							<a href="<?php echo base_url() ?>ip/konfigurasi/get_excel_o1/35">Download Excel</a>
 					<br/>
 					<br/>
 					<br/>
 					<div class="row">
 					<div class="col-lg-4">
+						<div class="form-group">
+						    <input type="radio" name="methodsTerisi" value="1" checked> Isi Semua Dengan &nbsp;&nbsp;
+						    <input type="radio" name="methodsTerisi" value="0" > Jika tidak ada isi dengan
+						</div>
+						<br/>
 						<label>Rencana Pertemuan</label>
 					    <input type="text" id="rencana_pertemuan" name="rencana_pertemuan" class="form-control" value="14">
 					</div>
@@ -411,6 +417,7 @@ jQuery(function ($) {
 				'rencana'		: $('#rencana_pertemuan').val(),
 				'o1'			: $('#o1_raw_count').text(),
 				'method'		: $('input[name="methods"]:checked').val(),
+				'methodTerisi'	: $('input[name="methodsTerisi"]:checked').val(),
 				'semester'		: $('#semesteran').val(),
 				'thn_ajaran'	: $('#thnajaran').val()
 			},			
