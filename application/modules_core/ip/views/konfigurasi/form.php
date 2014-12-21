@@ -439,7 +439,8 @@ jQuery(function ($) {
 		return false;
 	});
 
-	var kode,grup,tot_hadir,index,nama,rencana,kelasb;
+	var kode,grup,tot_hadir,index,nama,rencana,kelasb,prodi;
+	var kodebaru='',kodelama='',grupbaru='',gruplama='';
 	jQuery('#o1_modal_show').on('click',function(){
 
 		$.ajax({
@@ -459,14 +460,17 @@ jQuery(function ($) {
 					grup = data[index]['grup'];
 					rencana = data[index]['rencana'];
 					tot_hadir = data[index]['tot_hadir'];
+					prodi = data[index]['prodi'];
 					
+					kodebaru = data[index]['kode'];
+					grupbaru = data[index]['grup'];
 					if (tot_hadir == null || rencana == null) {
 						jQuery('#table_o1 > tbody:first').append(
 							'<tr class="warning">'+
 								'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
-								'<td style="font-size:12px;text-align:center">'+kode+'</td>'+
+								'<td class="o1-kode" style="font-size:12px;text-align:center">'+kode+'</td>'+
 								'<td style="font-size:12px">'+nama+'</td>'+
-								'<td style="font-size:12px;text-align:center">'+grup+'</td>'+
+								'<td class="o1-grup" style="font-size:12px;text-align:center">'+grup+'</td>'+
 								'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
 								'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
 								'</td>'+
@@ -476,30 +480,56 @@ jQuery(function ($) {
 								'<td style="font-size:12px">'+
 								'<a href="#" class="btn btn-xs btn-info ubah-presensi">Ubah<a>'+
 								'<a href="#" class="btn btn-xs btn-info batal-ubah-presensi" style="display:none">Batal<a>'+
+								'<a href="#" class="btn btn-xs btn-danger hapus-ubah-presensi" style="display:none">Hapus<a>'+
 								'</td>'+
 							'</tr>'
 							);						
 					} else {
-						jQuery('#table_o1 > tbody:first').append(
-							'<tr>'+
-								'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
-								'<td style="font-size:12px;text-align:center">'+kode+'</td>'+
-								'<td style="font-size:12px">'+nama+'</td>'+
-								'<td style="font-size:12px;text-align:center">'+grup+'</td>'+
-								'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
-								'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
-								'</td>'+
-								'<td style="font-size:12px;text-align:center"><span class="realisasi-mtk">'+tot_hadir+'</span>'+
-								'<input type="text" class="form-control input-sm ubah-realisasi-mtk num" value="'+tot_hadir+'" style="display:none"/>'+								
-								'</td>'+
-								'<td style="font-size:12px">'+
-								'<a href="#" class="btn btn-xs btn-info ubah-presensi">Ubah<a>'+
-								'<a href="#" class="btn btn-xs btn-info batal-ubah-presensi" style="display:none">Batal<a>'+
-								'</td>'+
-							'</tr>'
-							);
-						
+						if (kodelama == kodebaru && gruplama == grupbaru) {
+							jQuery('#table_o1 > tbody:first').append(
+									'<tr class="danger">'+
+										'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
+										'<td class="o1-kode" style="font-size:12px;text-align:center">'+kode+'</td>'+
+										'<td style="font-size:12px">'+nama+' <span class="info-prodi">('+prodi+')</span></td>'+
+										'<td class="o1-grup" style="font-size:12px;text-align:center">'+grup+'</td>'+
+										'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
+										'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
+										'</td>'+
+										'<td style="font-size:12px;text-align:center"><span class="realisasi-mtk">'+tot_hadir+'</span>'+
+										'<input type="text" class="form-control input-sm ubah-realisasi-mtk num" value="'+tot_hadir+'" style="display:none"/>'+								
+										'</td>'+
+										'<td style="font-size:12px">'+
+										'<a href="#" class="btn btn-xs btn-info ubah-presensi">Ubah<a>'+
+										'<a href="#" class="btn btn-xs btn-info batal-ubah-presensi" style="display:none">Batal<a>'+
+										'<a href="#" class="btn btn-xs btn-danger hapus-ubah-presensi" style="display:none">Hapus<a>'+
+										'</td>'+
+									'</tr>'
+									);
+						} else {
+							jQuery('#table_o1 > tbody:first').append(
+								'<tr>'+
+									'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
+									'<td class="o1-kode" style="font-size:12px;text-align:center">'+kode+'</td>'+
+									'<td style="font-size:12px">'+nama+' <span class="info-prodi">('+prodi+')</span></td>'+
+									'<td class="o1-grup" style="font-size:12px;text-align:center">'+grup+'</td>'+
+									'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
+									'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
+									'</td>'+
+									'<td style="font-size:12px;text-align:center"><span class="realisasi-mtk">'+tot_hadir+'</span>'+
+									'<input type="text" class="form-control input-sm ubah-realisasi-mtk num" value="'+tot_hadir+'" style="display:none"/>'+								
+									'</td>'+
+									'<td style="font-size:12px">'+
+									'<a href="#" class="btn btn-xs btn-info ubah-presensi">Ubah<a>'+
+									'<a href="#" class="btn btn-xs btn-info batal-ubah-presensi" style="display:none">Batal<a>'+
+									'<a href="#" class="btn btn-xs btn-danger hapus-ubah-presensi" style="display:none">Hapus<a>'+
+									'</td>'+
+								'</tr>'
+								);
+						}
+
 					}
+					kodelama = kodebaru;
+					gruplama = grupbaru;
 
 				};
 			},
@@ -510,30 +540,80 @@ jQuery(function ($) {
 	}); //end of jQuery('#o1_modal_show').on('click',function(){
 
 	jQuery('#table_o1').on('click','tbody tr td a.ubah-presensi',function(){
+		if (jQuery(this).closest('tr').find('td.o1-kode').text() == jQuery(this).closest('tr').next().find('td.o1-kode').text()
+			&& jQuery(this).closest('tr').find('td.o1-grup').text() == jQuery(this).closest('tr').next().find('td.o1-grup').text()) 
+		{
+			console.log('duplikat');
+			jQuery(this).closest('tr').find('td a.hapus-ubah-presensi').show();
+		} else if (jQuery(this).closest('tr').find('td.o1-kode').text() == jQuery(this).closest('tr').prev().find('td.o1-kode').text()
+			&& jQuery(this).closest('tr').find('td.o1-grup').text() == jQuery(this).closest('tr').prev().find('td.o1-grup').text()) 
+		{
+			console.log('duplikat');
+			jQuery(this).closest('tr').find('td a.hapus-ubah-presensi').show();
+		}
+
 		if (jQuery(this).closest('tr').find('td span.rencana-mtk').text() == 'null') {
 			jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val(0);			
 		} if (jQuery(this).closest('tr').find('td span.realisasi-mtk').text() == 'null') {
 			jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val(0);
 		}
+
 		jQuery(this).closest('tr').find('td span.rencana-mtk').hide();
 		jQuery(this).closest('tr').find('td span.realisasi-mtk').hide();
 		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').show();
 		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').show();
 		jQuery(this).closest('tr').find('td a.batal-ubah-presensi').show();
-		jQuery(this).text('Simpan').removeClass('ubah-presensi').addClass('simpan-presensi').removeClass('btn-info').addClass('btn-danger');
+		jQuery(this).text('Simpan').removeClass('ubah-presensi').addClass('simpan-presensi').removeClass('btn-info').addClass('btn-success');
 		return false;
 	});
 
+	var dethis;
 	jQuery('#table_o1').on('click','tbody tr td a.simpan-presensi',function(){
-		jQuery(this).closest('tr').find('td span.rencana-mtk').show().text(jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val());
-		jQuery(this).closest('tr').find('td span.realisasi-mtk').show().text(jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val());
-		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').hide();
-		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').hide();
-		jQuery(this).closest('tr').find('td a.batal-ubah-presensi').hide();
-		jQuery(this).text('Ubah').removeClass('simpan-presensi').addClass('ubah-presensi').removeClass('btn-danger').addClass('btn-info');
-		if (jQuery(this).closest('tr').find('td span.realisasi-mtk').text() != 'null' || jQuery(this).closest('tr').find('td span.rencana-mtk').text() != 'null') {
-			jQuery(this).closest('tr').removeClass('warning').addClass('success');
-		}
+
+		dethis = jQuery(this);
+
+		var item = {};
+		var num = 1;
+		item[num] = {};
+		item[num]['kode'] = jQuery(this).closest('tr').find('td.o1-kode').text();
+		item[num]['grup'] = jQuery(this).closest('tr').find('td.o1-grup').text();
+		item[num]['tot_hadir'] = jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val();
+		item[num]['rencana'] = jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val();
+		item[num]['semester'] = $('#semesteran').val();
+		item[num]['th_ajaran'] = $('#thnajaran').val();
+		// console.log(item[num]);
+		// return false;
+		//simpan
+		$.ajax({
+			url:CI_ROOT+'ip/konfigurasi/save_input_sistem_o1',
+			type:"POST",
+			data:item,
+			success : function(data) {
+
+				console.log(data);
+
+				if (data == true) {
+
+					dethis.closest('tr').find('td span.rencana-mtk').show().text(dethis.closest('tr').find('td input.ubah-rencana-mtk').val());
+					dethis.closest('tr').find('td span.realisasi-mtk').show().text(dethis.closest('tr').find('td input.ubah-realisasi-mtk').val());
+					dethis.closest('tr').find('td input.ubah-rencana-mtk').hide();
+					dethis.closest('tr').find('td input.ubah-realisasi-mtk').hide();
+					dethis.closest('tr').find('td a.batal-ubah-presensi').hide();
+					dethis.text('Ubah').removeClass('simpan-presensi').addClass('ubah-presensi').removeClass('btn-success').addClass('btn-info');
+					if (dethis.closest('tr').find('td span.realisasi-mtk').text() != 'null' || jQuery(this).closest('tr').find('td span.rencana-mtk').text() != 'null') {
+						dethis.closest('tr').removeClass('warning').addClass('success');
+					}	
+
+				} else {
+					console.log('something has gone wrong');
+				}
+
+			},
+			errors : function(data) {
+				console.log(data);
+			}
+		});
+
 		return false;
 	});
 
@@ -545,10 +625,49 @@ jQuery(function ($) {
 		jQuery(this).closest('tr').find('td input.ubah-rencana-mtk').val(jQuery(this).closest('tr').find('td span.rencana-mtk').text());
 		jQuery(this).closest('tr').find('td input.ubah-realisasi-mtk').val(jQuery(this).closest('tr').find('td span.realisasi-mtk').text());
 		jQuery(this).closest('tr').find('td a.simpan-presensi').text('Ubah').removeClass('simpan-presensi').addClass('ubah-presensi')		
-		.removeClass('btn-danger').addClass('btn-info');;
+		.removeClass('btn-success').addClass('btn-info');;
 		jQuery(this).hide();
 		return false;
 	});
+
+	jQuery('#table_o1').on('click','tbody tr td a.hapus-ubah-presensi',function(){
+
+
+
+		dethis = jQuery(this);
+
+		var item = {};
+		var num = 1;
+		item[num] = {};		
+		item[num]['kode'] = jQuery(this).closest('tr').find('td.o1-kode').text();
+		item[num]['grup'] = jQuery(this).closest('tr').find('td.o1-grup').text();
+		item[num]['semester'] = $('#semesteran').val();
+		item[num]['th_ajaran'] = $('#thnajaran').val();
+
+
+		$.ajax({
+			url:CI_ROOT+'ip/konfigurasi/hapus_sistem_o1',
+			type:"POST",
+			data:item,
+			success : function(data) {
+				console.log(data);
+
+				if (data == true) {
+					dethis.closest('tr').fadeOut(800, function(){
+						dethis.closest('tr').remove();	
+					});
+				} else {
+					console.log('something has gone wrong');
+				}
+
+			},
+			errors : function(data) {
+				console.log(data);
+			}
+		});		
+		return false;
+	});
+
 
     jQuery('#table_o1').on('keydown','.num',function (e) {
         // Allow: backspace, delete, tab, escape, enter and .

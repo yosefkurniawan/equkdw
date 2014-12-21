@@ -424,6 +424,31 @@ class Konfigurasi extends MX_Controller {
 		// }
 	}
 
+	function save_input_sistem_o1() {
+		foreach ($_POST as $value => $val) 
+		{
+			$status = $this->m_olahan->save_input_sistem_o1($val);
+		}
+
+		//masukan ke tabel siswa
+		header('Content-Type: application/json');
+	    echo json_encode($status);	    	
+	}
+
+	function hapus_sistem_o1() {
+		foreach ($_POST as $value => $val) 
+		{
+			$status = $this->m_olahan->hapus_sistem_o1($val);
+		}
+
+		//masukan ke tabel siswa
+		header('Content-Type: application/json');
+	    echo json_encode($status);	    	
+		
+	}
+
+
+
 	protected function _is_ajax()
 	{
 		if (!$this->input->is_ajax_request()) {
