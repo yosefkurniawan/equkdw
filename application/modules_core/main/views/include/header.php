@@ -83,7 +83,7 @@
     <div class="user pull-right">
       <a href="#" title="User Options" data-toggle="dropdown" class="pull-right">
         <div class="pull-left">
-          <h5><?=$this->session->userdata['nama'];?></h5>
+          <h5><? echo ucwords($this->session->userdata['nama']);?></h5>
           <p>
           <?php if ($this->session->userdata['is_super_admin']): ?>
             Superadmin
