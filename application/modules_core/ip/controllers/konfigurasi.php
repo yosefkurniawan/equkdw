@@ -13,6 +13,7 @@ class Konfigurasi extends MX_Controller {
 		$this->load->model('laporan/m_laporan_matkul');
 		$this->load->model('laporan/m_laporan');
 		$this->load->model('main/m_general');
+		$this->load->model('ip_model');
 		$this->load->model('m_dosen');
 		$this->load->model('m_olahan');
 
@@ -49,6 +50,7 @@ class Konfigurasi extends MX_Controller {
 		}
 
 		/* -- Render Layout -- */
+		$data['prodi_list']			= $this->ip_model->getProdiList();		
 		$data['paket_list']			= $this->m_laporan->getPaketList();
 		$data['periode'] 			= $periode;
 		$data['title'] 				= "Konfigurasi IP Dosen";
@@ -180,13 +182,14 @@ class Konfigurasi extends MX_Controller {
 	    echo json_encode(array('infox' => $data,'status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert));
 	}
 
-	public function upload_o3() {
+	public function upload_o3_nilai() {
 		header('Content-Type: application/json');
 		$afterInsert = $_POST['o3'];
+		$prodi = $_POST['prodi'];
 	    $status = "";
 	    $msg = "";
 	    $data = array();
-	    $file_element_name = 'userfile_o3';
+	    $file_element_name = 'userfile_o3_nilai';
 
 	    if ($status != "error")
 	    {
@@ -219,21 +222,10 @@ class Konfigurasi extends MX_Controller {
 			            {
 			            	$validasi = false;
 			                $status = "error";
-			                $msg = $row."Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran.)";
+			                $msg = "Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran.)";
 			            	break;
 			            }
 
-		            if(empty($value['nim']) OR empty($value['kode']) OR empty($value['sks']) OR
-		            	empty($value['harga']) OR empty($value['grup']) OR 
-		            	empty($value['semester']) OR empty($value['th_ajaran']))
-				        {
-				        	{
-				            	$validasi = false;
-				                $status = "error";
-				                $msg = $row."Tidak boleh ada data kosong di nim, kode, sks, harga, grup, semester, dan tahun ajaran.";
-				            	break;
-				            }	
-				        }
 			         $row = $row + 1;
 		        }
 		        $simpan = 0;
@@ -242,35 +234,139 @@ class Konfigurasi extends MX_Controller {
 		        	//yang kurang
 		        	if ($_POST['method'] == '1') {
 		        		//delete all value
-		        		$this->m_olahan->delete_o3_raw($_POST['thn_ajaran'],$_POST['semester']);
+		        		$this->m_olahan->delete_o3_raw_nilai($_POST['thn_ajaran'],$_POST['semester']);
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
+					        		// replace empty nilai with 'T'
 					        		if (!isset($value['nilai']) || $value['nilai'] == '') {
-					        			$value['nilai'] = 'F';
+					        			$value['nilai'] = 'T';
 					        		}
+
+					        		// add prodi field
+					        		$value['prodi'] = $prodi;
+
 				        			$simpan = $simpan + 1;
-						            $this->m_olahan->save_input_nilai_kelulusan($value);
+						            $this->m_olahan->save_input_o3_nilai($value);
 				        	}				  
 				        }
 		                $status = "success";
-		                $msg = "Data berhasil disimpan di dalam database (".$simpan." dari ".$row." data)";
+		                $msg = "Data Nilai berhasil disimpan (".$simpan." dari ".$row." data)";
 				        $afterInsert = $simpan;
 		        	} elseif ($_POST['method'] == '0') {
 			        	//metode : delete all then insert / existing replace + insert
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
-				        			if (!isset($value['nilai']) || $value['nilai'] == '') {
-					        			$value['nilai'] = 'F';
+				        			// replace empty nilai with 'T'
+					        		if (!isset($value['nilai']) || $value['nilai'] == '') {
+					        			$value['nilai'] = 'T';
 					        		}
+
+					        		// add prodi field
+					        		$value['prodi'] = $prodi;
+
 				        			$simpan = $simpan + 1;
-						            $this->m_olahan->save_input_nilai_kelulusan($value,true);
+						            $this->m_olahan->save_input_o3_nilai($value,true);
 				        	}
 
 				        }
 		                $status = "success";
-		                $msg = "Data berhasil disimpan di dalam database (".$simpan." dari ".$row." data)";
+		                $msg = "Data berhasil disimpan (".$simpan." dari ".$row." data)";
+				        $afterInsert = $simpan;
+		        	}
+		        	else {
+		                $status = "error";
+		                $msg = "Metode Harus dipilih";
+		        	}
+			    }
+	        }
+	        @unlink($_FILES[$file_element_name]);
+	    }
+	    echo json_encode(array('status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert, 'infox' => $data));
+	}
+
+	public function upload_o3_presensi() {
+		header('Content-Type: application/json');
+		$afterInsert = $_POST['o3'];
+		$prodi = $_POST['prodi'];
+	    $status = "";
+	    $msg = "";
+	    $data = array();
+	    $file_element_name = 'userfile_o3_presensi';
+
+	    if ($status != "error")
+	    {
+	        $config['upload_path'] = './temp_upload/';
+	        $config['allowed_types'] = 'csv';
+	        $config['encrypt_name'] = TRUE;
+	 
+	        $this->load->library('upload', $config);
+	 
+	        if (!$this->upload->do_upload($file_element_name))
+	        {
+	            $status = 'error';
+	            $msg = $this->upload->display_errors('', '');
+	            $data = $this->upload->display_errors('', '');
+	        }
+	        else
+	        {
+	            $upload_data = $this->upload->data();
+	            $file =  $upload_data['full_path'];
+
+		        $this->load->library('csvreader');
+		        $result =   $this->csvreader->parse_file($file);
+		        $data['csvData'] =  $result;
+		        $validasi = true;
+		        $row = 0;
+		        foreach ($result as $key => $value) {
+		            if ( !isset($value['nim']) OR !isset($value['kode']) OR
+		            	!isset($value['grup']) OR !isset($value['absen']) OR
+		            	!isset($value['semester']) OR !isset($value['th_ajaran']))
+			            {
+			            	$validasi = false;
+			                $status = "error";
+			                $msg = "Format CSV Salah (Harus terdiri dari : nim, kode, grup, absen, semester, dan thn ajaran.)";
+			            	break;
+			            }
+
+			         $row = $row + 1;
+		        }
+		        $simpan = 0;
+		        if ($validasi == true) {
+		        	// echo $_POST['thn_ajaran'].' '.$_POST['semester'] ; die;
+		        	//yang kurang
+		        	if ($_POST['method'] == '1') {
+		        		//delete all value
+		        		$this->m_olahan->delete_o3_raw_nilai($_POST['thn_ajaran'],$_POST['semester']);
+				        foreach ($result as $key => $value) {
+				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
+				        	{	
+				        			// add prodi field
+					        		$value['prodi'] = $prodi;
+
+				        			$simpan = $simpan + 1;
+						            $this->m_olahan->save_input_o3_presensi($value);
+				        	}				  
+				        }
+		                $status = "success";
+		                $msg = "Data Nilai berhasil disimpan (".$simpan." dari ".$row." data)";
+				        $afterInsert = $simpan;
+		        	} elseif ($_POST['method'] == '0') {
+			        	//metode : delete all then insert / existing replace + insert
+				        foreach ($result as $key => $value) {
+				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
+				        	{
+				        			// add prodi field
+					        		$value['prodi'] = $prodi;
+					        		
+				        			$simpan = $simpan + 1;
+						            $this->m_olahan->save_input_o3_presensi($value,true);
+				        	}
+
+				        }
+		                $status = "success";
+		                $msg = "Data berhasil disimpan (".$simpan." dari ".$row." data)";
 				        $afterInsert = $simpan;
 		        	}
 		        	else {

@@ -44,6 +44,7 @@ class M_o4 extends CI_Model{
 
 			$kode 		= $mtk->kode;
 			$grup 		= $mtk->grup;
+			$prodi 		= $mtk->prodi;
 			$semester 	= $mtk->semester;
 			$thn_ajaran = $mtk->thn_ajaran;
 			
@@ -65,8 +66,8 @@ class M_o4 extends CI_Model{
 
 			if (!$query_cek->num_rows() > 0) {
 				
-				$sql = "INSERT INTO o4_nilaimasuk (kode,grup,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
-						('$kode','$grup','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
+				$sql = "INSERT INTO o4_nilaimasuk (kode,grup,prodi,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
+						('$kode','$grup','$prodi','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
 
 				$result = $this->db->query($sql);
 

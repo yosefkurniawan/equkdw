@@ -45,6 +45,20 @@ class ip_model extends CI_Model
 		}		
 	}
 
+	function getProdiList(){
+		$sql = "SELECT * FROM prodi";
+		$query = $this->db->query($sql);
+		// echo '<pre>'; print_r($query->row()); die;
+		if ($query->num_rows() > 1 ) 
+		{
+			return $query->result_array();
+		} // end of if
+		else 
+		{
+			return array();
+		}
+	}
+
 	function get_ip_list($prodi,$th_ajaran,$semester) {
 		$sql = "SELECT dsn.nik_baru,dsn.nidn,dsn.nama_dsn,dsn.prodi,p.nama_prodi,
 				SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
