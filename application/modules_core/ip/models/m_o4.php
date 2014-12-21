@@ -95,4 +95,75 @@ class M_o4 extends CI_Model{
 			return $data;
 		}
 	}
+
+	function setDeadline() {
+		if( $this->input->post('deadline')) {
+			$dl = $this->input->post('deadline');	
+			$dl = explode('/', $dl);
+			$deadline = $dl[2].'-'.$dl[1].'-'.$dl[0];
+		} else {
+			$deadline = '';
+		}
+
+		$sql_semester 	= "(SELECT MAX(semester) as semester FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+		$sql_thn_ajaran = "(SELECT MAX(thn_ajaran) as thn_ajaran FROM eva_paket)";
+
+		$semester 	= $this->db->query($sql_semester)->row()->semester;
+		$thn_ajaran = $this->db->query($sql_thn_ajaran)->row()->thn_ajaran;
+
+		$data = array(
+           'deadline_o4' => $deadline,
+           'semester' 	=> $semester,
+           'thn_ajaran' => $thn_ajaran
+        );
+		$this->db->where('semester',$semester);
+		$this->db->where('thn_ajaran',$thn_ajaran);
+		$result = $this->db->update('eva_paket',$data);
+		
+		if ($result) {
+		 	return true;
+		} else {
+		 	return false;
+		}				
+	}
+
+	function getDeadline($timestamp = false) {
+		/* NOTE::
+		 * 2 modes:
+		 * - $timestamp = false --> get deadline as a date
+		 * - $timestamp = false --> get deadline as a timestamp
+		 */
+
+		$semester 	= "(SELECT MAX(semester) FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+		$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM eva_paket)";
+
+		$sql = "SELECT deadline_o4 FROM eva_paket WHERE semester = $semester AND thn_ajaran = $thn_ajaran";
+		$deadline = $this->db->query($sql);
+
+		if ($deadline->num_rows > 0) {			
+			$dl = $deadline->row()->deadline_o4;
+			if (!$timestamp) {
+				/* if get deadline as date */
+				if (!empty($dl)) {
+					$dl = explode('-', $dl);
+					$deadline = $dl[2].'/'.$dl[1].'/'.$dl[0];	
+					return $deadline;
+				}else{
+					return false;
+				}
+			}else{
+				/* if get deadline as timestamp */
+
+				if (!empty($dl)) {
+					return strtotime($dl);
+				}else{
+					return false;
+				}
+			}
+		} else {
+		 	return false;
+		}	
+	}
 }
