@@ -111,6 +111,7 @@ class M_olahan extends CI_Model
 		}
 	}
 
+
 	function getPresensiDosenRaw($id_paket='')
 	{
 		if ($id_paket != '') {
@@ -368,7 +369,36 @@ class M_olahan extends CI_Model
 		} else {
 			return array();
 		}
-
 	}
+
+	function getPresensiDosenRekap($id_paket='') {
+
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' 
+						ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka 
+							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
+							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}		
+
+		$sql = "SELECT k.*, o1.tot_hadir, o1.rencana, m.nama'nama_mtk', o1.prodi
+				FROM (SELECT * FROM kelas_all WHERE thn_ajaran = $thn_ajaran AND semester = $semester AND eva_status = 1
+					GROUP BY kode,grup) k
+				LEFT JOIN ec_matkul m ON k.kode = m.kode
+				LEFT JOIN o1_raw o1 ON k.kode = o1.kode AND k.grup = o1.grup AND k.thn_ajaran = o1.th_ajaran AND k.semester = o1.semester";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return array();
+		}
+	}
+
 }
 
