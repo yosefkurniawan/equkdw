@@ -125,41 +125,81 @@
 					</h4>
 				</div>
 				<div class="panel-body">
-					<br/> Terdapat <strong><span id="o3_raw_count"><?php echo count($o3_raw) ?></span> o3 </strong> 
+					Terdapat <strong><span id="o3_raw_count"><?php echo count($o3_raw) ?></span> o3 </strong> 
 							<a href="#" data-toggle="modal" data-target="#o3_modal" id="o3_modal_show">Lihat Detail</a>
 					<br/>
 					<br/>
-					<br/>
+
 					<div class="row">
-					<div class="col-lg-4">
-						<label>Prodi</label>
-					    <input type="text" id="o3_prodi" name="o3_prodi" class="form-control">
-					</div>
-					</div>
-					<br/>
-					<br/>
-					<div class="row">
-					<div class="col-lg-6">
-						<div class="form-group">
-						    <input type="radio" name="methods_o3" value="1" checked> Delete all data then Insert &nbsp;&nbsp;
-						    <input type="radio" name="methods_o3" value="0" > Replace If Existing and Insert The Unique Record<br><br>
+						<div class="col-lg-4">
+							<label>Prodi</label>
+						    <select id="o3-prodi" name="o3-prodi" class="full-width">
+						        <?php foreach ($prodi_list as $key => $prodi): ?>
+						        	<option value="<?php echo $prodi['prodi'] ?>"><?php echo $prodi['nama_prodi']; ?></option>
+						        <?php endforeach ?>
+						    </select>
 						</div>
 					</div>
-					</div>
+
+					<br/>
+
 					<div class="row">
-					<div class="col-lg-6">
-						<div class="form-group">
-							<label>Upload File CSV Untuk o3 Nilai Kelulusan</label>
-							<input id="userfile_o3" type="file" name="userfile_o3">
+						<!-- upload 1: nilai -->
+						<div class="col-lg-6">
+							<h4><strong>Upload CSV Nilai</strong></h4>
+							<hr/>
+							<div class="row">
+							<div class="col-lg-10">
+								<div class="form-group">
+								    <p><input type="radio" name="methods_o3_nilai" value="1" checked> Delete all data then Insert <br/></p>
+								    <p><input type="radio" name="methods_o3_nilai" value="0" > Replace If Existing and Insert The Unique Record<br><br></p>
+								</div>
+							</div>
+							</div>
+							<div class="row">
+							<div class="col-lg-10">
+								<div class="form-group">
+									<label>Upload File CSV Nilai</label>
+									<input id="userfile_o3_nilai" type="file" name="userfile_o3_nilai">
+								</div>
+							</div>
+							</div>
+						    <div id="o3_nilai_error_message" class="alert alert-danger fade in" style="display:none;">
+								<button data-dismiss="alert" class="close" type="button">×</button>
+								<div class="content"></div>
+						    </div>
+						</div>
+
+					    <!-- upload 2: presensi -->
+						<div class="col-lg-6">
+							<h4><strong>Upload CSV Presensi</strong></h4>
+							<hr/>
+							<div class="row">
+							<div class="col-lg-10">
+								<div class="form-group">
+								    <p><input type="radio" name="methods_o3_presensi" value="1" checked> Delete all data then Insert <br/></p>
+								    <p><input type="radio" name="methods_o3_presensi" value="0" > Replace If Existing and Insert The Unique Record<br><br></p>
+								</div>
+							</div>
+							</div>
+							<div class="row">
+							<div class="col-lg-10">
+								<div class="form-group">
+									<label>Upload File CSV Presensi</label>
+									<input id="userfile_o3_presensi" type="file" name="userfile_o3_presensi">
+								</div>
+							</div>
+							</div>
+
+							<div id="o3_presensi_error_message" class="alert alert-danger fade in" style="display:none;">
+								<button data-dismiss="alert" class="close" type="button">×</button>
+								<div class="content"></div>
+						    </div>
 						</div>
 					</div>
-					</div>
-			    <div id="files" class="files"></div>
-			    <br>
 				</div>
 				<div class="panel-footer clearfix">
 					<button type="submit" id="upload_o3" class="btn btn-success">Upload o3</button> &nbsp; &nbsp;
-					<span id="o3_error_message" class="text text-danger"></span>
 				</div>
 			</div>
 		</div>
@@ -342,7 +382,7 @@
 var url = CI_ROOT+"ip/konfigurasi/upload_o1";
 
 
-jQuery(function () {
+jQuery(function ($) {
     'use strict';
     // Change this to the location of your server-side upload handler:
 
@@ -530,20 +570,27 @@ jQuery(function () {
     /* --------------------------------------------------- */
 
 	jQuery('#upload_file_o3').submit(function(e) {
-		document.getElementById('upload_o3').innerHTML = '<i class="icon-spinner icon-spin"></i> Uploading ... ';
+
+		/* Description: 
+		 * - There will be 2 uploadin proccess.
+		 * 		1. upload nilai
+		 * 		2. upload presensi
+		 * - The 2nd proccess will be done once the 1st one is complete.
+		 */
+		jQuery('#upload_o3').html('<i class="icon-spinner icon-spin"></i> Uploading ... ');
 		jQuery('#upload_o3').attr('disabled','disabled');
 
 		e.preventDefault();
 
 		$.ajaxFileUpload({
-			url 			: CI_ROOT+"ip/konfigurasi/upload_o3", 
+			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_nilai", 
 			secureuri		: false,
-			fileElementId	:'userfile_o3',
+			fileElementId	:'userfile_o3_nilai',
 			dataType		:'json',
 			data			: {
-				'prodi'			: $('#o3_prodi').val(),
+				'prodi'			: $('#o3-prodi').val(),
 				'o3'			: $('#o3_raw_count').text(),
-				'method'		: $('input[name="methods_o3"]:checked').val(),
+				'method'		: $('input[name="methods_o3_nilai"]:checked').val(),
 				'semester'		: $('#semesteran').val(),
 				'thn_ajaran'	: $('#thnajaran').val()
 			},			
@@ -555,22 +602,25 @@ jQuery(function () {
 				{
 					// console.log('berhasil');					
 					// console.log(data.infox);
-					jQuery('#upload_o3').removeAttr('disabled');
-					jQuery('#o3_error_message').removeClass('text-danger').addClass('text-success');
+					// jQuery('#upload_o3').removeAttr('disabled');
+					jQuery('#o3_nilai_error_message').removeClass('alert-danger').addClass('alert-success').show();
+
+					// do the 2nd upload.
+					upload_o3_presensi();
 				}
 				else {
 					// console.log('gagal');					
 					// console.log(data.infox);					
+					// jQuery('#upload_o3').removeAttr('disabled');
 					jQuery('#upload_o3').removeAttr('disabled');
-					jQuery('#o3_error_message').removeClass('text-success').addClass('text-danger');
+					jQuery('#o3_nilai_error_message').removeClass('alert-success').addClass('alert-danger').show();
 				}
-				document.getElementById('o3_error_message').innerHTML = data.msg;
-				document.getElementById('upload_o3').innerHTML = 'Upload o3 ';
-				jQuery('#userfile').val('');
+				jQuery('#o3_nilai_error_message .content').html(data.msg);
+				// jQuery('#upload_o3').html('Upload o3');
+				jQuery('#userfile_o3_nilai').val('');
 				jQuery('#o3_raw_count').text(data.rowCount);
 			},
 			errors: function(data) {
-				alert('qdsdsdweqw');
 				console.log(data);
 			}
 
@@ -579,6 +629,43 @@ jQuery(function () {
 		return false;
 	});    
 
+	function upload_o3_presensi() {
+		$.ajaxFileUpload({
+			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_presensi", 
+			secureuri		: false,
+			fileElementId	:'userfile_o3_presensi',
+			dataType		:'json',
+			data			: {
+				'prodi'			: $('#o3-prodi').val(),
+				'o3'			: $('#o3_raw_count').text(),
+				'method'		: $('input[name="methods_o3_presensi"]:checked').val(),
+				'semester'		: $('#semesteran').val(),
+				'thn_ajaran'	: $('#thnajaran').val()
+			},			
+			success	: function (data,status)
+			{
+				console.log(data);
+				console.log(data.msg);
+				if(data.status != 'error')
+				{
+					jQuery('#o3_presensi_error_message').removeClass('alert-danger').addClass('alert-success').show();
+				}
+				else {
+					jQuery('#o3_presensi_error_message').removeClass('alert-success').addClass('alert-danger').show();
+				}
+				jQuery('#o3_presensi_error_message .content').html(data.msg);
+
+				jQuery('#upload_o3').removeAttr('disabled');
+				jQuery('#upload_o3').html('Upload o3');
+				jQuery('#userfile_o3_presensi').val('');
+				jQuery('#o3_raw_count').text(data.rowCount);
+			},
+			errors: function(data) {
+				console.log(data);
+			}
+
+		});	
+	}
 
 
 });

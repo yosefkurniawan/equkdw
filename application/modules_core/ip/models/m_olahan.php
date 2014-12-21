@@ -156,7 +156,7 @@ class M_olahan extends CI_Model
 							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}		
 
-		$sql = "SELECT o3.*,m.eva_status FROM o3_raw o3
+		$sql = "SELECT o3.*,m.eva_status FROM o3_raw_nilai o3
 				LEFT JOIN ec_matkul m ON o3.kode = m.kode
 				WHERE o3.semester = $semester AND o3.th_ajaran = $thn_ajaran AND m.eva_status = 1";
 
@@ -180,10 +180,10 @@ class M_olahan extends CI_Model
 		}						
 	}
 
-	function delete_o3_raw($th_ajaran,$semester) {
+	function delete_o3_raw_nilai($th_ajaran,$semester) {
 		$this->db->where('semester',$semester);
 		$this->db->where('th_ajaran',$th_ajaran);
-		$delete = $this->db->delete('o3_raw');
+		$delete = $this->db->delete('o3_raw_nilai');
 		if ($delete) {
 		 	return false;
 		} else {
@@ -227,26 +227,27 @@ class M_olahan extends CI_Model
 		}
 	}
 
-	//this is saving result from csv text for o3
-	function save_input_nilai_kelulusan($value,$replace=false)
+	//these2 below are saving result from csv text for o3
+	/* upload1: nilai */
+	function save_input_o3_nilai($value,$replace=false)
 	{
 		if ($replace == true) {
 			$this->db->where('nim',$value['nim']);
 			$this->db->where('kode',$value['kode']);
 			$this->db->where('grup',$value['grup']);
-			$query = $this->db->get('o3_raw');
+			$query = $this->db->get('o3_raw_nilai');
 			if ($query->num_rows == 1) {
 				$this->db->where('nim',$value['nim']);
 				$this->db->where('kode',$value['kode']);
 				$this->db->where('grup',$value['grup']);
-				$update = $this->db->update('o3_raw',$value);
+				$update = $this->db->update('o3_raw_nilai',$value);
 				if ($update) {
 				 	return false;
 				} else {
 				 	return true;
 				}				
 			} else {
-				$insert = $this->db->insert('o3_raw',$value);
+				$insert = $this->db->insert('o3_raw_nilai',$value);
 				if ($insert) {
 				 	return false;
 				} else {
@@ -256,7 +257,45 @@ class M_olahan extends CI_Model
 		}
 		else {
 			//insert
-			$insert = $this->db->insert('o3_raw',$value);
+			$insert = $this->db->insert('o3_raw_nilai',$value);
+			if ($insert) {
+			 	return false;
+			} else {
+			 	return true;
+			}				
+		}
+	}
+
+	/* upload2: presensi */
+	function save_input_o3_presensi($value,$replace=false)
+	{
+		if ($replace == true) {
+			$this->db->where('nim',$value['nim']);
+			$this->db->where('kode',$value['kode']);
+			$this->db->where('grup',$value['grup']);
+			$query = $this->db->get('o3_raw_presensi');
+			if ($query->num_rows == 1) {
+				$this->db->where('nim',$value['nim']);
+				$this->db->where('kode',$value['kode']);
+				$this->db->where('grup',$value['grup']);
+				$update = $this->db->update('o3_raw_nilai',$value);
+				if ($update) {
+				 	return false;
+				} else {
+				 	return true;
+				}				
+			} else {
+				$insert = $this->db->insert('o3_raw_nilai',$value);
+				if ($insert) {
+				 	return false;
+				} else {
+				 	return true;
+				}				
+			}
+		}
+		else {
+			//insert
+			$insert = $this->db->insert('o3_raw_nilai',$value);
 			if ($insert) {
 			 	return false;
 			} else {
