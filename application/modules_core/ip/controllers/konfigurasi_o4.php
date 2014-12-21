@@ -24,12 +24,41 @@ class Konfigurasi_o4 extends MX_Controller {
 
 		/* Data */
 		$data['list_matkul']		= $this->m_o4->getListMtk();
-		$data['deadline']			= strtotime('2014-12-17');
+		$data['deadline']			= $this->m_o4->getDeadline(true);
 
 		/* Render Layout */
 		$data['title'] 				= "Input Tanggal Penyerahan Berkas";
 		$data['content'] 			= 'ip/konfigurasi/form_o4';
 		$this->load->view('main/render_layout',$data);
+	}
+
+	function deadline() {
+
+		if ($_POST) {
+			$result = $this->m_o4->setDeadline();
+
+			if ($result) {
+				$data['alert']['status']= "success";
+				$data['alert']['msg']	= "Deadline berhasil diupdate.";
+			}else{
+				$data['alert']['status']= "danger";
+				$data['alert']['msg']	= "Deadline gagal diupdate.";
+			}
+			unset($_POST);
+			// print_r($data['alert']);die;
+		}
+
+		/* Data */
+		$data['deadline']			= $this->m_o4->getDeadline();
+
+		/* Render Layout */
+		$data['title'] 				= "Konfigurasi Deadline O4";
+		$data['content'] 			= 'ip/konfigurasi/form_deadline_o4';
+
+		// echo "<pre>";
+		// print_r($data);
+		// die;
+		$this->load->view('main/render_layout',$data);	
 	}
 
 }

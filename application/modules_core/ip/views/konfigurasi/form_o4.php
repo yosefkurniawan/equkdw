@@ -74,8 +74,11 @@
 
 <script>
     jQuery(document).ready(function($j) { 
+
+    	// select matkul
     	jQuery("#select-matkul").select2(); 
 
+    	// datetime picker
     	jQuery('#deadline').datetimepicker({
 	   		lang:'de',
 			 i18n:{
@@ -86,14 +89,20 @@
 			 },
 			 timepicker:false,
 			 format:'d/m/Y'
-	   });
+	   	});
 
-
-    	// set status. compare deadline with today for default
-    	var now = new Date();
-		var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-		var timestampToday = today/1000;
-    	cekFlagTepat(<?php echo $deadline; ?>,timestampToday);
+    	// check wheter deadline is exist.
+    	var deadline = '<?php echo ($deadline)? $deadline: 0 ?>';
+    	if (!deadline || deadline=='' || deadline=='0') {
+    		alert('Deadline belum disetting.');
+    		window.location.href = "<?php echo base_url() ?>";
+    	}else{
+    		// set status. compare deadline with today for default
+	    	var now = new Date();
+			var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			var timestampToday = today/1000;
+	    	cekFlagTepat(deadline,timestampToday);
+    	}
     });
 
     function getTimeStamp(date) {
