@@ -324,6 +324,7 @@ class Konfigurasi extends MX_Controller {
 	}
 
 	public function upload_o3_presensi() {
+		header('Content-Type: application/json');
 		$afterInsert = $_POST['o3'];
 		$prodi = $_POST['prodi'];
 	    $status = "";
@@ -374,7 +375,7 @@ class Konfigurasi extends MX_Controller {
 		        	//yang kurang
 		        	if ($_POST['method'] == '1') {
 		        		//delete all value
-		        		$this->m_olahan->delete_o3_raw_nilai($_POST['thn_ajaran'],$_POST['semester']);
+		        		$this->m_olahan->delete_o3_raw_kehadiran($_POST['thn_ajaran'],$_POST['semester']);
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{	
@@ -413,9 +414,14 @@ class Konfigurasi extends MX_Controller {
 	        }
 	        @unlink($_FILES[$file_element_name]);
 	    }
-	    
-		header('Content-Type: application/json');
+
 	    echo json_encode(array('status' => $status, 'msg' => $msg, 'rowCount' => $afterInsert, 'infox' => $data));
+	}
+
+	public function o3_olah() {
+		// $o3_result 		= array();
+
+		// $sql = "SELECT n.nim, n.kode, n.grup, n.nilai"
 	}
 
 	// ajax request

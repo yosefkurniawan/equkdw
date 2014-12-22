@@ -192,6 +192,17 @@ class M_olahan extends CI_Model
 		}						
 	}
 
+	function delete_o3_raw_kehadiran($th_ajaran,$semester) {
+		$this->db->where('semester',$semester);
+		$this->db->where('th_ajaran',$th_ajaran);
+		$delete = $this->db->delete('o3_raw_kehadiran');
+		if ($delete) {
+		 	return false;
+		} else {
+		 	return true;
+		}						
+	}
+
 	//this is saving result from csv text for o1
 	function save_input_presensi_dosen($value,$replace=false)
 	{
@@ -321,6 +332,7 @@ class M_olahan extends CI_Model
 				$this->db->where('kode',$value['kode']);
 				$this->db->where('grup',$value['grup']);
 				$update = $this->db->update('o3_raw_kehadiran',$value);
+
 				if ($update) {
 				 	return false;
 				} else {
