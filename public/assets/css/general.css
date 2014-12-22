@@ -44,6 +44,52 @@
 	width: 100%;
 }
 
+/*========================================*/
+/* General Popup
+/*========================================*/
+
+.popup {
+	display: none;
+}
+
+.popup .background {
+	background: #000;
+	opacity: 0.4;
+    filter: alpha(opacity=40);
+    top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	position: fixed;
+}
+
+.popup .content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	background: #fff;
+	padding: 20px;
+	box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+	z-index: 9999;
+}
+
+/*========================================*/
+/* Popup Loader
+/*========================================*/
+
+#popup-uploading .content {
+	padding: 25px 40px;
+	text-align: center;
+	margin-top: -60px;
+	margin-left: -125px;
+	width: 250px;
+	height: 120px;
+}
+
+#popup-uploading i {
+	font-size: 30px;
+}
+
 /* ---------------  <= 640 px layout -------------------- */
 @media only screen and (max-width: 640px) {
 	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {

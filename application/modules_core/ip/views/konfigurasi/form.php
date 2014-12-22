@@ -135,6 +135,18 @@
 							<a href="#" data-toggle="modal" data-target="#o3_modal" id="o3_modal_show">Lihat Detail</a>
 					<br/>
 					<br/>
+					<div id="o3_nilai_error_message" class="alert alert-danger fade in" style="display:none;">
+						<button data-dismiss="alert" class="close" type="button">×</button>
+						<div class="content"></div>
+				    </div>
+					<div id="o3_presensi_error_message" class="alert alert-danger fade in" style="display:none;">
+						<button data-dismiss="alert" class="close" type="button">×</button>
+						<div class="content"></div>
+				    </div>
+				    <div id="o3_olah_error_message" class="alert alert-danger fade in" style="display:none;">
+						<button data-dismiss="alert" class="close" type="button">×</button>
+						<div class="content"></div>
+				    </div>
 
 					<div class="row">
 						<div class="col-lg-4">
@@ -170,10 +182,6 @@
 								</div>
 							</div>
 							</div>
-						    <div id="o3_nilai_error_message" class="alert alert-danger fade in" style="display:none;">
-								<button data-dismiss="alert" class="close" type="button">×</button>
-								<div class="content"></div>
-						    </div>
 						</div>
 
 					    <!-- upload 2: presensi -->
@@ -196,11 +204,6 @@
 								</div>
 							</div>
 							</div>
-
-							<div id="o3_presensi_error_message" class="alert alert-danger fade in" style="display:none;">
-								<button data-dismiss="alert" class="close" type="button">×</button>
-								<div class="content"></div>
-						    </div>
 						</div>
 					</div>
 				</div>
@@ -362,9 +365,12 @@
 </div>
 
 <!-- uploading popup -->
-<div id="uploading-popup">
-	<div class="bg"></div>
-	<div class="content"></div>
+<div id="popup-uploading" class="popup">
+	<div class="background"></div>
+	<div class="content">
+		<p><i class="icon-spinner icon-spin"></i></p>
+		<p>Uploading...</p>
+	</div>
 </div>
 
 
@@ -713,7 +719,6 @@ jQuery(function ($) {
 		e.preventDefault();
 
 		// validation
-
 		if($('#userfile_o3_nilai').val() == '' || $('#userfile_o3_presensi').val() == ''){
 			alert('Input file CSV nilai dan presensi wajib diisi.');
 			return false;
@@ -723,14 +728,13 @@ jQuery(function ($) {
 		jQuery('#upload_o3').attr('disabled','disabled');
 		
 		// show uploading popup 
-		jQuery('#popup_uploading').show();
+		jQuery('#popup-uploading').show();
 
 		$.ajaxFileUpload({
 			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_nilai", 
 			secureuri		: false,
 			fileElementId	:'userfile_o3_nilai',
 			dataType		:'json',
-			async			: false,
 			data			: {
 				'prodi'			: $('#o3-prodi').val(),
 				'o3'			: $('#o3_raw_count').text(),
@@ -750,10 +754,7 @@ jQuery(function ($) {
 					jQuery('#o3_nilai_error_message').removeClass('alert-success').addClass('alert-danger').show();
 				}
 				jQuery('#o3_nilai_error_message .content').html(data.msg);
-				jQuery('#upload_o3').html('Upload o3');
-				jQuery('#upload_o3').removeAttr('disabled');
 				jQuery('#userfile_o3_nilai').val('');
-				jQuery('#o3_raw_count').text(data.rowCount);
 			},
 			errors: function(data) {
 				console.log(data);
@@ -765,7 +766,6 @@ jQuery(function ($) {
 			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_presensi", 
 			secureuri		: false,
 			fileElementId	:'userfile_o3_presensi',
-			async			: false,
 			dataType		:'json',
 			data			: {
 				'prodi'			: $('#o3-prodi').val(),
@@ -776,8 +776,6 @@ jQuery(function ($) {
 			},			
 			success	: function (data,status)
 			{
-				console.log(data);
-				console.log(data.msg);
 				if(data.status != 'error')
 				{
 					jQuery('#o3_presensi_error_message').removeClass('alert-danger').addClass('alert-success').show();
@@ -786,17 +784,50 @@ jQuery(function ($) {
 					jQuery('#o3_presensi_error_message').removeClass('alert-success').addClass('alert-danger').show();
 				}
 				jQuery('#o3_presensi_error_message .content').html(data.msg);
-
-				jQuery('#upload_o3').removeAttr('disabled');
-				jQuery('#upload_o3').html('Upload o3');
 				jQuery('#userfile_o3_presensi').val('');
-				jQuery('#o3_raw_count').text(data.rowCount);
 			},
 			errors: function(data) {
 				console.log(data);
 			}
 
 		});	
+	
+		jQuery(document).ajaxStop(function() {
+
+			// change loading status as 'saving'
+			jQuery('#popup-uploading .content p:last').text('Saving data...');
+
+			// olah data
+			$.ajax({
+				url 			: CI_ROOT+"ip/konfigurasi/o3_olah",
+				dataType		:'json',
+				data			: {
+					'o3'			: $('#o3_raw_count').text(),
+					'semester'		: $('#semesteran').val(),
+					'thn_ajaran'	: $('#thnajaran').val()
+				},			
+				success	: function (data,status)
+				{
+					if(data.status != 'error')
+					{
+						jQuery('#o3_olah_error_message').removeClass('alert-danger').addClass('alert-success').show();
+					}
+					else {
+						jQuery('#o3_olah_error_message').removeClass('alert-success').addClass('alert-danger').show();
+					}
+					jQuery('#o3_olah_error_message .content').html(data.msg);
+					
+					jQuery('#o3_raw_count').text(data.rowCount);
+					jQuery('#popup-uploading').hide();
+					jQuery('#upload_o3').removeAttr('disabled');
+					jQuery('#upload_o3').html('Upload o3');
+				},
+				errors: function(data) {
+					console.log(data);
+				}
+
+			});
+		});
 
 		return false;
 	});    
