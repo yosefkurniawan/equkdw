@@ -428,19 +428,19 @@ class M_olahan extends CI_Model
 		   	prodi,
 		   	
 		   	SUM( 
-		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir >= 50 ,1,0 ) 
+		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir > 50 ,1,0 ) 
 		   	) AS tot_lulus,
 		   	
 		   	SUM( 
-		   		IF( persen_hadir >= 50 ,1,0 ) 
+		   		IF( persen_hadir > 50 ,1,0 ) 
 		   	) AS tot_mhs,
 			
 			(SUM( 
-		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir >= 50 ,1,0 ) 
+		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir > 50 ,1,0 ) 
 		   	) 
 		   	/ 
 		   	SUM( 
-		   		IF( persen_hadir >= 50 ,1,0 ) 
+		   		IF( persen_hadir > 50 ,1,0 ) 
 		   	) 
 		   	) * 100 AS persen_lulus,
 
