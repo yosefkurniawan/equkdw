@@ -135,6 +135,18 @@
 							<a href="#" data-toggle="modal" data-target="#o3_modal" id="o3_modal_show">Lihat Detail</a>
 					<br/>
 					<br/>
+					<div id="o3_nilai_error_message" class="alert alert-danger fade in" style="display:none;">
+						<button data-dismiss="alert" class="close" type="button">×</button>
+						<div class="content"></div>
+				    </div>
+					<div id="o3_presensi_error_message" class="alert alert-danger fade in" style="display:none;">
+						<button data-dismiss="alert" class="close" type="button">×</button>
+						<div class="content"></div>
+				    </div>
+				    <div id="o3_olah_error_message" class="alert alert-danger fade in" style="display:none;">
+						<button data-dismiss="alert" class="close" type="button">×</button>
+						<div class="content"></div>
+				    </div>
 
 					<div class="row">
 						<div class="col-lg-4">
@@ -170,10 +182,6 @@
 								</div>
 							</div>
 							</div>
-						    <div id="o3_nilai_error_message" class="alert alert-danger fade in" style="display:none;">
-								<button data-dismiss="alert" class="close" type="button">×</button>
-								<div class="content"></div>
-						    </div>
 						</div>
 
 					    <!-- upload 2: presensi -->
@@ -196,11 +204,6 @@
 								</div>
 							</div>
 							</div>
-
-							<div id="o3_presensi_error_message" class="alert alert-danger fade in" style="display:none;">
-								<button data-dismiss="alert" class="close" type="button">×</button>
-								<div class="content"></div>
-						    </div>
 						</div>
 					</div>
 				</div>
@@ -790,6 +793,9 @@ jQuery(function ($) {
 		});	
 	
 		jQuery(document).ajaxStop(function() {
+
+			// change loading status as 'saving'
+			jQuery('#popup-uploading .content p:last').text('Saving data...');
 
 			// olah data
 			$.ajax({

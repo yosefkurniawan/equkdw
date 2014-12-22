@@ -419,9 +419,16 @@ class Konfigurasi extends MX_Controller {
 	}
 
 	public function o3_olah() {
-		// $o3_result 		= array();
-
-		// $sql = "SELECT n.nim, n.kode, n.grup, n.nilai"
+		header('Content-Type: application/json');
+		$result = $this->m_olahan->save_o3($this->input->get('semester'),$this->input->get('thn_ajaran'));
+		if ($result) {
+		    $status = "success";
+			$msg = "Data o3 berhasil disimpan";
+		}else{
+		    $status = "error";
+			$msg = "Data o3 gagal disimpan";
+		}
+	    echo json_encode(array('status' => $status, 'msg' => $msg));
 	}
 
 	// ajax request

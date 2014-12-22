@@ -111,7 +111,6 @@ class M_olahan extends CI_Model
 		}
 	}
 
-
 	function getPresensiDosenRaw($id_paket='')
 	{
 		if ($id_paket != '') {
@@ -170,6 +169,61 @@ class M_olahan extends CI_Model
 		}
 	}
 
+
+	function get_sks_info($kode) {
+		$this->db->where('kode',$kode);
+		$query = $this->db->get('ec_matkul');
+		if ($query->num_rows == 1) {
+			$data =  $query->row_array();
+			return $data['sks'];
+		} else {
+			return 0;
+		}
+	}
+
+	function getPresensiDosenList($th_ajaran,$semester) {
+		$sql = "SELECT k.*, o1.tot_hadir, o1.rencana, m.nama'nama_mtk', o1.prodi
+				FROM (SELECT * FROM kelas_all WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester' AND eva_status = 1
+					GROUP BY kode,grup) k
+				LEFT JOIN ec_matkul m ON k.kode = m.kode
+				LEFT JOIN o1_raw o1 ON k.kode = o1.kode AND k.grup = o1.grup AND k.thn_ajaran = o1.th_ajaran AND k.semester = o1.semester";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return array();
+		}
+	}
+
+	function getPresensiDosenRekap($id_paket='') {
+
+		if ($id_paket != '') {
+			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' 
+						ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+			$query = $this->db->query($sql_latest_paket);
+			$semester 	= "'".$query->row()->semester."'";
+			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		}
+		else{
+			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka 
+							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
+							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}		
+
+		$sql = "SELECT k.*, o1.tot_hadir, o1.rencana, m.nama'nama_mtk', o1.prodi
+				FROM (SELECT * FROM kelas_all WHERE thn_ajaran = $thn_ajaran AND semester = $semester AND eva_status = 1
+					GROUP BY kode,grup) k
+				LEFT JOIN ec_matkul m ON k.kode = m.kode
+				LEFT JOIN o1_raw o1 ON k.kode = o1.kode AND k.grup = o1.grup AND k.thn_ajaran = o1.th_ajaran AND k.semester = o1.semester";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return array();
+		}
+	}
+
 	function delete_o1_raw($th_ajaran,$semester) {
 		$this->db->where('semester',$semester);
 		$this->db->where('th_ajaran',$th_ajaran);
@@ -202,6 +256,8 @@ class M_olahan extends CI_Model
 		 	return true;
 		}						
 	}
+
+	// ------------------- o1 ------------------- //
 
 	//this is saving result from csv text for o1
 	function save_input_presensi_dosen($value,$replace=false)
@@ -280,7 +336,8 @@ class M_olahan extends CI_Model
 			}
 	}
 
-	//these2 below are saving result from csv text for o3
+	// ------------------- o3 ------------------- //
+	
 	/* upload1: nilai */
 	function save_input_o3_nilai($value,$replace=false)
 	{
@@ -358,58 +415,72 @@ class M_olahan extends CI_Model
 		}
 	}
 
-	function get_sks_info($kode) {
-		$this->db->where('kode',$kode);
-		$query = $this->db->get('ec_matkul');
-		if ($query->num_rows == 1) {
-			$data =  $query->row_array();
-			return $data['sks'];
-		} else {
-			return 0;
-		}
-	}
+	// the real o3 save
+	function save_o3($semester, $thn_ajaran) {
+		
+		/* NOTE: 
+		 * - setengah olahan sudah dilakukan di db --> view: o3_olah_nilai_kehadiran
+		 */
+		
+		$sql = "SELECT 
+			kode,
+		   	grup,
+		   	prodi,
+		   	
+		   	SUM( 
+		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir >= 50 ,1,0 ) 
+		   	) AS tot_lulus,
+		   	
+		   	SUM( 
+		   		IF( persen_hadir >= 50 ,1,0 ) 
+		   	) AS tot_mhs,
+			
+			(SUM( 
+		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir >= 50 ,1,0 ) 
+		   	) 
+		   	/ 
+		   	SUM( 
+		   		IF( persen_hadir >= 50 ,1,0 ) 
+		   	) 
+		   	) * 100 AS persen_lulus,
 
-	function getPresensiDosenList($th_ajaran,$semester) {
-		$sql = "SELECT k.*, o1.tot_hadir, o1.rencana, m.nama'nama_mtk', o1.prodi
-				FROM (SELECT * FROM kelas_all WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester' AND eva_status = 1
-					GROUP BY kode,grup) k
-				LEFT JOIN ec_matkul m ON k.kode = m.kode
-				LEFT JOIN o1_raw o1 ON k.kode = o1.kode AND k.grup = o1.grup AND k.thn_ajaran = o1.th_ajaran AND k.semester = o1.semester";
+			semester,
+		   	th_ajaran,
+		   	CONCAT(kode, grup, prodi, semester, th_ajaran) as mykey
+		FROM o3_olah_nilai_kehadiran
+		WHERE semester = '$semester' AND th_ajaran = '$thn_ajaran'
+		GROUP BY kode, grup, prodi, semester, th_ajaran";
+
 		$query = $this->db->query($sql);
-		if ($query->num_rows() > 0) {
-			return $query->result_array();
+		if ($query->num_rows > 1) {
+			
+			$data_o3 =  $query->result_array();
+			
+			foreach ($data_o3 as $key => $value) {
+				$value['tot_lulus1'] = '';
+				$value['tot_mhs1'] = '';
+
+				// check if row is exist
+				$this->db->where('mykey',$value['mykey']);
+				$check = $this->db->get('o3_nilailulus');
+
+				// if exist, do update, else do insert
+				if ($check->num_rows > 0) {
+					$this->db->where('mykey',$value['mykey']);
+					$result = $this->db->update('o3_nilailulus',$value);
+				}else{
+					$result = $this->db->insert('o3_nilailulus',$value);
+				}
+				if (!$result) {
+					break;
+				}
+			}		
+
+			return $result;
+
 		} else {
-			return array();
-		}
-	}
-
-	function getPresensiDosenRekap($id_paket='') {
-
-		if ($id_paket != '') {
-			$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' 
-						ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
-			$query = $this->db->query($sql_latest_paket);
-			$semester 	= "'".$query->row()->semester."'";
-			$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
-		}
-		else{
-			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka 
-							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
-			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
-							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+			return false;
 		}		
-
-		$sql = "SELECT k.*, o1.tot_hadir, o1.rencana, m.nama'nama_mtk', o1.prodi
-				FROM (SELECT * FROM kelas_all WHERE thn_ajaran = $thn_ajaran AND semester = $semester AND eva_status = 1
-					GROUP BY kode,grup) k
-				LEFT JOIN ec_matkul m ON k.kode = m.kode
-				LEFT JOIN o1_raw o1 ON k.kode = o1.kode AND k.grup = o1.grup AND k.thn_ajaran = o1.th_ajaran AND k.semester = o1.semester";
-		$query = $this->db->query($sql);
-		if ($query->num_rows() > 0) {
-			return $query->result_array();
-		} else {
-			return array();
-		}
 	}
 
 }
