@@ -15,10 +15,24 @@
 			<li><a href="<?=base_url()?>loginas" title="Login As" >Login As</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_admin']): ?>
-			<li><a href="<?=base_url()?>" title="Dashboard" >Dashboard</a></li>
-			<li><a href="<?=base_url()?>soal" title="Periode dan Soal" >Periode &amp; Soal</a></li>
-			<li><a href="<?=base_url()?>matakuliah" title="Matakuliah" >Matakuliah</a></li>
-			<li><a href="<?=base_url()?>laporan" title="Laporan" >Laporan</a></li>
+			<li><i class="icon-globe"></i><a href="<?=base_url()?>" title="Dashboard" >Dashboard</a></li>
+			<li>
+				<i class="icon-check"></i><a href="javascript:void(0)" title="Dashboard" >Kuisioner</a>
+				<ul class="toggle">
+					<li><a href="<?=base_url()?>soal" title="Periode dan Soal" >Periode &amp; Soal</a></li>
+					<li><a href="<?=base_url()?>matakuliah" title="Matakuliah" >Matakuliah</a></li>
+					<li><a href="<?=base_url()?>laporan" title="Laporan" >Laporan</a></li>
+				</ul>
+			</li>
+			<li>
+				<i class="icon-dashboard"></i><a href="javascript:void(0)" title="Dashboard" >IP Dosen</a>
+				<ul class="toggle">
+					<li><a href="<?=base_url()?>ip/konfigurasi/pengajar" title="Dosen Pengajar" >Dosen Pengajar</a></li>
+					<li><a href="<?=base_url()?>ip/konfigurasi/" title="O1 dan O3" >Presensi (O1) &amp; Nilai Kelulusan (O3)</a></li>
+					<li><a href="<?=base_url()?>ip/konfigurasi_o4/deadline/" title="Deadline Pengumpulan Nilai" >Deadline Pengumpulan Nilai</a></li>
+					<li><a href="<?=base_url()?>ip/ip/" title="Laporan" >Laporan</a></li>
+				</ul>
+			</li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_kepala_unit'] || ($this->session->userdata['status'] == 'Dosen')) :?>
 			<li><a href="<?=base_url()?>laporan/dosen/hasil_evaluasi/<?= $this->session->userdata('username'); ?>" title="Laporan" >Laporan</a></li>
@@ -28,7 +42,13 @@
 			<li><a href="<?=base_url()?>mahasiswa/dashboard" title="Dashboard" ><i class="icon-">&#xf0ac;</i>Dashboard</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_biro1']): ?>
-			<li><a href="<?=base_url()?>ip/konfigurasi_o4" title="Konfiguras O4" >Input Tanggal Penyerahan Berkas</a></li>
+			<li><i class="icon-globe"></i><a href="<?=base_url()?>" title="Dashboard" >Dashboard</a></li>
+			<li>
+				<i class="icon-dashboard"></i><a href="javascript:void(0)" title="Dashboard" >IP Dosen</a>
+				<ul class="toggle">
+					<li><a href="<?=base_url()?>ip/konfigurasi_o4" title="Penerimaan Nilai Masuk" >Penerimaan Nilai Masuk</a></li>
+				</ul>
+			</li>
 	<?php endif ?>
     </ul>
   </div>
