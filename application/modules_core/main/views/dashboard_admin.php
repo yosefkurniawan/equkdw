@@ -5,7 +5,7 @@
 
 	<!-- equkdw menu -->
 	<ul class="stats clearfix">
-		<h2>Menu eqUKDW</h2>
+		<h2>Menu Kuisioner</h2>
 		<li class="col-md-4">
 		  <div class="blue-bg"><i class="icon-calendar"></i>
 		    <h5>Periode dan Soal</h5>
@@ -33,7 +33,7 @@
 		</li>
 		<li class="col-md-4">
 		  <div class="green-bg"><i class="icon-cogs"></i>
-		    <h5>Konfigurasi</h5>
+		    <h5>Input O1 &amp; O3</h5>
 		    <a href="<?= base_url() ?>ip/konfigurasi">View Details <i class="icon-"></i></a></div>
 		</li>
 		<li class="col-md-4">

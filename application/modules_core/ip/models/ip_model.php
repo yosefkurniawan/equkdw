@@ -377,4 +377,37 @@ class ip_model extends CI_Model
 		}		
 	} // end of function get_dosen_list
 
+	function convertToOldProdi($new_id) {
+		$sql = "SELECT * FROM prodi WHERE prodi = $new_id";
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0 ) 
+		{	
+			return $id = $query->row()->id_unit;
+		} 
+		else 
+		{
+			return NULL;
+		}		
+	}
+
+	function getLastPeriode() {
+		$sql_semester 	= "(SELECT MAX(semester) AS semester FROM kelas_all 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM kelas_all))";
+		$sql_thn_ajaran = "(SELECT MAX(thn_ajaran) AS thn_ajaran FROM kelas_all 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM kelas_all))";
+
+		$query_semester  = $this->db->query($sql_semester);
+		$query_thnAjaran = $this->db->query($sql_thn_ajaran);
+
+		if ($query_semester->num_rows() > 0 && $query_thnAjaran->num_rows() > 0) {	
+			$result['semester']   = $query_semester->row()->semester;
+			$result['thn_ajaran'] = $query_thnAjaran->row()->thn_ajaran;
+			return $result;
+		} else {
+			return array();
+		}	
+
+	}
+
 } // end of class

@@ -24,7 +24,7 @@
 			<div class="panel colored col-md-7 form-box">
 				<div class="panel-heading green-bg">
 					<h4 class="panel-title">
-						<?php echo $title ?>
+						<?php echo $title ?> Periode <?php echo $semester.' - '.$thn_ajaran ?>
 					</h4>
 				</div>
 				<div class="panel-body">
@@ -55,7 +55,7 @@
 			 i18n:{
 			  de:{
 			   months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
-			   dayOfWeek:['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+			   dayOfWeek:['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
 			  }
 			 },
 			 timepicker:false,

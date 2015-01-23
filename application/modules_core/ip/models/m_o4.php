@@ -2,14 +2,16 @@
 
 class M_o4 extends CI_Model{
 
-	function getListMtk() {
+	function getListMtk($prodi = NULL) {
 		$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka 
 						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
 						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 
+		if ($prodi) { $where_prodi = " AND prodi = $prodi"; }
+
 		$sql = "SELECT * FROM kelas_all 
-				WHERE semester = $semester AND thn_ajaran = $thn_ajaran 
+				WHERE semester = $semester AND thn_ajaran = $thn_ajaran $where_prodi
 				GROUP BY kode";
 
 		$query = $this->db->query($sql);

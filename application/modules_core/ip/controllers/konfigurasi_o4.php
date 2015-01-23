@@ -10,16 +10,21 @@ class Konfigurasi_o4 extends MX_Controller {
 			redirect('main/page404');	
 		}
 		
+		$this->load->model('ip_model');
 		$this->load->model('m_o4');
 	}
 
-	function index(){
+	function index() {
+		$this->grid();
+	}
+
+	// simple form
+	function simple(){
 		
 		if ($_POST) {
 			$result = $this->m_o4->save();
 
 			$data['alert']	= $result['alert'];
-			// print_r($data['alert']);die;
 		}
 
 		/* Data */
@@ -27,9 +32,68 @@ class Konfigurasi_o4 extends MX_Controller {
 		$data['deadline']			= $this->m_o4->getDeadline(true);
 
 		/* Render Layout */
-		$data['title'] 				= "Input Tanggal Penyerahan Berkas";
+		$data['title'] 				= "Input Nilai Masuk";
 		$data['content'] 			= 'ip/konfigurasi/form_o4';
 		$this->load->view('main/render_layout',$data);
+	}
+
+	// grid view form
+	function grid() {
+
+		$prodi = $this->uri->segment(4);
+
+		if ($prodi) {
+
+			if ($prodi == 'others') {
+				$id_unit = '0000';
+			}else{
+				$id_unit 	= $this->ip_model->convertToOldProdi($prodi);
+			}
+
+			if ($id_unit) {
+				$data['list_matkul']		= $this->m_o4->getListMtk($id_unit);
+				$data['selected_prodi']		= $prodi;
+			}else{
+				redirect($this->uri->segment(1).'/'.$this->uri->segment(2).'/'.$this->uri->segment(3));
+			}
+		}else{
+			$data['list_matkul']		= array();
+			$data['selected_prodi']		= '';
+		}
+		
+		$data['list_prodi']			= $this->ip_model->getProdiList();
+		// remove unit from list_prodi
+		foreach ($data['list_prodi'] as $key => $prodi) {
+			if ($prodi['prodi'] == '99') {
+				unset($data['list_prodi'][$key]);
+			}
+			if ($prodi['prodi'] == 'PA') {
+				unset($data['list_prodi'][$key]);
+			}
+		}
+
+		$data['deadline']			= $this->m_o4->getDeadline(true);
+		$data['page_url']			= base_url().'ip/konfigurasi_o4/grid/';
+
+		$lastPeroide 				= $this->ip_model->getLastPeriode();
+		$data['semester']			= $lastPeroide['semester'];
+		$data['thn_ajaran']			= $lastPeroide['thn_ajaran'];
+
+		/* Render Layout */
+		$data['title'] 				= "Input Nilai Masuk";
+		$data['content'] 			= 'ip/konfigurasi/form_o4_grid';
+		$this->load->view('main/render_layout',$data);
+	}
+
+	function gridSave() {
+		if ($_POST) {
+			$result = $this->m_o4->saveGrid();
+
+			$data['alert']	= $result['alert'];
+			// print_r($data['alert']);die;
+		}else{
+			redirect('ip/konfigurasi_o4/grid');
+		}
 	}
 
 	function deadline() {
@@ -51,13 +115,14 @@ class Konfigurasi_o4 extends MX_Controller {
 		/* Data */
 		$data['deadline']			= $this->m_o4->getDeadline();
 
+		$lastPeroide 				= $this->ip_model->getLastPeriode();
+		$data['semester']			= $lastPeroide['semester'];
+		$data['thn_ajaran']			= $lastPeroide['thn_ajaran'];
+
 		/* Render Layout */
-		$data['title'] 				= "Konfigurasi Deadline O4";
+		$data['title'] 				= "Deadline Pengumpulan Nilai";
 		$data['content'] 			= 'ip/konfigurasi/form_deadline_o4';
 
-		// echo "<pre>";
-		// print_r($data);
-		// die;
 		$this->load->view('main/render_layout',$data);	
 	}
 
