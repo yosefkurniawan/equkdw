@@ -2,20 +2,31 @@
 
 class M_o4 extends CI_Model{
 
-	function getListMtk($prodi = NULL) {
-		$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka 
-						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
-		$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
-						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+	function getListMtk($prodi = NULL, $semester = NULL, $thn_ajaran = NULL) {
 
-		if ($prodi) { $where_prodi = " AND prodi = $prodi"; }
+		if ($semester) {
+			$where_semester = " AND k.semester = '$semester'";			
+		}else{
+			$where_semester = " AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka 
+							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
 
-		$sql = "SELECT * FROM kelas_all 
-				WHERE semester = $semester AND thn_ajaran = $thn_ajaran $where_prodi
-				GROUP BY kode";
+		if ($thn_ajaran) {
+			$where_thn_ajaran = " AND k.thn_ajaran = '$thn_ajaran'";			
+		}else{
+			$where_thn_ajaran = " AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
+								WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+
+		if ($prodi) { $where_prodi = " AND k.prodi = $prodi"; }
+
+		$sql = "SELECT k.*, o4.tgl_masuk, o4.flag_tepat FROM kelas_all k
+				LEFT JOIN o4_nilaimasuk_copy o4 ON o4.mykey = k.id_kelasb
+				WHERE 1 = 1 $where_semester $where_thn_ajaran $where_prodi
+				GROUP BY k.kode";
 
 		$query = $this->db->query($sql);
-		// echo "<pre>"; print_r($query->result_array()); die;
+		// echo "<pre>"; print_r($sql); die;
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
 		} else {
@@ -55,7 +66,7 @@ class M_o4 extends CI_Model{
 			$tgl_masuk 	= $tgl_masuk[2].'-'.$tgl_masuk[1].'-'.$tgl_masuk[0];
 			
 			$flag_tepat = $_POST['flag_tepat'];
-			$mykey 		= $mtk->id_kelasb.$mtk->kode;
+			$mykey 		= $mtk->id_kelasb;
 
 			
 			// check is it exist already?
@@ -94,6 +105,110 @@ class M_o4 extends CI_Model{
 		}else {
 			$data['alert']['status'] 	= 'danger';
 			$data['alert']['msg'] 		= 'Tidak ada data yang disimpan.';
+		
+			return $data;
+		}
+	}
+
+	function saveGrid() {
+		if ($_POST) {
+			// echo "<pre>"; print_r($_POST);die;
+
+			$countSaved 	= 0;
+			$countUpdated 	= 0;
+
+			foreach ($_POST['flag_tepat'] as $key => $flag_tepat) {
+				
+				$semester 	= $_POST['semester'];
+				$thn_ajaran = $_POST['thn_ajaran'];
+				$kode 		= $_POST['kode'][$key];
+				$grup 		= $_POST['grup'][$key];
+				
+				if ($_POST['tgl_masuk'][$key]) {
+					$tgl_masuk_raw = $_POST['tgl_masuk'][$key];
+					$tgl_masuk_exp = explode('/', $tgl_masuk_raw);
+					$tgl_masuk     = $tgl_masuk_exp[2].'-'.$tgl_masuk_exp[1].'-'.$tgl_masuk_exp[0];
+				}else{
+					$tgl_masuk = $_POST['tgl_masuk'][$key];
+				}
+				
+				$mykey 		= $_POST['id_kelasb'][$key];
+
+				// prodi id mapping
+				if ($_POST['prodi'] != 'others') {
+					$prodi = $_POST['prodi'];
+				}else{
+					$alt_id = substr($kode, 0, 2);
+					
+					if (strtoupper($alt_id) == 'PB') {
+						$prodi = 'PA';
+					}else{
+						$prodi = '99';
+					}
+				}
+
+
+				// check does it exist already?
+				$sql_cek = "SELECT * FROM o4_nilaimasuk_copy WHERE mykey = '$mykey'";
+				$query_cek = $this->db->query($sql_cek);
+				$result_row = $query_cek->row();
+
+				if (!$query_cek->num_rows() > 0) {
+					
+					// save data with flag 'T' or 'F' only
+					if ($flag_tepat == 'T' || $flag_tepat == 'F') {
+						
+						$sql = "INSERT INTO o4_nilaimasuk_copy (kode,grup,prodi,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
+								('$kode','$grup','$prodi','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
+
+						$result = $this->db->query($sql);
+
+						if ($result) {
+							$countSaved++;
+						}
+					}
+				}else{
+					
+					// make sure no new and old data is different
+					$old_tgl_masuk = (empty($result_row->tgl_masuk))? '' : $result_row->tgl_masuk;
+					$old_flag_tepat = $result_row->flag_tepat;
+
+					if ($old_tgl_masuk != $tgl_masuk && $old_flag_tepat != $flag_tepat) {
+						$sql = "UPDATE o4_nilaimasuk_copy SET tgl_masuk = '$tgl_masuk', flag_tepat = '$flag_tepat'
+								WHERE mykey = '$mykey'";
+
+						$result = $this->db->query($sql);
+
+						if ($result) {
+							$countUpdated++;
+							echo $old_flag_tepat;
+							echo $old_tgl_masuk;
+							echo $sql;die;
+						}
+					}
+				}
+			}
+
+			$data = array();
+			if ($countSaved > 0 || $countUpdated > 0 ) {
+
+				if ($countSaved > 0) {
+					$data['alert']['status'][] 	= 'success';
+					$data['alert']['msg'][] = $countSaved.' data berhasil disimpan.';
+				}
+				if ($countUpdated > 0) {
+					$data['alert']['status'][] 	= 'success';
+					$data['alert']['msg'][] = $countUpdated.' data berhasil diperbarui.';
+				}
+			}else{
+				$data['alert']['status'][] 	= 'warning';
+				$data['alert']['msg'][] 	= 'Tidak ada data yang disimpan.';
+			}
+
+			return $data;
+		}else{
+			$data['alert']['status'][] 	= 'warning';
+			$data['alert']['msg'][] 	= 'Tidak ada data yang disimpan.';
 		
 			return $data;
 		}
