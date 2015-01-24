@@ -11,7 +11,7 @@
 	<form role="form" id="form-deadline-o4" class="form-horizontal" method="POST">
 		<?php if (isset($alert)): ?>
 			<div class="row">
-				<div class="col-md-7">
+				<div class="col-md-12">
 					<div class="alert alert-<?php echo $alert['status'] ?> fade in">
 						<button data-dismiss="alert" class="close" type="button">×</button>
 						<p><?php echo $alert['msg'] ?></p>
@@ -21,7 +21,7 @@
 		<?php endif ?>
 
 		<div class="row">
-			<div class="panel colored col-md-7 form-box">
+			<div class="panel colored col-md-12 form-box">
 				<div class="panel-heading green-bg">
 					<h4 class="panel-title">
 						<?php echo $title ?> Periode <?php echo $semester.' - '.$thn_ajaran ?>
@@ -29,8 +29,8 @@
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<div class="col-lg-3"><label>Deadline</label></div>
-						<div class="col-lg-9">
+						<div class="col-lg-2"><label>Deadline</label></div>
+						<div class="col-lg-3">
 							<input type="text" class="form-control" name="deadline" id="deadline" value="<?php echo $deadline ?>" placeholder="Masukkan tanggal..." />
 						</div>
 					</div>
