@@ -1,3 +1,12 @@
+<?php
+/*
+ * Author: Pinaple
+ * Description:
+ * - ...
+ * - prodi dropdown update. now it's using prodi list from ref_unit
+ */
+?>
+
 <div id="ip_form_o4">
 
 	<div class="page-header">
@@ -41,7 +50,7 @@
 						<div class="form-group">
 							<div class="col-lg-2"><label>Semester</label></div>
 							<div class="col-lg-4">
-								<select id="select-prodi" name="semester" class="full-width">
+								<select id="select-semester" name="semester" class="full-width">
 							        <option value="GASAL" <?php echo (strtoupper($semester) == 'GASAL')? 'selected="selected"' : ''; ?>>GASAL</option>
 							        <option value="GENAP" <?php echo (strtoupper($semester) == 'GENAP')? 'selected="selected"' : ''; ?>>GENAP</option>
 							    </select>
@@ -55,7 +64,7 @@
 								$thn_ajaran_a	= $thn_ajaran_exp[0];
 								$thn_ajaran_b	= $thn_ajaran_exp[1];
 								?>
-								<select id="select-prodi" name="thn_ajaran" class="full-width">
+								<select id="select-thn_ajaran" name="thn_ajaran" class="full-width">
 							        <?php for ($i=1; $i >= 0; $i--): ?>
 							        	<option value="<?php echo ((int)$thn_ajaran_a - $i) .'-'. ((int)$thn_ajaran_b - $i) ?>" 
 								        	<?php echo (((int)$thn_ajaran_a - $i) .'/'. ((int)$thn_ajaran_b - $i) == $thn_ajaran)? 'selected="selected"': '' ?> >
@@ -71,21 +80,27 @@
 								<select id="select-prodi" name="prodi" class="full-width">
 							        <option value="">-- Pilih Prodi --</option>
 							        <?php foreach ($list_prodi as $prodi): ?>
-							        	<?php $selected = ($selected_prodi == $prodi['prodi'])? 'selected="selected"' : ''; ?>
-							        	<option value="<?php echo $prodi['prodi'] ?>" <?php echo $selected ?>><?php echo $prodi['nama_prodi']; ?></option>
+							        	<?php $selected = ($selected_prodi == $prodi['id_unit'])? 'selected="selected"' : ''; ?>
+							        	<option value="<?php echo $prodi['id_unit'] ?>" <?php echo $selected ?>><?php echo $prodi['unit']; ?></option>
 							        <?php endforeach ?>
-							        <option value="others" <?php echo ($selected_prodi == 'others')? 'selected="selected"' : ''; ?>>Lainnya</option>
+							        <option value="0000" <?php echo ($selected_prodi == '0000')? 'selected="selected"' : ''; ?>>Lainnya...</option>
 							    </select>
 							</div>
 						</div>
-	                    <button type="submit"class="btn btn-med blue-bg">Reset</button> 
+	                    <button type="submit"class="btn btn-med blue-bg">Reset Filter</button> 
 					</form>
                     <?php //echo "<pre>";print_r($list_prodi); ?>
 					
-					<br/>
-					<br/>
-					
-					<p>Total: <strong><?php echo count($list_matkul) ?></strong> baris</p>
+					<hr/>
+
+					<?php
+						if ($deadline) {
+							$formated_deadline = date('d/m/Y',$deadline);
+						}else{
+							$formated_deadline = 'belum ada';
+						}
+					?>
+					<p>Total: <span class="text-info"><?php echo ($deadline)? count($list_matkul): '0'; ?></span> baris &nbsp;|&nbsp; Deadline: <span class="text-info"><?php echo $formated_deadline ?></span></p>
 
 					<form role="form" id="form-o4-grid" method="POST">
 	                    <table border="0" cellpadding="0" cellspacing="0" class="table table-striped table-bordered" id="tabelInputO4">
@@ -102,9 +117,8 @@
 	                        </thead>
 
 	                        <tbody>
-	                        <?php if (count($list_matkul) > 0): ?>
+	                        <?php if ($deadline && count($list_matkul) > 0): ?>
 	                        	<?php foreach ($list_matkul as $matkul): ?>
-                                	<input type="hidden" name="prodi" value="<?php echo $selected_prodi ?>">
                                 	<input type="hidden" name="semester" value="<?php echo $semester ?>">
                                 	<input type="hidden" name="thn_ajaran" value="<?php echo $thn_ajaran ?>">
                                 	<input type="hidden" name="id_kelasb[]" value="<?php echo $matkul['id_kelasb'] ?>">
@@ -151,7 +165,7 @@
 	                        </tbody>
 	                    </table>
                     
-	                    <?php if (count($list_matkul) > 0): ?>
+	                    <?php if ($deadline && count($list_matkul) > 0): ?>
 	                    	<button type="submit"class="btn btn-med blue-bg">Simpan Semua</button> 
 	                    <?php endif; ?>
 	                </form>
@@ -180,14 +194,7 @@
     	// check wheter deadline is exist.
     	var deadline = '<?php echo ($deadline)? $deadline: 0 ?>';
     	if (!deadline || deadline=='' || deadline=='0') {
-    		alert('Deadline belum disetting.');
-    		window.location.href = "<?php echo base_url() ?>";
-    	}else{
-    		// set status. compare deadline with today for default
-	    	var now = new Date();
-			var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-			var timestampToday = today/1000;
-	    	cekFlagTepat(deadline,timestampToday);
+    		alert('Belum ada deadline.');
     	}
 
     	jQuery('#form-o4-grid').submit(function(e) {
@@ -256,8 +263,8 @@
             data: data,
             success: function (data) {
 				jQuery('#form-o4-grid .row-'+kode).find('span.loading').hide();
-				jQuery('#form-o4-grid .row-'+kode).find('span.success').show().delay(2000).fadeOut(2000);
-				jQuery('#form-o4-grid .row-'+kode).find('a.save').delay(5000).fadeIn();
+				jQuery('#form-o4-grid .row-'+kode).find('span.success').show().delay(1000).fadeOut(2000);
+				jQuery('#form-o4-grid .row-'+kode).find('a.save').delay(3000).fadeIn();
             },
             error: function(data) {
             	alert(data.msg);

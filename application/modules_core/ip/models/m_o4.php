@@ -1,4 +1,10 @@
 <?php 
+/*
+ * Author: Pinaple
+ * Description:
+ * - ...
+ * - add function getListProdi() for getting list prodi from ref_unit
+ */
 
 class M_o4 extends CI_Model{
 
@@ -21,7 +27,7 @@ class M_o4 extends CI_Model{
 		if ($prodi) { $where_prodi = " AND k.prodi = $prodi"; }
 
 		$sql = "SELECT k.*, o4.tgl_masuk, o4.flag_tepat FROM kelas_all k
-				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = k.id_kelasb
+				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = CONCAT(k.id_kelasb,k.kode)
 				WHERE 1 = 1 $where_semester $where_thn_ajaran $where_prodi
 				GROUP BY k.kode";
 
@@ -47,70 +53,10 @@ class M_o4 extends CI_Model{
 		}
 	}
 
-	function save_2015_01_24() {
-		if ($_POST) {
-			
-			$id_kelasb = $_POST['id_kelasb'];
-
-			$mtk = $this->getMtk($id_kelasb);
-			
-
-			$kode 		= $mtk->kode;
-			$grup 		= $mtk->grup;
-			$prodi 		= $mtk->prodi;
-			$semester 	= $mtk->semester;
-			$thn_ajaran = $mtk->thn_ajaran;
-			
-			$tgl_masuk 	= $_POST['tgl_masuk'];
-			$tgl_masuk 	= explode('/', $tgl_masuk);
-			$tgl_masuk 	= $tgl_masuk[2].'-'.$tgl_masuk[1].'-'.$tgl_masuk[0];
-			
-			$flag_tepat = $_POST['flag_tepat'];
-			$mykey 		= $mtk->id_kelasb;
-
-			
-			// check is it exist already?
-			$sql_cek = "SELECT * FROM o4_nilaimasuk WHERE mykey = '$mykey'";
-			$query_cek = $this->db->query($sql_cek);
-
-			if (!$query_cek->num_rows() > 0) {
-				
-				$sql = "INSERT INTO o4_nilaimasuk (kode,grup,prodi,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
-						('$kode','$grup','$prodi','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
-
-				$result = $this->db->query($sql);
-
-				$data = array();
-				if ($result) {
-					$data['alert']['status'] 	= 'success';
-					$data['alert']['msg'] 		= 'Data berhasil disimpan.';
-				}else{
-					$data['alert']['status'] 	= 'danger';
-					$data['alert']['msg'] 		= 'Unknown error.';
-				}
-
-				return $data;
-			}else{
-				
-				$data['alert']['status'] 	= 'danger';
-				$data['alert']['msg'] 		= 'Matakuliah tersebut sudah pernah diinputkan.';
-
-				return $data;
-			}
-
-		}else {
-			$data['alert']['status'] 	= 'danger';
-			$data['alert']['msg'] 		= 'Tidak ada data yang disimpan.';
-		
-			return $data;
-		}
-	}
-
 	function save_ajax() {
 		if ($_POST) {
 			$kode 		= $_POST['kode'];
 			$grup 		= $_POST['grup'];
-			$prodi 		= $_POST['prodi'];
 			$semester 	= $_POST['semester'];
 			$thn_ajaran = $_POST['thn_ajaran'];
 			
@@ -122,7 +68,7 @@ class M_o4 extends CI_Model{
 			}
 			
 			$flag_tepat = $_POST['flag_tepat'];
-			$mykey 		= $_POST['id_kelasb'];
+			$mykey 		= $_POST['id_kelasb'].$_POST['kode'];
 
 			// check is it exist already?
 			$sql_cek = "SELECT * FROM o4_nilaimasuk WHERE mykey = '$mykey'";
@@ -130,8 +76,8 @@ class M_o4 extends CI_Model{
 
 			if (!$query_cek->num_rows() > 0) {
 				
-				$sql = "INSERT INTO o4_nilaimasuk (kode,grup,prodi,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
-						('$kode','$grup','$prodi','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
+				$sql = "INSERT INTO o4_nilaimasuk (kode,grup,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
+						('$kode','$grup','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
 
 				$result = $this->db->query($sql);
 			}else{
@@ -163,7 +109,6 @@ class M_o4 extends CI_Model{
 
 	function saveGrid() {
 		if ($_POST) {
-			// echo "<pre>"; print_r($_POST);die;
 
 			$countSaved 	= 0;
 			$countUpdated 	= 0;
@@ -184,21 +129,7 @@ class M_o4 extends CI_Model{
 					$tgl_masuk = '';
 				}
 				
-				$mykey 		= $_POST['id_kelasb'][$key];
-
-				// prodi id mapping
-				if ($_POST['prodi'] != 'others') {
-					$prodi = $_POST['prodi'];
-				}else{
-					$alt_id = substr($kode, 0, 2);
-					
-					if (strtoupper($alt_id) == 'PB') {
-						$prodi = 'PA';
-					}else{
-						$prodi = '99';
-					}
-				}
-
+				$mykey 		= $_POST['id_kelasb'][$key].$kode;
 
 				// check does it exist already?
 				$sql_cek = "SELECT * FROM o4_nilaimasuk WHERE mykey = '$mykey'";
@@ -210,8 +141,8 @@ class M_o4 extends CI_Model{
 					// save data with flag 'T' or 'F' only
 					if ($flag_tepat == 'T' || $flag_tepat == 'F') {
 						
-						$sql = "INSERT INTO o4_nilaimasuk (kode,grup,prodi,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
-								('$kode','$grup','$prodi','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
+						$sql = "INSERT INTO o4_nilaimasuk (kode,grup,tgl_masuk,flag_tepat,semester,th_ajaran,mykey) VALUES
+								('$kode','$grup','$tgl_masuk','$flag_tepat','$semester','$thn_ajaran','$mykey')";
 
 						$result = $this->db->query($sql);
 
@@ -306,18 +237,28 @@ class M_o4 extends CI_Model{
 		}				
 	}
 
-	function getDeadline($timestamp = false) {
+	function getDeadline($semester = NULL, $thn_ajaran = NULL, $timestamp = false) {
 		/* NOTE::
 		 * 2 modes:
 		 * - $timestamp = false --> get deadline as a date
 		 * - $timestamp = false --> get deadline as a timestamp
 		 */
 
-		$semester 	= "(SELECT MAX(semester) FROM eva_paket 
-						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
-		$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM eva_paket)";
+		if ($semester) {
+			$where_semester = " AND k.semester = '$semester'";			
+		}else{
+			$where_semester = " AND k.semester = (SELECT MAX(semester) FROM ec_kelas_buka 
+							WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
 
-		$sql = "SELECT deadline_o4 FROM eva_paket WHERE semester = $semester AND thn_ajaran = $thn_ajaran";
+		if ($thn_ajaran) {
+			$where_thn_ajaran = " AND k.thn_ajaran = '$thn_ajaran'";			
+		}else{
+			$where_thn_ajaran = " AND k.thn_ajaran = (SELECT MAX(thn_ajaran) FROM ec_kelas_buka 
+								WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		}
+
+		$sql = "SELECT deadline_o4 FROM eva_paket k WHERE 1=1 $where_semester $where_thn_ajaran";
 		$deadline = $this->db->query($sql);
 
 		if ($deadline->num_rows > 0) {			
@@ -343,5 +284,20 @@ class M_o4 extends CI_Model{
 		} else {
 		 	return false;
 		}	
+	}
+
+	function getListProdi() {
+		$sql = "SELECT * FROM ref_unit WHERE UPPER(kategori) = 'PRODI'";
+
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0 ) 
+		{
+			return $query->result_array();
+		}
+		else 
+		{
+			return array();
+		}				
 	}
 }

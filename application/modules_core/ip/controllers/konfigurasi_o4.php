@@ -1,5 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/*
+ * Author: Pinaple
+ * Description:
+ * - ...
+ * - funtion grid(), now get list prodi from m_o4
+ */
+
 class Konfigurasi_o4 extends MX_Controller {
 
 	public function __construct() {
@@ -64,38 +71,17 @@ class Konfigurasi_o4 extends MX_Controller {
 
 		// get list mtk
 		if ($selected_prodi) {
-
-			// kode mtk mapping
-			if ($selected_prodi == 'others') {
-				$id_unit = '0000';
-			}else{
-				$id_unit 	= $this->ip_model->convertToOldProdi($selected_prodi);
-			}
-
-			if ($id_unit) {
-				$data['list_matkul']		= $this->m_o4->getListMtk($id_unit,$selected_semester,$selected_thn_ajaran);
-				$data['selected_prodi']		= $selected_prodi;
-			}else{
-				redirect($this->uri->segment(1).'/'.$this->uri->segment(2).'/'.$this->uri->segment(3));
-			}
+			$data['list_matkul']		= $this->m_o4->getListMtk($selected_prodi,$selected_semester,$selected_thn_ajaran);
+			$data['selected_prodi']		= $selected_prodi;
 		}else{
 			$data['list_matkul']		= array();
 			$data['selected_prodi']		= '';
 		}
 		
 		// get list prodi
-		$data['list_prodi']			= $this->ip_model->getProdiList();
-		foreach ($data['list_prodi'] as $key => $prodi) {
-			// remove units from list_prodi
-			if ($prodi['prodi'] == '99') {
-				unset($data['list_prodi'][$key]);
-			}
-			if ($prodi['prodi'] == 'PA') {
-				unset($data['list_prodi'][$key]);
-			}
-		}
+		$data['list_prodi']			= $this->m_o4->getListProdi();
 
-		$data['deadline']			= $this->m_o4->getDeadline(true);
+		$data['deadline']			= $this->m_o4->getDeadline($selected_semester, $selected_thn_ajaran, true);
 		$data['page_url']			= base_url().'ip/konfigurasi_o4/grid/';
 
 
