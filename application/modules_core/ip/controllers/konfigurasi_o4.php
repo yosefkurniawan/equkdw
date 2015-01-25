@@ -12,6 +12,7 @@ class Konfigurasi_o4 extends MX_Controller {
 		
 		$this->load->model('ip_model');
 		$this->load->model('m_o4');
+		$this->load->model('soal/m_soal');
 	}
 
 	function index() {
@@ -39,7 +40,7 @@ class Konfigurasi_o4 extends MX_Controller {
 
 	// grid view form
 	function grid() {
-		
+
 		$lastPeroide 				= $this->ip_model->getLastPeriode();
 
 		// get the filter params
@@ -55,10 +56,10 @@ class Konfigurasi_o4 extends MX_Controller {
 
 		// save data if POST
 		if ($_POST) {
-			$result = $this->m_o4->saveGrid();
+			$result 	= $this->m_o4->saveGrid();
 			$this->session->set_flashdata( 'alert', $result['alert'] );
 
-			redirect($this->uri->segment(1).'/'.$this->uri->segment(2).'/'.$this->uri->segment(3).'/'.$selected_prodi);
+			redirect($_SERVER['HTTP_REFERER']);
 		}
 
 		// get list mtk
@@ -104,10 +105,23 @@ class Konfigurasi_o4 extends MX_Controller {
 		$this->load->view('main/render_layout',$data);
 	}
 
-	function gridSave() {
+	function save() {
 		
+		if ($_POST) {
+			$result = $this->m_o4->save_ajax();
 
-		$this->index();
+			if ($result) {
+				$data['status'] = TRUE;
+				$data['msg'] = 'Data berhasil disimpan';
+			}else{
+				$data['status'] = FALSE;
+				$data['msg'] = 'Data gagal disimpan';
+			}
+			
+			echo json_encode($data);
+		}else{
+			$this->index();
+		}
 	}
 
 	function deadline() {
@@ -129,9 +143,9 @@ class Konfigurasi_o4 extends MX_Controller {
 		/* Data */
 		$data['deadline']			= $this->m_o4->getDeadline();
 
-		$lastPeroide 				= $this->ip_model->getLastPeriode();
-		$data['semester']			= $lastPeroide['semester'];
-		$data['thn_ajaran']			= $lastPeroide['thn_ajaran'];
+		$lastPeroide 				= $this->m_soal->getLatestPeriodePaket();
+		$data['semester']			= $lastPeroide->semester;
+		$data['thn_ajaran']			= $lastPeroide->thn_ajaran;
 
 		/* Render Layout */
 		$data['title'] 				= "Deadline Pengumpulan Nilai";
