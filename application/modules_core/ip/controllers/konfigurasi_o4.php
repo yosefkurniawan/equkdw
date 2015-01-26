@@ -48,7 +48,7 @@ class Konfigurasi_o4 extends MX_Controller {
 	// grid view form
 	function grid() {
 
-		$lastPeroide 				= $this->ip_model->getLastPeriode();
+		$lastPeroide 				= $this->m_o4->getLastPeriodeDeadline();
 
 		// get the filter params
 		$selected_semester	 	= ($this->input->get('semester'))? $this->input->get('semester') : $lastPeroide['semester'];
