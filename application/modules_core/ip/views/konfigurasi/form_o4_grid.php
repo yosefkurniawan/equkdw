@@ -100,7 +100,7 @@
 							$formated_deadline = 'belum ada';
 						}
 					?>
-					<p>Total: <span class="text-info"><?php echo ($deadline)? count($list_matkul): '0'; ?></span> baris &nbsp;|&nbsp; Deadline: <span class="text-info"><?php echo $formated_deadline ?></span></p>
+					<p>Total: <span class="text-info"><?php echo ($deadline)? count($list_matkul): '0'; ?></span> baris &nbsp;|&nbsp; Deadline: <span class="<?php echo ($formated_deadline == 'belum ada')? 'text-danger' : 'text-info'; ?>"><?php echo $formated_deadline ?></span></p>
 
 					<form role="form" id="form-o4-grid" method="POST">
 	                    <table border="0" cellpadding="0" cellspacing="0" class="table table-striped table-bordered" id="tabelInputO4">
@@ -110,6 +110,7 @@
 	                                <th style="text-align:center;vertical-align:middle"><strong>Nama Mtk</strong></th>
 	                                <th style="text-align:center;vertical-align:middle"><strong>Grup</strong></th>
 	                                <th style="text-align:center;vertical-align:middle"><strong>NIK</strong></th>
+	                                <th style="text-align:center;vertical-align:middle"><strong>Dosen</strong></th>
 	                                <th style="text-align:center;vertical-align:middle"><strong>Status</strong></th>
 	                                <th style="text-align:center;vertical-align:middle"><strong>Tanggal Masuk</strong></th>
 	                                <th></strong></th>
@@ -129,6 +130,7 @@
                                 		<td><?php echo $matkul['nama_mtk'] ?></td>
                                 		<td><?php echo $matkul['grup'] ?></td>
                                 		<td><?php echo $matkul['nik'] ?></td>
+                                		<td><?php echo $matkul['nama_dsn'] ?></td>
                                 		<td>
                                 			<?php $flag_tepat = ($matkul['flag_tepat'])? $matkul['flag_tepat'] : 'N'; ?>
                                 			<?php if ($flag_tepat == 'N'): ?>
@@ -159,7 +161,7 @@
 	                        	<?php endforeach ?>
 	                        <?php else : ?>
 	                            <tr>
-	                                <td colspan="7" style="text-align:center">Tidak ada kelas...</td>
+	                                <td colspan="8" style="text-align:center">Tidak ada kelas...</td>
 	                            </tr>
 	                        <?php endif; ?>
 	                        </tbody>
@@ -191,11 +193,11 @@
 			 format:'d/m/Y'
 	   	});
 
-    	// check wheter deadline is exist.
-    	var deadline = '<?php echo ($deadline)? $deadline: 0 ?>';
-    	if (!deadline || deadline=='' || deadline=='0') {
-    		alert('Belum ada deadline.');
-    	}
+    	// // check wheter deadline is exist.
+    	// var deadline = '<?php echo ($deadline)? $deadline: 0 ?>';
+    	// if (!deadline || deadline=='' || deadline=='0') {
+    	// 	alert('Belum ada deadline.');
+    	// }
 
     	jQuery('#form-o4-grid').submit(function(e) {
     		saveAll(e);

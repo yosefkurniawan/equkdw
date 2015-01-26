@@ -29,7 +29,7 @@ class M_o4 extends CI_Model{
 		$sql = "SELECT k.*, o4.tgl_masuk, o4.flag_tepat FROM kelas_all k
 				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = CONCAT(k.id_kelasb,k.kode)
 				WHERE 1 = 1 $where_semester $where_thn_ajaran $where_prodi
-				GROUP BY k.kode";
+				ORDER BY k.kode, k.grup";
 
 		$query = $this->db->query($sql);
 		// echo "<pre>"; print_r($sql); die;
@@ -299,5 +299,24 @@ class M_o4 extends CI_Model{
 		{
 			return array();
 		}				
+	}
+
+	function getLastPeriodeDeadline() {
+		$sql_semester 	= "(SELECT MAX(semester) AS semester FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+		$sql_thn_ajaran = "(SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+
+		$query_semester  = $this->db->query($sql_semester);
+		$query_thnAjaran = $this->db->query($sql_thn_ajaran);
+
+		if ($query_semester->num_rows() > 0 && $query_thnAjaran->num_rows() > 0) {	
+			$result['semester']   = $query_semester->row()->semester;
+			$result['thn_ajaran'] = $query_thnAjaran->row()->thn_ajaran;
+			return $result;
+		} else {
+			return array();
+		}	
+
 	}
 }
