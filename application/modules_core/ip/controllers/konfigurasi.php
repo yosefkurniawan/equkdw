@@ -152,18 +152,18 @@ class Konfigurasi extends MX_Controller {
 						            $sks = $this->m_olahan->get_sks_info($value['kode']);
 						        	if ($_POST['methodTerisi'] == '1') {
 							            if ($sks <= 3) {						            	
-						        			$value['rencana'] = $_POST['rencana'];
+						        			$value['rencana'] = $_POST['rencana_pertemuan'];
 							            } else {
-						        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+						        			$value['rencana'] = $_POST['rencana_pertemuan'] * 2;						            	
 							            }
 						        	} else {
 						        		if ($value['rencana'] != null) {
-						        			$value['rencana'] = $value['rencana'];
+						        			$value['rencana'] = $value['rencana_pertemuan'];
 						        		} else {
 								            if ($sks <= 3) {						            	
-							        			$value['rencana'] = $_POST['rencana'];
+							        			$value['rencana'] = $_POST['rencana_pertemuan'];
 								            } else {
-							        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+							        			$value['rencana'] = $_POST['rencana_pertemuan'] * 2;						            	
 								            }						        			
 						        		}
 						        	}
@@ -182,18 +182,18 @@ class Konfigurasi extends MX_Controller {
 						            $sks = $this->m_olahan->get_sks_info($value['kode']);
 						        	if ($_POST['methodTerisi'] == '1') {
 							            if ($sks <= 3) {						            	
-						        			$value['rencana'] = $_POST['rencana'];
+						        			$value['rencana'] = $_POST['rencana_pertemuan'];
 							            } else {
-						        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+						        			$value['rencana'] = $_POST['rencana_pertemuan'] * 2;						            	
 							            }
 						        	} else {
 						        		if ($value['rencana'] != null) {
-						        			$value['rencana'] = $value['rencana'];
+						        			$value['rencana'] = $value['rencana_pertemuan'];
 						        		} else {
 								            if ($sks <= 3) {						            	
-							        			$value['rencana'] = $_POST['rencana'];
+							        			$value['rencana'] = $_POST['rencana_pertemuan'];
 								            } else {
-							        			$value['rencana'] = $_POST['rencana'] * 2;						            	
+							        			$value['rencana'] = $_POST['rencana_pertemuan'] * 2;						            	
 								            }						        			
 						        		}
 						        	}				        			

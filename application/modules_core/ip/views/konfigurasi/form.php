@@ -50,8 +50,19 @@
 					<div class="row">
 					<div class="col-lg-4">
 						<div class="form-group">
-						    <input type="radio" name="methodsTerisi" value="1" checked> Isi Semua Dengan &nbsp;&nbsp;
-						    <input type="radio" name="methodsTerisi" value="0" > Jika tidak ada isi dengan
+							<b>Penggunaan Template</b><br>
+						    <input type="radio" name="methodsTerisi" value="1" checked> Template Excel dari Foxpro
+						    	<i class="tooltip-demo"
+	                            data-original-title="Semua rencana pertemuan pada data yang diupload akan diisi dengan nilai dibawah
+	                            ...... template ini diambil dari tabel foxpro"
+	                            data-placement="right" data-toggle="tooltip" href="#"
+	                            title=""><i class="icon-question-sign"></i></i> 	
+	                        <br>					    
+						    <input type="radio" name="methodsTerisi" value="0" > Template Excel dari Sistem
+						    	<i class="tooltip-demo"
+	                            data-original-title="Semua rencana pertemuan pada data yang diupload sesuai dengan yang diisikan pada kolom rencana, apabila ada kolom rencana yang dikosongkan maka akan diisi dengan nilai dibawah"
+	                            data-placement="right" data-toggle="tooltip" href="#"
+	                            title=""><i class="icon-question-sign"></i></i> 						    
 						</div>
 						<br/>
 						<label>Rencana Pertemuan</label>
@@ -63,11 +74,22 @@
 					<div class="row">
 					<div class="col-lg-6">
 						<div class="form-group">
-						    <input type="radio" name="methods" value="1" checked> Delete all data then Insert &nbsp;&nbsp;
-						    <input type="radio" name="methods" value="0" > Replace If Existing and Insert The Unique Record<br><br>
+							<b>Metode pengisian data</b><br>
+						    <input type="radio" name="methods" value="1" checked> Delete all + Insert 
+						    	<i class="tooltip-demo"
+	                            data-original-title="Semua data pada tahun ajaran yang dipilih akan dihapus, kemudian diisi dengan data yang diunggah"
+	                            data-placement="right" data-toggle="tooltip" href="#"
+	                            title=""><i class="icon-question-sign"></i></i> 
+						     &nbsp;&nbsp; <br>
+						    <input type="radio" name="methods" value="0" > Replace Existing + Insert 
+						    	<i class="tooltip-demo"
+	                            data-original-title="Data pertemuan pada matakuliah yang sudah ada akan diperbarui, sedangkan data baru akan ditambahkan"
+	                            data-placement="right" data-toggle="tooltip" href="#"
+	                            title=""><i class="icon-question-sign"></i></i> 
 						</div>
 					</div>
 					</div>
+					<br><br>
 					<div class="row">
 					<div class="col-lg-6">
 						<div class="form-group">
