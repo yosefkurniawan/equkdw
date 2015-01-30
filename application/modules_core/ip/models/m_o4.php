@@ -287,7 +287,12 @@ class M_o4 extends CI_Model{
 	}
 
 	function getListProdi() {
-		$sql = "SELECT * FROM ref_unit WHERE UPPER(kategori) = 'PRODI'";
+		$sql = "SELECT * FROM o9_prodi
+			ORDER BY CASE prodi
+			         WHEN 'LL' THEN 99
+			         END
+
+		";
 
 		$query = $this->db->query($sql);
 

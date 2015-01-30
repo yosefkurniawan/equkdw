@@ -81,9 +81,8 @@
 							        <option value="">-- Pilih Prodi --</option>
 							        <?php foreach ($list_prodi as $prodi): ?>
 							        	<?php $selected = ($selected_prodi == $prodi['id_unit'])? 'selected="selected"' : ''; ?>
-							        	<option value="<?php echo $prodi['id_unit'] ?>" <?php echo $selected ?>><?php echo $prodi['unit']; ?></option>
+							        	<option value="<?php echo $prodi['id_unit'] ?>" <?php echo $selected ?>><?php echo $prodi['nama_prodi']; ?></option>
 							        <?php endforeach ?>
-							        <option value="0000" <?php echo ($selected_prodi == '0000')? 'selected="selected"' : ''; ?>>Lainnya...</option>
 							    </select>
 							</div>
 						</div>
