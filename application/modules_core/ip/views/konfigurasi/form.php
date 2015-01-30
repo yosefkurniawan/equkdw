@@ -109,38 +109,6 @@
 		</div>
 		</form>
 
-		<!-- O2 - Kuisioner -->
-		<!--
-		<div class="panel section kuisioner">
-			<div class="panel colored col-md-10 form-box">
-				<div class="panel-heading gray-bg">
-					<h4 class="panel-title">
-						O2 - Kuisioner
-					</h4>
-				</div>
-				<div class="panel-body">
-					<form class="form-horizontal" id="form-kuisioner">
-						<div class="form-group jml-kelas">
-							<div class="col-lg-2"><label>Jumlah kelas</label></div>
-							<div class="col-lg-6">
-								#
-							</div>
-						</div>
-						<div class="form-group jml-kelas-inputan">
-							<div class="col-lg-2"><label>Jumlah kelas inputan</label></div>
-							<div class="col-lg-6">
-								-
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div id="" class="col-md-2 status-box">
-				<i class="icon-check"></i>
-			</div>
-		</div>
-		-->
-
 		<!-- O3 - Nilai Lulus -->
 		<form method="post" action="" id="upload_file_o3">		
 		<div class="panel section kelulusan">
@@ -174,6 +142,7 @@
 						<div class="col-lg-4">
 							<label>Prodi</label>
 						    <select id="o3-prodi" name="o3-prodi" class="full-width">
+						        <option value="">-- Pilih Prodi --</option>
 						        <?php foreach ($prodi_list as $key => $prodi): ?>
 						        	<option value="<?php echo $prodi['prodi'] ?>"><?php echo $prodi['nama_prodi']; ?></option>
 						        <?php endforeach ?>
@@ -188,9 +157,15 @@
 						<div class="col-lg-6">
 							<h4><strong>Upload CSV Nilai</strong></h4>
 							<hr/>
+							<div id="o3_nilai_error_message" class="alert alert-warning">
+								<strong>Catatan:</strong>
+								<p>Format CSV: nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran</p>
+								<p>Format nama file: nilai_[prodi]. Misal: nilai_SI.</p>
+							</div>
 							<div class="row">
 							<div class="col-lg-10">
 								<div class="form-group">
+									<label>Mode:</label>
 								    <p><input type="radio" name="methods_o3_nilai" value="1" checked> Delete all data then Insert <br/></p>
 								    <p><input type="radio" name="methods_o3_nilai" value="0" > Replace If Existing and Insert The Unique Record<br><br></p>
 								</div>
@@ -199,7 +174,7 @@
 							<div class="row">
 							<div class="col-lg-10">
 								<div class="form-group">
-									<label>Upload File CSV Nilai</label>
+									<label>Pilih File:</label>
 									<input id="userfile_o3_nilai" type="file" name="userfile_o3_nilai">
 								</div>
 							</div>
@@ -210,9 +185,15 @@
 						<div class="col-lg-6">
 							<h4><strong>Upload CSV Presensi</strong></h4>
 							<hr/>
+							<div id="o3_nilai_error_message" class="alert alert-warning">
+								<strong>Catatan:</strong>
+								<p>Format CSV: nim, kode, grup, absen, semester, dan thn ajaran.</p>
+								<p>Format nama file: presensi_[prodi]. Misal: presensi_SI.</p>
+							</div>
 							<div class="row">
 							<div class="col-lg-10">
 								<div class="form-group">
+									<label>Mode:</label>
 								    <p><input type="radio" name="methods_o3_presensi" value="1" checked> Delete all data then Insert <br/></p>
 								    <p><input type="radio" name="methods_o3_presensi" value="0" > Replace If Existing and Insert The Unique Record<br><br></p>
 								</div>
@@ -221,7 +202,7 @@
 							<div class="row">
 							<div class="col-lg-10">
 								<div class="form-group">
-									<label>Upload File CSV Presensi</label>
+									<label>Pilih File:</label>
 									<input id="userfile_o3_presensi" type="file" name="userfile_o3_presensi">
 								</div>
 							</div>
@@ -235,121 +216,7 @@
 			</div>
 		</div>
 		</form>
-		<!-- <div class="panel section kelulusan">
-			<div class="panel colored col-md-12 form-box">
-				<div class="panel-heading blue-bg">
-					<h4 class="panel-title">
-						O3 - Nilai Kelulusan
-					</h4>
-				</div>
-				<div class="panel-body">
-					<form class="form-horizontal" id="form-kelulusan">
-						<div class="form-group jml-kelas">
-							<div class="col-lg-2"><label>Jumlah kelas</label></div>
-							<div class="col-lg-6">
-								#
-							</div>
-						</div>
-						<div class="form-group jml-kelas-inputan">
-							<div class="col-lg-2"><label>Jumlah kelas inputan</label></div>
-							<div class="col-lg-6">
-								-
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-lg-2"><label for="file">Upload file</label></div>
-							<div class="col-lg-6">
-								<input type="file" name="file" class="col-md-12 styled">
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="panel-footer clearfix">
-					<div class="form-group">
-						<a href="#" class="btn btn-med gray-bg">Simpan</a> 
-					</div>
-				</div>
-			</div>
-			<!--
-			<div id="" class="col-md-2 status-box">
-				<i class="icon-check"></i>
-			</div>
-			-->
-		<!-- </div> --> 
-		<!-- O4 - Tepat Waktu -->
-		<!--
-		<div class="panel section deadline">
-			<div class="panel colored col-md-10 form-box">
-				<div class="panel-heading gray-bg">
-					<h4 class="panel-title">
-						O4 - Ketepatan Waktu Penyerahan Berkas
-					</h4>
-				</div>
-				<div class="panel-body">
-					<form class="form-horizontal" id="form-deadline">
-						<div class="form-group jml-kelas">
-							<div class="col-lg-2"><label>Jumlah kelas</label></div>
-							<div class="col-lg-6">
-								#
-							</div>
-						</div>
-						<div class="form-group jml-kelas-inputan">
-							<div class="col-lg-2"><label>Jumlah kelas inputan</label></div>
-							<div class="col-lg-6">
-								-
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-lg-2"><label for="periode_semester">Input</label></div>
-							<div class="col-lg-6">
-                            	<a href="#o4-input-modal" class="btn btn-med gray-bg" data-toggle="modal"><i class="icon-table"></i></a>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div id="" class="col-md-2 status-box">
-				<i class="icon-check"></i>
-			</div>
-		</div>
-
-		<!-- o4 input modal -->		
-		<div class="modal fade" id="o4-input-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                <h4 class="modal-title"> <strong> <span id="namaMatakuliah"> Input Tanggal Penyerahan Berkas </span> </strong>
-		            </div>
-		            <div class="modal-body">
-		                <div class="panel colored">
-		                    <div class="panel-heading blue-bg">
-		                        <h3 class="panel-title">Daftar Kelas</h3>
-		                    </div>
-		                    <div class="panel-body">
-		                        <table class="table table-hover" id="tableDaftarKelas">
-		                            <thead>
-		                                <tr>
-		                                    <td width="5%">Kode</td>
-		                                    <td width="50%">Matakuliah</td>
-		                                    <td width="10%">Grup</td>
-		                                    <td width="20%">Dosen</td>
-		                                    <td width="15%">Status</td>
-		                                </tr>
-		                            </thead>
-		                            <tbody>
-		                            </tbody>
-		                        </table>
-		                    </div>                  
-		                </div>
-		            </div>
-		            <div class="modal-footer">
-		                <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
-		                <button type="button" class="btn blue-bg">Simpan</button>
-		            </div>
-		        </div><!-- /.modal-content -->
-		    </div><!-- /.modal-dialog -->
-		</div><!-- /.modal --><!-- Modal -->     
+		
 	</div>
 </div>
 
@@ -373,6 +240,35 @@
                     <td width="5%" style="font-size:12px;text-align:center">Rencana</td>
                     <td width="5%" style="font-size:12px;text-align:center">Terisi</td>
                     <td width="5%" style="font-size:12px;text-align:center"></td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FOR o3 MANAGEMENT -->
+<div class="modal fade bs-example-modal-lg" id="o3_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Daftar Prodi yang Telah Diinputkan </h4>
+        <small><?php echo $periode['thn_ajaran']; echo $periode['semester']; ?> </small>
+      </div>
+      <div class="modal-body">
+        <table class="table" id="table_o3_insertedProdi">
+            <thead>
+                <tr>
+                    <td width="10%" style="font-size:12px;text-align:center" >Kode</td>
+                    <td width="10%" style="font-size:12px;text-align:center">Nama Prodi</td>
+                    <td width="10%" style="font-size:12px;text-align:center">Total Baris</td>
                 </tr>
             </thead>
             <tbody>
@@ -732,7 +628,7 @@ jQuery(function ($) {
 	jQuery('#upload_file_o3').submit(function(e) {
 
 		/* Description: 
-		 * - There will be 2 uploadin proccess.
+		 * - There will be 2 uploading proccess.
 		 * 		1. upload nilai
 		 * 		2. upload presensi
 		 * - The 2nd proccess will be done once the 1st one is complete.
@@ -740,11 +636,27 @@ jQuery(function ($) {
 		
 		e.preventDefault();
 
-		// validation
+		// start: validation
+
+		if($('select#o3-prodi').val() == "") {
+			alert('Silakan pilih prodi terlebih dahulu.');
+			return false;
+		}
 		if($('#userfile_o3_nilai').val() == '' || $('#userfile_o3_presensi').val() == ''){
 			alert('Input file CSV nilai dan presensi wajib diisi.');
 			return false;
+		}else {
+			var fileNameNilai 		= $('#userfile_o3_nilai').val().replace(/^.*[\\\/]/, '').split('.')[0];
+			var fileNamePresensi 	= $('#userfile_o3_presensi').val().replace(/^.*[\\\/]/, '').split('.')[0];
+			var prodiNilai			= fileNameNilai.substr(6,fileNameNilai.length);
+			var prodiPresensi		= fileNamePresensi.substr(9,fileNamePresensi.length);
+
+			if (prodiNilai != prodiPresensi) {
+				alert('Format penamaan file tidak tepat. Pastikan pula file yang diinputkan untuk data prodi yang sama.');
+				return false;
+			};
 		}
+		// end: validation
 
 		jQuery('#upload_o3').html('<i class="icon-spinner icon-spin"></i> Uploading ... ');
 		jQuery('#upload_o3').attr('disabled','disabled');
@@ -752,6 +664,7 @@ jQuery(function ($) {
 		// show uploading popup 
 		jQuery('#popup-uploading').show();
 
+		// upload nilai
 		$.ajaxFileUpload({
 			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_nilai", 
 			secureuri		: false,
@@ -784,6 +697,7 @@ jQuery(function ($) {
 
 		});			
 
+		// upload presensi
 		$.ajaxFileUpload({
 			url 			: CI_ROOT+"ip/konfigurasi/upload_o3_presensi", 
 			secureuri		: false,
@@ -815,6 +729,11 @@ jQuery(function ($) {
 		});	
 	
 		jQuery(document).ajaxStop(function() {
+
+			// scroll to result msg
+			$('html,body').animate({
+	        	scrollTop: $("#upload_file_o3").offset().top},
+	        'slow');
 
 			// change loading status as 'saving'
 			jQuery('#popup-uploading .content p:last').text('Saving data...');
@@ -852,7 +771,35 @@ jQuery(function ($) {
 		});
 
 		return false;
-	});    
+	}); 
+
+	jQuery('#o3_modal_show').on('click',function(){
+		$.ajax({
+			url:CI_ROOT+'ip/konfigurasi/get_o3_insertedProdi',
+			type:"POST",
+			data: {
+				'semester'		: $('#semesteran').val(),
+				'thn_ajaran'	: $('#thnajaran').val()
+			},
+			success : function(data) {
+				jQuery('#table_o3_insertedProdi tbody tr').remove();
+
+				data = JSON.parse(data);
+				jQuery.each(data, function() {
+				  	jQuery('#table_o3_insertedProdi > tbody:first').append(
+					'<tr>'+
+						'<td style="font-size:12px;text-align:center">'+this.prodi+'</td>'+
+						'<td style="font-size:12px;text-align:center">'+this.nama_prodi+'</td>'+
+						'<td style="font-size:12px;text-align:center">'+this.total_row+'</td>'+
+					'</tr>'
+					);	
+				});
+			},
+			errors : function(data) {
+				console.log(data);
+			}
+		});
+	}); //end of jQuery('#o3_modal_show').on('click',function()
 
 });
 

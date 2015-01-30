@@ -18,7 +18,7 @@ class ip_model extends CI_Model
 	} // end of function get_thn_ajaran_periode()
 
 	function get_dosen_info($nik) {
-		$sql = "SELECT * FROM dosen_all, prodi WHERE dosen_all.nik_baru = '$nik' AND dosen_all.prodi = prodi.prodi";
+		$sql = "SELECT * FROM dosen_all, o9_prodi WHERE dosen_all.nik_baru = '$nik' AND dosen_all.prodi = prodi.prodi";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -32,7 +32,7 @@ class ip_model extends CI_Model
 	}
 
 	function get_info_prodi($prodi) {
-		$sql = "SELECT * FROM prodi WHERE prodi.prodi = '$prodi' LIMIT 1";
+		$sql = "SELECT * FROM o9_prodi WHERE prodi.prodi = '$prodi' LIMIT 1";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->row()); die;
 		if ($query->num_rows() == 1 ) 
@@ -46,7 +46,7 @@ class ip_model extends CI_Model
 	}
 
 	function getProdiList(){
-		$sql = "SELECT * FROM prodi";
+		$sql = "SELECT * FROM o9_prodi";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->row()); die;
 		if ($query->num_rows() > 1 ) 
@@ -75,7 +75,7 @@ class ip_model extends CI_Model
 				FROM (SELECT * FROM kelas_all
 				WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran') kls
 				LEFT JOIN dosen_all dsn ON kls.nik_baru = dsn.nik_baru
-				LEFT JOIN prodi p ON dsn.prodi = p.prodi
+				LEFT JOIN o9_prodi p ON dsn.prodi = p.prodi
 				LEFT JOIN o1_presensi o1 ON kls.mykey = o1.mykey
 				LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey
 				LEFT JOIN o3_nilailulus o3 ON kls.mykey = o3.mykey
@@ -305,7 +305,7 @@ class ip_model extends CI_Model
 		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,COUNT(kelas.mykey) as jumlah_matkul_ajar, p.prodi, p.nama_prodi, kelas.semester, kelas.thn_ajaran
 					FROM
 					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
-					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, prodi p
+					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o9_prodi p
 					WHERE p.prodi = kelas.prodi_dosen AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' 
 					GROUP BY nama_dsn
 					ORDER BY p.prodi ASC";
@@ -378,7 +378,7 @@ class ip_model extends CI_Model
 	} // end of function get_dosen_list
 
 	function convertToOldProdi($new_id) {
-		$sql = "SELECT * FROM prodi WHERE prodi = $new_id";
+		$sql = "SELECT * FROM o9_prodi WHERE prodi = $new_id";
 		$query = $this->db->query($sql);
 
 		if ($query->num_rows() > 0 ) 
