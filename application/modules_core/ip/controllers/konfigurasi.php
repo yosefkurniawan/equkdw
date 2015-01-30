@@ -247,11 +247,13 @@ class Konfigurasi extends MX_Controller {
 	            $upload_data = $this->upload->data();
 	            $file =  $upload_data['full_path'];
 
-		        $this->load->library('csvreader');
-		        $result =   $this->csvreader->parse_file($file);
+		        $_file 	= file_get_contents($file);
+				$result = array_map("str_getcsv", preg_split('/\r*\n+|\r+/', $_file));
+				$result = $this->reformatArrayOfCsv_o3_nilai($result);
 		        $data['csvData'] =  $result;
 		        $validasi = true;
 		        $row = 0;
+
 		        foreach ($result as $key => $value) {
 		            if ( !isset($value['nim']) OR !isset($value['kode']) OR !isset($value['sks']) OR
 		            	!isset($value['harga']) OR !isset($value['grup']) OR 
@@ -259,7 +261,7 @@ class Konfigurasi extends MX_Controller {
 			            {
 			            	$validasi = false;
 			                $status = "error";
-			                $msg = "Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran.)";
+			                $msg = "Data nilai gagal disimpan. Format CSV Salah (Harus terdiri dari : nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran.)";
 			            	break;
 			            }
 
@@ -288,7 +290,7 @@ class Konfigurasi extends MX_Controller {
 				        	}				  
 				        }
 		                $status = "success";
-		                $msg = "Data Nilai berhasil disimpan (".$simpan." dari ".$row." data)";
+		                $msg = "Data nilai berhasil disimpan (".$simpan." dari ".$row." data)";
 				        $afterInsert = $simpan;
 		        	} elseif ($_POST['method'] == '0') {
 			        	//metode : delete all then insert / existing replace + insert
@@ -351,11 +353,13 @@ class Konfigurasi extends MX_Controller {
 	            $upload_data = $this->upload->data();
 	            $file =  $upload_data['full_path'];
 
-		        $this->load->library('csvreader');
-		        $result =   $this->csvreader->parse_file($file);
+		        $_file 	= file_get_contents($file);
+				$result = array_map("str_getcsv", preg_split('/\r*\n+|\r+/', $_file));
+				$result = $this->reformatArrayOfCsv_o3_presensi($result);
 		        $data['csvData'] =  $result;
 		        $validasi = true;
 		        $row = 0;
+
 		        foreach ($result as $key => $value) {
 		            if ( !isset($value['nim']) OR !isset($value['kode']) OR
 		            	!isset($value['grup']) OR !isset($value['absen']) OR
@@ -363,7 +367,7 @@ class Konfigurasi extends MX_Controller {
 			            {
 			            	$validasi = false;
 			                $status = "error";
-			                $msg = "Format CSV Salah (Harus terdiri dari : nim, kode, grup, absen, semester, dan thn ajaran.)";
+			                $msg = "Data presensi gagal disimpan. Format CSV Salah (Harus terdiri dari : nim, kode, grup, absen, semester, dan thn ajaran.)";
 			            	break;
 			            }
 
@@ -387,7 +391,7 @@ class Konfigurasi extends MX_Controller {
 				        	}				  
 				        }
 		                $status = "success";
-		                $msg = "Data Nilai berhasil disimpan (".$simpan." dari ".$row." data)";
+		                $msg = "Data presensi berhasil disimpan (".$simpan." dari ".$row." data)";
 				        $afterInsert = $simpan;
 		        	} elseif ($_POST['method'] == '0') {
 			        	//metode : delete all then insert / existing replace + insert
@@ -429,6 +433,95 @@ class Konfigurasi extends MX_Controller {
 			$msg = "Data o3 gagal disimpan";
 		}
 	    echo json_encode(array('status' => $status, 'msg' => $msg));
+	}
+
+	private function reformatArrayOfCsv_o3_presensi($result) {
+		$new_result = array();
+
+		foreach ($result[0] as $key => $value) {
+	       	if (strtolower($value) == "nim") {
+	       		$keyNim = $key;
+	       	}
+	       	if (strtolower($value) == "kode") {
+	       		$keyKode = $key;
+	       	}
+	       	if (strtolower($value) == "grup") {
+	       		$keyGrup = $key;
+	       	}
+	       	if (strtolower($value) == "absen") {
+	       		$keyAbsen = $key;
+	       	}
+	       	if (strtolower($value) == "semester") {
+	       		$keySemester = $key;
+	       	}
+	       	if (strtolower($value) == "th_ajaran") {
+	       		$keyThAjaran = $key;
+	       	}
+       	}
+
+		foreach ($result as $key => $value) {
+			if ($key > 0) { // key = 0 is the csv header
+				$new_result[$key-1]['nim'] = $value[$keyNim];
+				$new_result[$key-1]['kode'] = $value[$keyKode];
+				$new_result[$key-1]['grup'] = $value[$keyGrup];
+				$new_result[$key-1]['absen'] = $value[$keyAbsen];
+				$new_result[$key-1]['semester'] = $value[$keySemester];
+				$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+			}
+		}
+
+		return $new_result;
+	}
+
+	private function reformatArrayOfCsv_o3_nilai($result) {
+		$new_result = array();
+
+		foreach ($result[0] as $key => $value) {
+	       	if (strtolower($value) == "nim") {
+	       		$keyNim = $key;
+	       	}
+	       	if (strtolower($value) == "kode") {
+	       		$keyKode = $key;
+	       	}
+	       	if (strtolower($value) == "sks") {
+	       		$keySks = $key;
+	       	}
+	       	if (strtolower($value) == "harga") {
+	       		$keyHarga = $key;
+	       	}
+	       	if (strtolower($value) == "grup") {
+	       		$keyGrup = $key;
+	       	}
+	       	if (strtolower($value) == "nilai") {
+	       		$keyNilai = $key;
+	       	}
+	       	if (strtolower($value) == "semester") {
+	       		$keySemester = $key;
+	       	}
+	       	if (strtolower($value) == "th_ajaran") {
+	       		$keyThAjaran = $key;
+	       	}
+       	}
+
+		foreach ($result as $key => $value) {
+			if ($key > 0) { // key = 0 is the csv header
+				$new_result[$key-1]['nim'] = $value[$keyNim];
+				$new_result[$key-1]['kode'] = $value[$keyKode];
+				$new_result[$key-1]['sks'] = $value[$keySks];
+				$new_result[$key-1]['harga'] = $value[$keyHarga];
+				$new_result[$key-1]['grup'] = $value[$keyGrup];
+				$new_result[$key-1]['nilai'] = $value[$keyNilai];
+				$new_result[$key-1]['semester'] = $value[$keySemester];
+				$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+			}
+		}
+
+		return $new_result;
+	}
+
+	function get_o3_insertedProdi() {
+		$insertedProdiList = $this->m_olahan->get_o3_insertedProdi();
+	    echo json_encode($insertedProdiList);	    	
 	}
 
 	// ajax request

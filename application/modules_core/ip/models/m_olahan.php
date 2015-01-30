@@ -483,5 +483,18 @@ class M_olahan extends CI_Model
 		}		
 	}
 
+	function get_o3_insertedProdi() {
+		$sql = "SELECT o.prodi,p.nama_prodi,COUNT(o.prodi) as total_row FROM o3_nilailulus o 
+				JOIN o9_prodi p ON p.prodi = o.prodi GROUP BY o.prodi, p.nama_prodi";		
+		
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return array();
+		}
+	}
+
 }
 
