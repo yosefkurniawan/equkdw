@@ -582,7 +582,10 @@ class Konfigurasi extends MX_Controller {
 	}
 
 	function get_o3_insertedProdi() {
-		$insertedProdiList = $this->m_olahan->get_o3_insertedProdi();
+		$th_ajaran = $this->m_o4->getLastPeriodeDeadline();
+		$thn_ajaran 	= $th_ajaran['thn_ajaran'];
+		$semester		= $th_ajaran['semester'];
+		$insertedProdiList = $this->m_olahan->get_o3_insertedProdi($semester,$thn_ajaran);
 	    echo json_encode($insertedProdiList);	    	
 	}
 
