@@ -407,7 +407,6 @@ class ip_model extends CI_Model
 		} else {
 			return array();
 		}	
-
 	}
 
 } // end of class
