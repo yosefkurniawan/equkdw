@@ -16,7 +16,7 @@ class Konfigurasi extends MX_Controller {
 		$this->load->model('ip_model');
 		$this->load->model('m_dosen');
 		$this->load->model('m_olahan');
-
+		$this->load->model('m_o4');
 	}
 
 	function index(){
@@ -28,8 +28,9 @@ class Konfigurasi extends MX_Controller {
 		// set periode
 		if ($id_paket == '') {
 			$data['id_paket'] 	= '';
-			$periode['thn_ajaran'] 		= $this->m_general->getLastPeriode()->thn_ajaran;
-			$periode['semester']		= $this->m_general->getLastPeriode()->semester;
+			$th_ajaran = $this->m_o4->getLastPeriodeDeadline();
+			$periode['thn_ajaran'] 		= $th_ajaran['thn_ajaran'];
+			$periode['semester']		= $th_ajaran['semester'];
 			$data['kelas_all_check']	= $this->m_olahan->getKelasAll('',false);		
 			$data['kelas_all']			= $this->m_olahan->getKelasAll();		
 			$data['o5_data']			= $this->m_olahan->getEClassData();		
@@ -64,8 +65,9 @@ class Konfigurasi extends MX_Controller {
 		// set periode
 		if ($id_paket == '') {
 			$data['id_paket'] 	= '';
-			$periode['thn_ajaran'] 		= $this->m_general->getLastPeriode()->thn_ajaran;
-			$periode['semester']		= $this->m_general->getLastPeriode()->semester;
+			$th_ajaran = $this->m_o4->getLastPeriodeDeadline();
+			$periode['thn_ajaran'] 		= $th_ajaran['thn_ajaran'];
+			$periode['semester']		= $th_ajaran['semester'];
 			$data['dosen_list']			= $this->m_dosen->getAllKelasProblem();		
 		}
 		else {
@@ -109,8 +111,11 @@ class Konfigurasi extends MX_Controller {
 	            $upload_data = $this->upload->data();
 	            $file =  $upload_data['full_path'];
 
-		        $this->load->library('csvreader');
-		        $result =   $this->csvreader->parse_file($file);
+		        $_file 	= file_get_contents($file);
+				$result = array_map("str_getcsv", preg_split('/\r*\n+|\r+/', $_file));
+				$result = $this->reformatArrayOfCsv_o1_presensi($result);
+		        // $this->load->library('csvreader');
+		        // $result =   $this->csvreader->parse_file($file);
 		        $data['csvData'] =  $result;
 		        $validasi = true;
 		        $row = 0;
@@ -435,6 +440,47 @@ class Konfigurasi extends MX_Controller {
 	    echo json_encode(array('status' => $status, 'msg' => $msg));
 	}
 
+	private function reformatArrayOfCsv_o1_presensi($result) {
+
+		$new_result = array();
+
+		foreach ($result[0] as $key => $value) {
+	       	if (strtolower($value) == "kode") {
+	       		$keyKode = $key;
+	       	}
+	       	if (strtolower($value) == "grup") {
+	       		$keyGrup = $key;
+	       	}
+	       	if (strtolower($value) == "tot_hadir") {
+	       		$keyTotHadir = $key;
+	       	}
+	       	if (strtolower($value) == "semester") {
+	       		$keySemester = $key;
+	       	}
+	       	if (strtolower($value) == "th_ajaran") {
+	       		$keyThAjaran = $key;
+	       	}
+	       	if (strtolower($value) == "prodi") {
+	       		$keyProdi = $key;
+	       	}
+       	}
+
+		foreach ($result as $key => $value) {
+			if ($key > 0) { // key = 0 is the csv header
+				if (!empty($value[$keyKode]) AND $value[$keyKode] != '') {
+					$new_result[$key-1]['kode'] = $value[$keyKode];
+					$new_result[$key-1]['grup'] = $value[$keyGrup];
+					$new_result[$key-1]['tot_hadir'] = $value[$keyTotHadir];
+					$new_result[$key-1]['semester'] = $value[$keySemester];
+					$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+					$new_result[$key-1]['prodi'] = $value[$keyProdi];					
+				}				
+			}
+		}
+
+		return $new_result;
+	}
+
 	private function reformatArrayOfCsv_o3_presensi($result) {
 		$new_result = array();
 
@@ -461,12 +507,19 @@ class Konfigurasi extends MX_Controller {
 
 		foreach ($result as $key => $value) {
 			if ($key > 0) { // key = 0 is the csv header
-				$new_result[$key-1]['nim'] = $value[$keyNim];
-				$new_result[$key-1]['kode'] = $value[$keyKode];
-				$new_result[$key-1]['grup'] = $value[$keyGrup];
-				$new_result[$key-1]['absen'] = $value[$keyAbsen];
-				$new_result[$key-1]['semester'] = $value[$keySemester];
-				$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+				if ((!empty($value[$keyNim]) AND $value[$keyNim] != '') &&
+					(!empty($value[$keyKode]) AND $value[$keyKode] != '') &&
+					(!empty($value[$keyGrup]) AND $value[$keyGrup] != '') &&
+					(!empty($value[$keyAbsen]) AND $value[$keyAbsen] != '') &&
+					(!empty($value[$keySemester]) AND $value[$keySemester] != '') &&
+					(!empty($value[$keyThAjaran]) AND $value[$keyThAjaran] != '')) {
+					$new_result[$key-1]['nim'] = $value[$keyNim];
+					$new_result[$key-1]['kode'] = $value[$keyKode];
+					$new_result[$key-1]['grup'] = $value[$keyGrup];
+					$new_result[$key-1]['absen'] = $value[$keyAbsen];
+					$new_result[$key-1]['semester'] = $value[$keySemester];
+					$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+				}
 			}
 		}
 
@@ -505,14 +558,23 @@ class Konfigurasi extends MX_Controller {
 
 		foreach ($result as $key => $value) {
 			if ($key > 0) { // key = 0 is the csv header
-				$new_result[$key-1]['nim'] = $value[$keyNim];
-				$new_result[$key-1]['kode'] = $value[$keyKode];
-				$new_result[$key-1]['sks'] = $value[$keySks];
-				$new_result[$key-1]['harga'] = $value[$keyHarga];
-				$new_result[$key-1]['grup'] = $value[$keyGrup];
-				$new_result[$key-1]['nilai'] = $value[$keyNilai];
-				$new_result[$key-1]['semester'] = $value[$keySemester];
-				$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+				if ((!empty($value[$keyNim]) AND $value[$keyNim] != '') &&
+					(!empty($value[$keyKode]) AND $value[$keyKode] != '') &&
+					(!empty($value[$keySks]) AND $value[$keySks] != '') &&
+					(!empty($value[$keyHarga]) AND $value[$keyHarga] != '') &&
+					(!empty($value[$keyGrup]) AND $value[$keyGrup] != '') &&
+					(!empty($value[$keyNilai]) AND $value[$keyNilai] != '') &&
+					(!empty($value[$keySemester]) AND $value[$keySemester] != '') &&
+					(!empty($value[$keyThAjaran]) AND $value[$keyThAjaran] != '')) {
+						$new_result[$key-1]['nim'] = $value[$keyNim];
+						$new_result[$key-1]['kode'] = $value[$keyKode];
+						$new_result[$key-1]['sks'] = $value[$keySks];
+						$new_result[$key-1]['harga'] = $value[$keyHarga];
+						$new_result[$key-1]['grup'] = $value[$keyGrup];
+						$new_result[$key-1]['nilai'] = $value[$keyNilai];
+						$new_result[$key-1]['semester'] = $value[$keySemester];
+						$new_result[$key-1]['th_ajaran'] = $value[$keyThAjaran];
+				}
 			}
 		}
 

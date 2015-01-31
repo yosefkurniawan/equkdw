@@ -160,16 +160,19 @@
 							<div id="o3_nilai_error_message" class="alert alert-warning">
 								<strong>Catatan:</strong>
 								<p>Format CSV: nim, kode, sks, harga, grup, nilai, semester, dan thn ajaran</p>
-								<p>Format nama file: nilai_[prodi]. Misal: nilai_SI.</p>
+								<p>Format nama file: khs_[prodi]. Misal: khs_23.csv</p>
 							</div>
 							<div class="row">
-							<div class="col-lg-10">
+
+							<?php /* disable mode since updating mode need more extra time */ ?>
+							<input type="hidden" name="methods_o3_nilai" value="1"> 
+							<!-- <div class="col-lg-10">
 								<div class="form-group">
 									<label>Mode:</label>
 								    <p><input type="radio" name="methods_o3_nilai" value="1" checked> Delete all data then Insert <br/></p>
 								    <p><input type="radio" name="methods_o3_nilai" value="0" > Replace If Existing and Insert The Unique Record<br><br></p>
 								</div>
-							</div>
+							</div> -->
 							</div>
 							<div class="row">
 							<div class="col-lg-10">
@@ -188,16 +191,19 @@
 							<div id="o3_nilai_error_message" class="alert alert-warning">
 								<strong>Catatan:</strong>
 								<p>Format CSV: nim, kode, grup, absen, semester, dan thn ajaran.</p>
-								<p>Format nama file: presensi_[prodi]. Misal: presensi_SI.</p>
+								<p>Format nama file: kehadiran_[prodi]. Misal: kehadiran_23.csv</p>
 							</div>
 							<div class="row">
-							<div class="col-lg-10">
+
+							<?php /* disable mode since updating mode need more extra time */ ?>
+							<input type="hidden" name="methods_o3_presensi" value="1"> 
+							<!-- <div class="col-lg-10">
 								<div class="form-group">
 									<label>Mode:</label>
 								    <p><input type="radio" name="methods_o3_presensi" value="1" checked> Delete all data then Insert <br/></p>
 								    <p><input type="radio" name="methods_o3_presensi" value="0" > Replace If Existing and Insert The Unique Record<br><br></p>
 								</div>
-							</div>
+							</div> -->
 							</div>
 							<div class="row">
 							<div class="col-lg-10">
@@ -648,9 +654,13 @@ jQuery(function ($) {
 		}else {
 			var fileNameNilai 		= $('#userfile_o3_nilai').val().replace(/^.*[\\\/]/, '').split('.')[0];
 			var fileNamePresensi 	= $('#userfile_o3_presensi').val().replace(/^.*[\\\/]/, '').split('.')[0];
-			var prodiNilai			= fileNameNilai.substr(6,fileNameNilai.length);
-			var prodiPresensi		= fileNamePresensi.substr(9,fileNamePresensi.length);
+			var prodiNilai			= fileNameNilai.substr(4,fileNameNilai.length);
+			var prodiPresensi		= fileNamePresensi.substr(10,fileNamePresensi.length);
 
+			console.log(fileNameNilai);
+			console.log(fileNamePresensi);
+			console.log(prodiNilai);
+			console.log(prodiPresensi);
 			if (prodiNilai != prodiPresensi) {
 				alert('Format penamaan file tidak tepat. Pastikan pula file yang diinputkan untuk data prodi yang sama.');
 				return false;
@@ -673,7 +683,7 @@ jQuery(function ($) {
 			data			: {
 				'prodi'			: $('#o3-prodi').val(),
 				'o3'			: $('#o3_raw_count').text(),
-				'method'		: $('input[name="methods_o3_nilai"]:checked').val(),
+				'method'		: $('input[name="methods_o3_nilai"]').val(),
 				'semester'		: $('#semesteran').val(),
 				'thn_ajaran'	: $('#thnajaran').val()
 			},			
@@ -706,7 +716,7 @@ jQuery(function ($) {
 			data			: {
 				'prodi'			: $('#o3-prodi').val(),
 				'o3'			: $('#o3_raw_count').text(),
-				'method'		: $('input[name="methods_o3_presensi"]:checked').val(),
+				'method'		: $('input[name="methods_o3_presensi"]').val(),
 				'semester'		: $('#semesteran').val(),
 				'thn_ajaran'	: $('#thnajaran').val()
 			},			
