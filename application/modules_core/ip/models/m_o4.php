@@ -68,7 +68,7 @@ class M_o4 extends CI_Model{
 			}
 			
 			$flag_tepat = $_POST['flag_tepat'];
-			$mykey 		= $_POST['id_kelasb'].$_POST['kode'];
+			$mykey 		= $_POST['kode'].$_POST['grup'].$_POST['semester'].$_POST['thn_ajaran'];
 
 			// check is it exist already?
 			$sql_cek = "SELECT * FROM o4_nilaimasuk WHERE mykey = '$mykey'";
