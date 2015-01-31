@@ -139,16 +139,28 @@ nav#main_topnav .toggle li a {
 /*========================================*/
 
 #popup-uploading .content {
-	padding: 25px 40px;
+	padding: 25px 20px;
 	text-align: center;
 	margin-top: -60px;
-	margin-left: -125px;
-	width: 250px;
-	height: 120px;
+	margin-left: -160px;
+	width: 320px;
+	height: auto;
 }
 
 #popup-uploading i {
 	font-size: 30px;
+}
+
+#popup-uploading .content {
+	text-align: left;
+}
+
+#popup-uploading .content .status li {
+	list-style: none;
+}
+
+#popup-uploading .content .status li .done {
+	display: none;
 }
 
 /* ---------------  <= 640 px layout -------------------- */

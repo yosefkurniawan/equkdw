@@ -483,10 +483,12 @@ class M_olahan extends CI_Model
 		}		
 	}
 
-	function get_o3_insertedProdi() {
+	function get_o3_insertedProdi($semester,$thn_ajaran) {
 		$sql = "SELECT o.prodi,p.nama_prodi,COUNT(o.prodi) as total_row FROM o3_nilailulus o 
-				JOIN o9_prodi p ON p.prodi = o.prodi GROUP BY o.prodi, p.nama_prodi";		
-		
+				JOIN o9_prodi p ON p.prodi = o.prodi 
+				WHERE semester = '$semester' AND th_ajaran = '$thn_ajaran'
+				GROUP BY o.prodi, p.nama_prodi";		
+
 		$query = $this->db->query($sql);
 
 		if ($query->num_rows() > 0) {

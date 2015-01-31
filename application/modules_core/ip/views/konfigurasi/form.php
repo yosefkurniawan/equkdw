@@ -292,8 +292,20 @@
 <div id="popup-uploading" class="popup">
 	<div class="background"></div>
 	<div class="content">
-		<p><i class="icon-spinner icon-spin"></i></p>
-		<p>Uploading...</p>
+		<div style="margin-bottom:10px; text-align:center;"><i class="icon-spinner icon-spin"></i></div>
+		<p class="alert alert-warning">Proses dapat memakan beberapa menit. Mohon bersabar.</p>
+		<p><strong>Status:</strong></p>
+		<ul class="status">
+			<li class="uploadnilai">
+				Mengupload data KHS...<span class="done">(Selesai)</span>
+			</li>
+			<li class="uploadpresensi">
+				Mengupload data kehadiran...<span class="done">(Selesai)</span>
+			</li>
+			<li class="mengolah">
+				Mengolah data KHS dan kehadiran...<span class="done">(Selesai)</span>
+			</li>
+		</ul>
 	</div>
 </div>
 
@@ -642,6 +654,15 @@ jQuery(function ($) {
 		
 		e.preventDefault();
 
+		// upload status
+		var uploadNilaiComplete 	= false;
+		var uploadPresensiComplete 	= false;
+
+		// hide all message 
+		$('#o3_presensi_error_message').hide();
+		$('#o3_nilai_error_message').hide();
+		$('#o3_olah_error_message').hide();
+
 		// start: validation
 
 		if($('select#o3-prodi').val() == "") {
@@ -657,10 +678,6 @@ jQuery(function ($) {
 			var prodiNilai			= fileNameNilai.substr(4,fileNameNilai.length);
 			var prodiPresensi		= fileNamePresensi.substr(10,fileNamePresensi.length);
 
-			console.log(fileNameNilai);
-			console.log(fileNamePresensi);
-			console.log(prodiNilai);
-			console.log(prodiPresensi);
 			if (prodiNilai != prodiPresensi) {
 				alert('Format penamaan file tidak tepat. Pastikan pula file yang diinputkan untuk data prodi yang sama.');
 				return false;
@@ -689,20 +706,24 @@ jQuery(function ($) {
 			},			
 			success	: function (data,status)
 			{
-				console.log(data);
-				console.log(data.msg);
 				if(data.status != 'error')
 				{
 					jQuery('#o3_nilai_error_message').removeClass('alert-danger').addClass('alert-success').show();
+					jQuery('#popup-uploading .content .status .uploadnilai').addClass('text-success');
+					jQuery('#popup-uploading .content .status .uploadnilai .done').show();
 				}
 				else {
 					jQuery('#o3_nilai_error_message').removeClass('alert-success').addClass('alert-danger').show();
+					jQuery('#popup-uploading .content .status .uploadnilai').addClass('text-danger');
 				}
 				jQuery('#o3_nilai_error_message .content').html(data.msg);
 				jQuery('#userfile_o3_nilai').val('');
 			},
 			errors: function(data) {
 				console.log(data);
+			},
+			complete: function() {
+				uploadNilaiComplete = true;
 			}
 
 		});			
@@ -725,59 +746,78 @@ jQuery(function ($) {
 				if(data.status != 'error')
 				{
 					jQuery('#o3_presensi_error_message').removeClass('alert-danger').addClass('alert-success').show();
+					jQuery('#popup-uploading .content .status .uploadpresensi').addClass('text-success');
+					jQuery('#popup-uploading .content .status .uploadpresensi .done').show();
 				}
 				else {
 					jQuery('#o3_presensi_error_message').removeClass('alert-success').addClass('alert-danger').show();
+					jQuery('#popup-uploading .content .status .uploadpresensi').addClass('text-danger');
 				}
 				jQuery('#o3_presensi_error_message .content').html(data.msg);
 				jQuery('#userfile_o3_presensi').val('');
 			},
 			errors: function(data) {
 				console.log(data);
+			},
+			complete: function() {
+				uploadPresensiComplete = true;
 			}
 
 		});	
 	
 		jQuery(document).ajaxStop(function() {
 
-			// scroll to result msg
-			$('html,body').animate({
-	        	scrollTop: $("#upload_file_o3").offset().top},
-	        'slow');
+			if (uploadPresensiComplete && uploadNilaiComplete) {
+				
+				// change loading status as 'saving'
+				jQuery('#popup-uploading .content .status .mengolah').show();
 
-			// change loading status as 'saving'
-			jQuery('#popup-uploading .content p:last').text('Saving data...');
-
-			// olah data
-			$.ajax({
-				url 			: CI_ROOT+"ip/konfigurasi/o3_olah",
-				dataType		:'json',
-				data			: {
-					'o3'			: $('#o3_raw_count').text(),
-					'semester'		: $('#semesteran').val(),
-					'thn_ajaran'	: $('#thnajaran').val()
-				},			
-				success	: function (data,status)
-				{
-					if(data.status != 'error')
+				// olah data
+				$.ajax({
+					url 			: CI_ROOT+"ip/konfigurasi/o3_olah",
+					dataType		:'json',
+					data			: {
+						'o3'			: $('#o3_raw_count').text(),
+						'semester'		: $('#semesteran').val(),
+						'thn_ajaran'	: $('#thnajaran').val()
+					},			
+					success	: function (data,status)
 					{
-						jQuery('#o3_olah_error_message').removeClass('alert-danger').addClass('alert-success').show();
-					}
-					else {
-						jQuery('#o3_olah_error_message').removeClass('alert-success').addClass('alert-danger').show();
-					}
-					jQuery('#o3_olah_error_message .content').html(data.msg);
-					
-					jQuery('#o3_raw_count').text(data.rowCount);
-					jQuery('#popup-uploading').hide();
-					jQuery('#upload_o3').removeAttr('disabled');
-					jQuery('#upload_o3').html('Upload o3');
-				},
-				errors: function(data) {
-					console.log(data);
-				}
+						if(data.status != 'error')
+						{
+							jQuery('#o3_olah_error_message').removeClass('alert-danger').addClass('alert-success').show();
+						}
+						else {
+							jQuery('#o3_olah_error_message').removeClass('alert-success').addClass('alert-danger').show();
+						}
+						jQuery('#o3_olah_error_message .content').html(data.msg);
+						
+						jQuery('#o3_raw_count').text(data.rowCount);
+						jQuery('#upload_o3').removeAttr('disabled');
+						jQuery('#upload_o3').html('Upload o3');
+						jQuery('#o3-prodi').val("");
+					},
+					errors: function(data) {
+						console.log(data);
+					},
+					complete: function() {
+						uploadPresensiComplete = false;
+						uploadNilaiComplete = false;
+						
+						jQuery('#popup-uploading .content .status .uploadpresensi').removeClass('text-success text-danger');
+						jQuery('#popup-uploading .content .status .uploadnilai').removeClass('text-success text-danger');
+						jQuery('#popup-uploading .content .status .uploadnilai .done').hide();
+						jQuery('#popup-uploading .content .status .uploadpresensi .done').hide();
+						jQuery('#popup-uploading').delay(1000).hide();
 
-			});
+						// scroll to result msg
+						$('html,body').animate({
+				        	scrollTop: $("#upload_file_o3").offset().top},
+				        'slow');
+
+					}
+				});
+			}
 		});
 
 		return false;
@@ -809,7 +849,7 @@ jQuery(function ($) {
 				console.log(data);
 			}
 		});
-	}); //end of jQuery('#o3_modal_show').on('click',function()
+	});
 
 });
 
