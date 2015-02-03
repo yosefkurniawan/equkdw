@@ -442,4 +442,23 @@ class ip_model extends CI_Model
 		}	
 	}
 
+	function getLastPeriodePaket() {
+		$sql_semester 	= "(SELECT MAX(semester) AS semester FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+		$sql_thn_ajaran = "(SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+
+		$query_semester  = $this->db->query($sql_semester);
+		$query_thnAjaran = $this->db->query($sql_thn_ajaran);
+
+		if ($query_semester->num_rows() > 0 && $query_thnAjaran->num_rows() > 0) {	
+			$result['semester']   = $query_semester->row()->semester;
+			$result['thn_ajaran'] = $query_thnAjaran->row()->thn_ajaran;
+			return $result;
+		} else {
+			return array();
+		}	
+
+	}
+
 } // end of class

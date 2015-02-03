@@ -31,8 +31,9 @@ class Ip extends MX_Controller
 		// die;
 		if ($id_paket == '') {
 			$data['id_paket'] 	= '';
-			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
-			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+			$_periode 				= $this->ip_model->getLastPeriodePaket();
+			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$periode['semester']	= $_periode['semester'];
 		}
 		else {
 			$data['id_paket'] 		= $id_paket;
@@ -59,14 +60,18 @@ class Ip extends MX_Controller
 		}
 		if ($id_paket == '') {
 			$data['id_paket'] 	= '';
-			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
-			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+			$_periode 				= $this->ip_model->getLastPeriodePaket();
+			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$periode['semester']	= $_periode['semester'];
 		}
 		else {
 			$data['id_paket'] 		= $id_paket;
 			$periode['thn_ajaran']	= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
 			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
 		}
+		$data['periode']['semester'] 	= $_periode['semester'];
+		$data['periode']['thn_ajaran'] 	= $_periode['thn_ajaran'];
+
 		$data['dsn'] = $this->ip_model->get_dosen_info($nik);
 
 		$data['ajar'] = $this->ip_model->get_dosen_ajar($nik,$periode['thn_ajaran'],$periode['semester']);
