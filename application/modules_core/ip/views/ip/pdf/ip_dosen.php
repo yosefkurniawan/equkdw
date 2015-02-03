@@ -97,8 +97,9 @@
         <!-- rata-rata prodi p3 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o3 = 0 ?>
-        <?php foreach ($prodi_o3 as $pro_o3) : ?>
-            
+        <?php if ( count($prodi_o3) > 0 ) : ?>
+
+        <?php foreach ($prodi_o3 as $pro_o3) : ?>            
             <?php $pp3 = 0 ; ?>
             <?php if ($pro_o3->persen_lulus > 60) : ?>
                 <?php $pp3 = 4 ; ?>
@@ -112,10 +113,16 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_prodi_o3 = round($jmlh_prodi_o3 / count($prodi_o3),2) ?>
+        <?php else : ?>
+        <?php $avg_prodi_o3 = 2 ?>
+        <?php endif; ?>
+
 
         <!-- rata-rata prodi p4 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o4 = 0 ?>
+        <?php if ( count($prodi_o4) > 0 ) : ?>
+
         <?php foreach ($prodi_o4 as $pro_o4) : ?>
 
             <?php $pp4 = 0 ; ?>
@@ -130,6 +137,9 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_prodi_o4 = round($jmlh_prodi_o4 / count($prodi_o4),2) ?>
+        <?php else : ?>
+        <?php $avg_prodi_o4 = 2 ?>
+        <?php endif; ?>
 
         <!-- rata-rata prodi p5 -->
         <!-- foreach where prodi = prodi dosennya -->
@@ -305,9 +315,9 @@
             </dl>
             <dl>
                 <dt>Program Studi</dt>
-                <dd><?php echo $dsn->nama_prodi ?></dd>
+                <dd><?php echo $dsn->unit ?></dd>
                 <dt>NIK</dt>
-                <dd><?php echo $dsn->nik_baru?> / <?php echo $dsn->nik?>  </dd>
+                <dd><?php echo $dsn->nik?></dd>
                 <dt>Nama</dt>
                 <dd><?php echo $dsn->nama_dsn?></dd>
                 <dt>IPK</dt>
@@ -349,9 +359,9 @@
         </dl>
         <dl>
             <dt>Program Studi</dt>
-            <dd><?php echo $dsn->nama_prodi ?></dd>
+            <dd><?php echo $dsn->unit ?></dd>
             <dt>NIK</dt>
-            <dd><?php echo $dsn->nik_baru?> / <?php echo $dsn->nik?> </dd>
+            <dd><?php echo $dsn->nik?></dd>
             <dt>Nama</dt>
             <dd><?php echo $dsn->nama_dsn?></dd>
         </dl>

@@ -1,6 +1,6 @@
 <?php
 
-$string = preg_replace('/\s+/', '_', $prodi->nama_prodi);
+$string = preg_replace('/\s+/', '_', $prodi->unit);
 
 $title = 'Laporan_Rangkuman_IP_Dosen_'.$string.'_2013_2014_Genap';
 
@@ -70,7 +70,7 @@ header("Expires: 0");
 	<br/>
 	<strong>Periode :</strong> Genap
 	<br/>
-	<strong>Program Studi :</strong> <?php echo $prodi->nama_prodi ?>
+	<strong>Program Studi :</strong> <?php echo $prodi->unit ?>
 	<br/>
 	<br/>
 	<!-- Hasil Evaluasi Kelas -->
