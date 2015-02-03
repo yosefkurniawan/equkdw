@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		Hasil Evaluasi
+		Laporan IP Dosen
 		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?> &nbsp; <a href="" id="change-period"> <i class="icon-cog"></i></a> &nbsp;
 		<select id="id_paket" style="width:160px;display:none">
 			<?php foreach($paket_list as $item) : ?>

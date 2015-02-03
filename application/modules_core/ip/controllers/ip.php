@@ -41,6 +41,7 @@ class Ip extends MX_Controller
 		$data['listDosenPerUnit'] = $this->m_laporan->getListDosenAktifPerUnit($data['id_paket']);
 
 		/* -- Render Layout -- */
+		$data['paket_list']	= $this->m_laporan->getPaketList();
 		$data['periode']	= $periode;
 		$data['title'] 		= "IP Dosen";
 		$data['content'] 	= 'ip/ip/list';
