@@ -21,6 +21,10 @@ class Ip extends MX_Controller
 	}
 
 	function index($id_paket=''){
+		redirect('ip/ip/lists/'.$id_paket);
+	}
+
+	function lists($id_paket=''){
 		// $data['period'] = $this->ip_model->get_thn_ajaran_periode();
 
 		// $this->ip_model->updt_kelass_all();

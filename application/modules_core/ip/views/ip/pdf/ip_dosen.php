@@ -59,6 +59,7 @@
         <!-- rata-rata prodi p1 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o1 = 0 ?>
+        <?php if ( count($prodi_o1) > 0 ) : ?>
         <?php foreach ($prodi_o1 as $pro_o1) : ?>
             
             <?php $pp1 = 0 ; ?>
@@ -75,9 +76,14 @@
         <!-- rata rata : jumlah / count -->
         <?php $avg_prodi_o1 = round($jmlh_prodi_o1 / count($prodi_o1),2) ?>
 
+        <?php else: ?>
+            <?php $avg_prodi_o1 = 2 ?>
+        <?php endif; ?>
+        
         <!-- rata-rata prodi p2 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o2 = 0 ?>
+        <?php if ( count($prodi_o2) > 0 ) : ?>
         <?php foreach ($prodi_o2 as $pro_o2) : ?>
             
             <?php $pp2 = 0 ; ?>
@@ -93,7 +99,10 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_prodi_o2 = round($jmlh_prodi_o2 / count($prodi_o2),2) ?>
-  
+        <?php else: ?>
+        <?php $avg_prodi_o2 = 2 ?>
+        <?php endif; ?>
+
         <!-- rata-rata prodi p3 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o3 = 0 ?>
@@ -144,12 +153,15 @@
         <!-- rata-rata prodi p5 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o5 = 0 ?>
+        <?php if ( count($prodi_o5) > 0 ) : ?>
         <?php foreach ($prodi_o5 as $pro_o5) : ?>
             <?php $jmlh_prodi_o5 = $jmlh_prodi_o5 + $pro_o5->eclass ?>
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_prodi_o5 = round($jmlh_prodi_o5 / count($prodi_o5),2) ?>
-
+        <?php else: ?>
+        <?php $avg_prodi_o5 = 2 ?>
+        <?php endif; ?>
 
 
         <!-- SUM UNIVERSITAS -->
@@ -157,6 +169,7 @@
         <!-- rata-rata prodi p1 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o1 = 0 ?>
+        <?php if ( count($uni_o1) > 0 ) : ?>
         <?php foreach ($uni_o1 as $pro_o1) : ?>
             
             <?php $pp1 = 0 ; ?>
@@ -172,10 +185,13 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_uni_o1 = round($jmlh_prodi_o1 / count($uni_o1),2) ?>
-
+        <?php else: ?>
+        <?php $avg_uni_o1 = 2 ?>
+        <?php endif ?>
        <!-- rata-rata prodi p2 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o2 = 0 ?>
+        <?php if ( count($uni_o2) > 0 ) : ?>
         <?php foreach ($uni_o2 as $pro_o2) : ?>
             
             <?php $pp2 = 0 ; ?>
@@ -191,10 +207,13 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_uni_o2 = round($jmlh_prodi_o2 / count($uni_o2),2) ?>
-  
+        <?php else: ?>
+        <?php $avg_uni_o2 = 2 ?>
+        <?php endif ?>
         <!-- rata-rata prodi p3 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o3 = 0 ?>
+        <?php if ( count($uni_o3) > 0 ) : ?>
         <?php foreach ($uni_o3 as $pro_o3) : ?>
             
             <?php $pp3 = 0 ; ?>
@@ -210,11 +229,13 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_uni_o3 = round($jmlh_prodi_o3 / count($uni_o3),2) ?>
-
-
+        <?php else: ?>
+        <?php $avg_uni_o3 = 2 ?>
+        <?php endif; ?>
         <!-- rata-rata prodi p4 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o4 = 0 ?>
+        <?php if ( count($uni_o4) > 0 ) : ?>
         <?php foreach ($uni_o4 as $pro_o4) : ?>
 
             <?php $pp4 = 0 ; ?>
@@ -229,15 +250,22 @@
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_uni_o4 = round($jmlh_prodi_o4 / count($uni_o4),2) ?>
+        <?php else: ?>
+        <?php $avg_uni_o4 = 2 ?>
+        <?php endif; ?>
 
         <!-- rata-rata prodi p5 -->
         <!-- foreach where prodi = prodi dosennya -->
         <?php $jmlh_prodi_o5 = 0 ?>
+        <?php if ( count($uni_o4) > 0 ) : ?>
         <?php foreach ($uni_o5 as $pro_o5) : ?>
             <?php $jmlh_prodi_o5 = $jmlh_prodi_o5 + $pro_o5->eclass ?>
         <?php endforeach ?>
         <!-- rata rata : jumlah / count -->
         <?php $avg_uni_o5 = round($jmlh_prodi_o5 / count($uni_o5),2) ?>
+        <?php else: ?>
+        <?php $avg_uni_o5 = 2; ?>
+        <?php endif; ?>
 
 <div class="printable-area" sytle="font-type:calibri">
     

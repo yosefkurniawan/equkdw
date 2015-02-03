@@ -102,7 +102,7 @@
 			var nik = jQuery('#nik').val();
 			var id_paket = jQuery('#id_paket').val();
 			var admin = jQuery('#isAdmin').val();
-			window.location.replace(CI_ROOT+'laporan/hasil_evaluasi/'+id_paket);
+			window.location.replace(CI_ROOT+'ip/ip/index/'+id_paket);
 			return false;
 		});	    
     });
