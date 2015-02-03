@@ -2,7 +2,7 @@
 tcpdf();
 $obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $obj_pdf->SetCreator(PDF_CREATOR);
-$obj_pdf->setPageOrientation('L');
+$obj_pdf->setPageOrientation('P');
 $title = "RANGKUMAN IP DOSEN";
 $obj_pdf->SetTitle($title);
 $obj_pdf->SetHeaderData('logo.png', '10px', $title, 'PERIODE '.strtoupper($periode).' - '.$thn_ajaran);
@@ -24,8 +24,8 @@ ob_start();
 	else{
 		foreach ($list_ip_dosen_prodi as $dosen){
 			$data_hasil_kelas .= '<tr>
-			    <td width="15%">'.$dosen->nik_baru.'</td>
-			    <td width="25%">'.$dosen->nama_dsn.'</td>
+			    <td width="20%">'.$dosen->nik_baru.'</td>
+			    <td width="50%">'.$dosen->gelar_prefix.''.$dosen->nama_dsn.' '.$dosen->gelar_suffix.'</td>
 			    <td width="10%" style="text-align:right">'.$dosen->total_ip.'</td>
 			    <td width="10%" style="text-align:right">'.$dosen->jmlh_mtk.'</td>
 			    <td width="10%" style="text-align:right">'.$dosen->ip_dosen.'</td>
@@ -73,14 +73,14 @@ ob_start();
 	<!-- Hasil Evaluasi Kelas -->
 	<div class="hasil_kelas">
 		<h2>Hasil Rangkuman IP Dosen</h2>
-		<h4>Program Studi : '.$prodi->nama_prodi.'</h4>
+		<h4>Program Studi : '.$prodi->unit.'</h4>
 		<h4></h4>
 		<h4></h4>
 		<table class="table" id="hasil-evaluasi-dosen">
 			<thead>
 				<tr class="header">
-					<th width="15%">NIK</th>
-					<th width="25%">Nama Dosen</th>
+					<th width="20%">NIK</th>
+					<th width="50%">Nama Dosen</th>
 					<th width="10%" style="text-align:right">Total IP</th>
 					<th width="10%" style="text-align:right">Total Mtk</th>
 					<th width="10%" style="text-align:right">IP Dosen</th>
@@ -95,5 +95,5 @@ ob_start();
 
 ob_end_clean();
 $obj_pdf->writeHTML($content, true, false, true, false, '');
-$obj_pdf->Output('hasil_rangkuman_ip_dosen_'.$prodi->nama_prodi.'.pdf', 'I');
+$obj_pdf->Output('hasil_rangkuman_ip_dosen_'.$prodi->unit.'.pdf', 'I');
  ?>

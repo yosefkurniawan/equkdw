@@ -10,7 +10,6 @@
 		</select>
 		&nbsp;&nbsp;<a href="#" id="change_period_process" style="display:none"><i class='icon-save'> </i></a>
 		&nbsp;&nbsp;<a href="#" id="tutup_period_form" style="display:none"><i class='icon-remove'> </i></a>
-
 		</small>
 	</h1>
 </div>

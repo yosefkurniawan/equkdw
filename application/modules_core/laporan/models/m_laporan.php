@@ -48,17 +48,6 @@ class M_laporan extends CI_Model {
 			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}
-				
-		/*
-		if (isset($this->session->userdata['periode_laporan_evaluasi'])) {
-			$semester 	= "'".$this->session->userdata['periode_laporan_evaluasi']['semester']."'";
-			$thn_ajaran	= "'".$this->session->userdata['periode_laporan_evaluasi']['thn_ajaran']."'";
-		}
-		else{
-			$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
-			$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
-		}
-		*/
 
 		$sql_listDosen 	= "SELECT d.nik,d.nama,d.gelar_suffix,d.gelar_prefix,m.id_unit, IFNULL(u.unit,'zzz') as unit
 						FROM ec_kelas_buka k
@@ -68,6 +57,7 @@ class M_laporan extends CI_Model {
 						LEFT JOIN ref_unit u ON u.id_unit = m.id_unit
 						WHERE k.semester = $semester
 						AND k.thn_ajaran = $thn_ajaran
+						AND m.eva_status = 1
 						GROUP BY nik, nama, gelar_suffix, gelar_prefix, id_unit,unit
 						ORDER BY unit,d.nama ASC";
 		$_listDosen = $this->db->query($sql_listDosen);

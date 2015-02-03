@@ -18,7 +18,7 @@ class ip_model extends CI_Model
 	} // end of function get_thn_ajaran_periode()
 
 	function get_dosen_info($nik) {
-		$sql = "SELECT * FROM dosen_all, o9_prodi WHERE dosen_all.nik_baru = '$nik' AND dosen_all.prodi = prodi.prodi";
+		$sql = "SELECT d.*,d.nama'nama_dsn',u.unit FROM user_dosen_karyawan d, ref_unit u WHERE d.nik = '$nik' AND d.id_unit = u.id_unit";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -29,6 +29,37 @@ class ip_model extends CI_Model
 		{
 			return array();
 		}
+	}
+
+	function convertIdUnitToProdi($id_unit) {
+		$sql = "SELECT * FROM o9_prodi WHERE id_unit = $id_unit";
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() == 1 ) 
+		{	
+			return $query->row_array();
+		} 
+		else 
+		{
+			//in case something suspicious, ex : dosen with no id_unit
+			$sql = "SELECT * FROM o9_prodi WHERE id_unit = '0000'";
+			$query = $this->db->query($sql);
+			return $query->row_array();
+		}		
+	}
+
+	function get_info_ref_unit($id_unit) {
+		$sql = "SELECT * FROM ref_unit WHERE id_unit = '$id_unit' LIMIT 1";
+		$query = $this->db->query($sql);
+		// echo '<pre>'; print_r($query->row()); die;
+		if ($query->num_rows() == 1 ) 
+		{
+			return $query->row();
+		} // end of if
+		else 
+		{
+			return array();
+		}		
 	}
 
 	function get_info_prodi($prodi) {
@@ -59,30 +90,31 @@ class ip_model extends CI_Model
 		}
 	}
 
-	function get_ip_list($prodi,$th_ajaran,$semester) {
-		$sql = "SELECT dsn.nik_baru,dsn.nidn,dsn.nama_dsn,dsn.prodi,p.nama_prodi,
+	function get_ip_list($id_unit,$th_ajaran,$semester) {
+		$sql = "SELECT CONCAT(dsn.gelar_prefix,' ',dsn.nama,' ',dsn.gelar_suffix),dsn.gelar_prefix,dsn.gelar_suffix,
+				dsn.nik'nik_baru',dsn.nidn,dsn.nama'nama_dsn',p.id_unit,p.unit'nama_prodi',
 				SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
 				IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
 				IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
 				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
 				o5.eclass*0.2) as total_ip, 
-				COUNT(dsn.nik_baru) as jmlh_mtk,
+				COUNT(dsn.nik) as jmlh_mtk,
 				ROUND(SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
 				IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
 				IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
 				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
-				o5.eclass*0.2) / COUNT(dsn.nik_baru),2) as ip_dosen
+				o5.eclass*0.2) / COUNT(dsn.nik),2) as ip_dosen
 				FROM (SELECT * FROM kelas_all
-				WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran') kls
-				LEFT JOIN dosen_all dsn ON kls.nik_baru = dsn.nik_baru
-				LEFT JOIN o9_prodi p ON dsn.prodi = p.prodi
+				WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran' AND eva_status = '1' AND prodi = '$id_unit') kls
+				LEFT JOIN user_dosen_karyawan dsn ON kls.nik = dsn.nik
+				LEFT JOIN ref_unit p ON dsn.id_unit = p.id_unit
 				LEFT JOIN o1_presensi o1 ON kls.mykey = o1.mykey
-				LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey
+				LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey AND kls.nik = o2.nik
 				LEFT JOIN o3_nilailulus o3 ON kls.mykey = o3.mykey
 				LEFT JOIN o4_nilaimasuk o4 ON kls.mykey = o4.mykey
 				LEFT JOIN o5_eclass o5 ON kls.mykey = o5.mykey
-				WHERE dsn.prodi = '$prodi'
-				GROUP BY dsn.nik_baru
+				-- WHERE dsn.id_unit = '$id_unit'
+				GROUP BY dsn.nik
 				ORDER BY ip_dosen DESC, jmlh_mtk DESC";
 			$query = $this->db->query($sql);
 			// echo '<pre>'; print_r($query->result()); die;
@@ -104,9 +136,10 @@ class ip_model extends CI_Model
 
 		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o1.persen_hadir,kelas.semester, kelas.thn_ajaran
 				FROM
-				(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
-				LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o1_presensi o1 
+				(SELECT dsn.nik'nik_baru',dsn.nama'nama_dsn', dsn.id_unit'prodi_dosen', k.mykey, k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
+				LEFT JOIN user_dosen_karyawan dsn ON k.nik = dsn.nik) kelas, o1_presensi o1 
 				WHERE o1.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' ";
+
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -127,9 +160,9 @@ class ip_model extends CI_Model
 
 		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o2.baik,kelas.semester, kelas.thn_ajaran
 					FROM
-					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
-					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o2_persenbaik o2
-					WHERE o2.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' ";
+					(SELECT dsn.nik'nik_baru',dsn.nama'nama_dsn', dsn.id_unit'prodi_dosen', k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
+					LEFT JOIN user_dosen_karyawan dsn ON k.nik_baru = dsn.nik) kelas, o2_persenbaik o2
+					WHERE o2.mykey = kelas.mykey AND o2.nik = kelas.nik_baru AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' ";
 		
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
@@ -149,8 +182,8 @@ class ip_model extends CI_Model
 
 		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o3.persen_lulus,kelas.semester, kelas.thn_ajaran
 					FROM
-					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
-					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o3_nilailulus o3
+					(SELECT dsn.nik'nik_baru',dsn.nama'nama_dsn', dsn.id_unit'prodi_dosen', k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
+					LEFT JOIN user_dosen_karyawan dsn ON k.nik_baru = dsn.nik) kelas, o3_nilailulus o3
 					WHERE o3.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' ";
 
 		$query = $this->db->query($sql);
@@ -171,8 +204,8 @@ class ip_model extends CI_Model
 
 		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o4.flag_tepat,kelas.semester, kelas.thn_ajaran
 					FROM
-					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
-					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o4_nilaimasuk o4
+					(SELECT dsn.nik'nik_baru',dsn.nama'nama_dsn', dsn.id_unit'prodi_dosen', k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
+					LEFT JOIN user_dosen_karyawan dsn ON k.nik_baru = dsn.nik) kelas, o4_nilaimasuk o4
 					WHERE o4.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' ";
 
 		$query = $this->db->query($sql);
@@ -193,8 +226,8 @@ class ip_model extends CI_Model
 
 		$sql = "SELECT kelas.nik_baru,kelas.nama_dsn,kelas.prodi_dosen,kelas.mykey,kelas.nama_mtk,o5.eclass,kelas.semester, kelas.thn_ajaran
 					FROM
-					(SELECT dsn.nik_baru,dsn.nama_dsn,dsn.prodi as prodi_dosen, k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
-					LEFT JOIN dosen_all dsn ON k.nik_baru = dsn.nik_baru) kelas, o5_eclass o5
+					(SELECT dsn.nik'nik_baru',dsn.nama'nama_dsn', dsn.id_unit'prodi_dosen', k.mykey,k.nama_mtk, k.semester, k.thn_ajaran FROM kelas_all k
+					LEFT JOIN user_dosen_karyawan dsn ON k.nik_baru = dsn.nik) kelas, o5_eclass o5
 					WHERE o5.mykey = kelas.mykey AND kelas.prodi_dosen = '$prodi' AND kelas.semester = '$semester' AND kelas.thn_ajaran = '$th_ajaran' ";
 
 		$query = $this->db->query($sql);
@@ -227,8 +260,8 @@ class ip_model extends CI_Model
 	}
 
 	function get_univ_o2($th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, baik FROM o2_persenbaik 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'";
+		$sql = "SELECT kode, baik FROM o2_persenbaik 
+				WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester'";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -242,7 +275,7 @@ class ip_model extends CI_Model
 	}
 
 	function get_univ_o3($th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, persen_lulus FROM o3_nilailulus 
+		$sql = "SELECT kode, persen_lulus FROM o3_nilailulus 
 				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
@@ -257,7 +290,7 @@ class ip_model extends CI_Model
 	}
 
 	function get_univ_o4($th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, flag_tepat FROM o4_nilaimasuk 
+		$sql = "SELECT kode, flag_tepat FROM o4_nilaimasuk 
 				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
@@ -272,8 +305,8 @@ class ip_model extends CI_Model
 	}
 
 	function get_univ_o5($th_ajaran,$semester) {
-		$sql = "SELECT kode, prodi, eclass FROM o5_eclass 
-				WHERE th_ajaran = '$th_ajaran' AND semester = '$semester'";
+		$sql = "SELECT kode, eclass FROM o5_eclass 
+				WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester'";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
 		if ($query->num_rows() > 0 ) 
@@ -353,17 +386,17 @@ class ip_model extends CI_Model
 
 	function get_dosen_ajar($nik,$th_ajaran,$semester)
 	{
-		$sql = "SELECT matkul.nik_baru, matkul.nama_dsn, matkul.kode, matkul.nama_mtk, matkul.grup, matkul.mykey,
+		$sql = "SELECT matkul.nik as nik_baru, matkul.nama_dsn, matkul.kode, matkul.nama_mtk, matkul.grup, matkul.mykey,
 								o1.persen_hadir,o2.baik,o3.persen_lulus,o4.flag_tepat,
 								o5.silabus,o5.materi,o5.tugas,o5.nilai,o5.eclass
 				FROM
-				(SELECT nik_baru, nama_dsn, kode, nama_mtk, grup, mykey FROM kelas_all 
-				WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester' AND nik_baru = '$nik') matkul
+				(SELECT nik, nama_dsn, kode, nama_mtk, grup, mykey FROM kelas_all 
+				WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester' AND nik = '$nik' AND eva_status = '1') matkul
 				LEFT JOIN o1_presensi o1 ON o1.mykey = matkul.mykey 
-				LEFT JOIN o2_persenbaik o2 ON o2.mykey = matkul.mykey 
+				LEFT JOIN o2_persenbaik o2 ON o2.mykey = matkul.mykey AND o2.nik = matkul.nik
 				LEFT JOIN o3_nilailulus o3 ON o3.mykey = matkul.mykey 
 				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = matkul.mykey 
-				LEFT JOIN o5_eclass o5 ON o5.mykey = matkul.mykey 
+				LEFT JOIN o5_eclass o5 ON o5.mykey = matkul.mykey AND o5.nik = matkul.nik
 				";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
