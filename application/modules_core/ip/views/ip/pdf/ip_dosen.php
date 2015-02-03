@@ -337,9 +337,9 @@
         <div class="left">
             <dl class="periode">
                 <dt>Semester</dt>
-                <dd>GENAP</dd>
-                <dt>Tahun Ajaran</dt>
-                <dd>2013/2014</dd>
+                <dd><?php echo $periode['semester'] ?></dd>
+                <dt>echo</dt>
+                <dd><?php echo $periode['thn_ajaran'] ?></dd>
             </dl>
             <dl>
                 <dt>Program Studi</dt>
@@ -381,9 +381,9 @@
         <h3>INDEKS PRESTASI (IP) DOSEN</h3>
         <dl class="periode">
             <dt>Semester</dt>
-            <dd>GENAP</dd>
+            <dd><?php echo $periode['semester'] ?></dd>
             <dt>Tahun Ajaran</dt>
-            <dd>2013/2014</dd>
+            <dd><?php echo $periode['thn_ajaran'] ?></dd>
         </dl>
         <dl>
             <dt>Program Studi</dt>
