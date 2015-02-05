@@ -236,6 +236,8 @@
         <small><?php echo $periode['thn_ajaran']; echo $periode['semester']; ?> </small>
       </div>
       <div class="modal-body">
+      	<input type="text" id="keyword-o1" class="form-control" placeholder="kata kunci pencarian"></input> <br/>
+      	<!-- <a id="keyword-o1-btn" class="btn btn-info">Cari</a> -->
         <table class="table" id="table_o1">
             <thead>
                 <tr>
@@ -418,7 +420,7 @@ jQuery(function ($) {
 							'<tr class="warning">'+
 								'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
 								'<td class="o1-kode" style="font-size:12px;text-align:center">'+kode+'</td>'+
-								'<td style="font-size:12px">'+nama+'</td>'+
+								'<td style="font-size:12px"><span class="nama-mtk">'+nama+'</span></td>'+
 								'<td class="o1-grup" style="font-size:12px;text-align:center">'+grup+'</td>'+
 								'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
 								'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
@@ -439,7 +441,7 @@ jQuery(function ($) {
 									'<tr class="danger">'+
 										'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
 										'<td class="o1-kode" style="font-size:12px;text-align:center">'+kode+'</td>'+
-										'<td style="font-size:12px">'+nama+' <span class="info-prodi">('+prodi+')</span></td>'+
+										'<td style="font-size:12px"><span class="nama-mtk">'+nama+'</span> <span class="info-prodi">('+prodi+')</span></td>'+
 										'<td class="o1-grup" style="font-size:12px;text-align:center">'+grup+'</td>'+
 										'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
 										'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
@@ -459,7 +461,7 @@ jQuery(function ($) {
 								'<tr>'+
 									'<td style="font-size:12px;text-align:center">'+kelasb+'</td>'+
 									'<td class="o1-kode" style="font-size:12px;text-align:center">'+kode+'</td>'+
-									'<td style="font-size:12px">'+nama+' <span class="info-prodi">('+prodi+')</span></td>'+
+									'<td style="font-size:12px"><span class="nama-mtk">'+nama+'</span> <span class="info-prodi">('+prodi+')</span></td>'+
 									'<td class="o1-grup" style="font-size:12px;text-align:center">'+grup+'</td>'+
 									'<td style="font-size:12px;text-align:center"><span class="rencana-mtk">'+rencana+'</span>'+
 									'<input type="text" class="form-control input-sm ubah-rencana-mtk num" value="'+rencana+'" style="display:none"/>'+
@@ -779,7 +781,7 @@ jQuery(function ($) {
 					data			: {
 						'o3'			: $('#o3_raw_count').text(),
 						'semester'		: $('#semesteran').val(),
-						'thn_ajaran'	: $('#thnajaran').val()
+						'thn_ajaran'	: $('#thnajaran').val(),
 					},			
 					success	: function (data,status)
 					{
@@ -849,6 +851,34 @@ jQuery(function ($) {
 				console.log(data);
 			}
 		});
+	});
+
+	var keyword;
+	var recent;
+	// jQuery('#keyword-o1-btn').on('click',function(){
+	jQuery('#keyword-o1').on('keyup',function(){
+		keyword = jQuery('#keyword-o1').val().toLowerCase();
+
+		console.log(jQuery(this).val());
+		if (keyword == "") {
+			jQuery('#table_o1 tbody tr').each(function(){
+				jQuery(this).show();								
+			});
+			return false;
+		}
+
+		jQuery('#table_o1 tbody tr').each(function(){
+			recent = jQuery(this).find('td span.nama-mtk').text().toLowerCase();;
+			// console.log(recent);
+			// console.log(recent.indexOf(keyword));
+			if (recent.indexOf(keyword) > -1) {
+				jQuery(this).show();								
+			} else {
+				jQuery(this).hide();				
+			}
+		});
+		return false;
+
 	});
 
 });

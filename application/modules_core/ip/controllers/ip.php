@@ -43,7 +43,7 @@ class Ip extends MX_Controller
 
 
 		// $data['dosen'] = $this->ip_model->get_dosen_list($periode['thn_ajaran'],$periode['semester']);
-		$data['listDosenPerUnit'] = $this->m_laporan->getListDosenAktifPerUnit($data['id_paket']);
+		$data['listDosenPerUnit'] = $this->ip_model->getListDosenAktifPerUnit($periode['thn_ajaran'],$periode['semester'],$data['id_paket']);
 
 		/* -- Render Layout -- */
 		$data['paket_list']	= $this->m_laporan->getPaketList();
@@ -63,14 +63,19 @@ class Ip extends MX_Controller
 			$_periode 				= $this->ip_model->getLastPeriodePaket();
 			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
 			$periode['semester']	= $_periode['semester'];
+			$data['periode']['semester'] 	= $_periode['semester'];
+			$data['periode']['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$data['periode']['deadline'] 	= $_periode['deadline'];
 		}
 		else {
 			$data['id_paket'] 		= $id_paket;
 			$periode['thn_ajaran']	= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
 			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
+			$periode['deadline']	= $this->m_laporan->getPaketList($id_paket)->deadline_o4;
+			$data['periode']['semester'] 	= $periode['semester'];
+			$data['periode']['thn_ajaran'] 	= $periode['thn_ajaran'];
+			$data['periode']['deadline'] 	= $periode['deadline'];			
 		}
-		$data['periode']['semester'] 	= $_periode['semester'];
-		$data['periode']['thn_ajaran'] 	= $_periode['thn_ajaran'];
 
 		$data['dsn'] = $this->ip_model->get_dosen_info($nik);
 
@@ -118,8 +123,9 @@ class Ip extends MX_Controller
 		}
 		if ($id_paket == '') {
 			$data['id_paket'] 	= '';
-			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
-			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+			$_periode 				= $this->ip_model->getLastPeriodePaket();
+			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$periode['semester']	= $_periode['semester'];
 		}
 		else {
 			$data['id_paket'] 		= $id_paket;
@@ -192,8 +198,9 @@ class Ip extends MX_Controller
 		}
 		if ($id_paket == '') {
 			$data['id_paket'] 	= '';
-			$periode['thn_ajaran'] 	= $this->m_general->getLastPeriode()->thn_ajaran;
-			$periode['semester']	= $this->m_general->getLastPeriode()->semester;
+			$_periode 				= $this->ip_model->getLastPeriodePaket();
+			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$periode['semester']	= $_periode['semester'];
 		}
 		else {
 			$data['id_paket'] 		= $id_paket;
@@ -201,14 +208,9 @@ class Ip extends MX_Controller
 			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
 		}
 
-		// $data['list_ip_dosen_prodi'] = $this->ip_model->get_ip_list($prodi,'2013/2014','GENAP');
 		$data['list_ip_dosen_prodi'] = $this->ip_model->get_ip_list($id_unit,$periode['thn_ajaran'],$periode['semester']);
 
 		/* -- Render Layout -- */
-		// $data['title'] 		= "IP Dosen";
-		// $data['content'] 	= 'ip/ip/rangkuman';
-		// $this->load->view('main/render_layout',$data);
-
 		$data['thn_ajaran']			= $periode['thn_ajaran'];
 		$data['periode']			= $periode['semester'];
 		// $data['prodi']				= $this->ip_model->get_info_prodi($prodi);

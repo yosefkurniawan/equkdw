@@ -35,8 +35,15 @@
 			</li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_kepala_unit'] || ($this->session->userdata['status'] == 'Dosen')) :?>
-			<li><a href="<?=base_url()?>laporan/dosen/hasil_evaluasi/<?= $this->session->userdata('username'); ?>" title="Laporan" >Laporan</a></li>
-			<li><a href="<?=base_url()?>soal/soal_tambahan" title="Kuisioner" >Kuisioner</a></li>
+			<li><i class="icon-globe"></i><a href="<?=base_url()?>" title="Dashboard" >Dashboard</a></li>
+			<li>
+				<i class="icon-dashboard"></i><a href="javascript:void(0)" title="Laporan" >Laporan</a>
+				<ul class="toggle">
+					<li><a href="<?=base_url()?>laporan/dosen/hasil_evaluasi/<?= $this->session->userdata('username'); ?>" title="Laporan" >Evaluasi Dosen</a></li>
+					<li><a href="<?=base_url()?>laporan/dosen/ip_dosen/<?= $this->session->userdata('username'); ?>" title="Laporan" >IP Dosen</a></li>
+				</ul>
+			</li>
+			<!-- <li><a href="<?=base_url()?>soal/soal_tambahan" title="Kuisioner" >Kuisioner</a></li> -->
 	<?php endif ?>
 	<?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
 			<li><a href="<?=base_url()?>mahasiswa/dashboard" title="Dashboard" ><i class="icon-">&#xf0ac;</i>Dashboard</a></li>

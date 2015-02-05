@@ -235,9 +235,10 @@ class M_olahan extends CI_Model
 		}						
 	}
 
-	function delete_o3_raw_nilai($th_ajaran,$semester) {
+	function delete_o3_raw_nilai($prodi,$th_ajaran,$semester) {
 		$this->db->where('semester',$semester);
 		$this->db->where('th_ajaran',$th_ajaran);
+		$this->db->where('prodi',$prodi);
 		$delete = $this->db->delete('o3_raw_nilai');
 		if ($delete) {
 		 	return false;
@@ -246,9 +247,10 @@ class M_olahan extends CI_Model
 		}						
 	}
 
-	function delete_o3_raw_kehadiran($th_ajaran,$semester) {
+	function delete_o3_raw_kehadiran($prodi,$th_ajaran,$semester) {
 		$this->db->where('semester',$semester);
 		$this->db->where('th_ajaran',$th_ajaran);
+		$this->db->where('prodi',$prodi);
 		$delete = $this->db->delete('o3_raw_kehadiran');
 		if ($delete) {
 		 	return false;
@@ -425,8 +427,7 @@ class M_olahan extends CI_Model
 		$sql = "SELECT 
 			kode,
 		   	grup,
-		   	prodi,
-		   	
+		   	prodi,		   	
 		   	SUM( 
 		   		IF( FIND_IN_SET(nilai,'A,A-,B+,B,B-,C+,C') AND persen_hadir > 50 ,1,0 ) 
 		   	) AS tot_lulus,
@@ -446,7 +447,7 @@ class M_olahan extends CI_Model
 
 			semester,
 		   	th_ajaran,
-		   	CONCAT(kode, grup, prodi, semester, th_ajaran) as mykey
+		   	CONCAT(kode, grup, semester, th_ajaran) as mykey
 		FROM o3_olah_nilai_kehadiran
 		WHERE semester = '$semester' AND th_ajaran = '$thn_ajaran'
 		GROUP BY kode, grup, prodi, semester, th_ajaran";
@@ -475,9 +476,7 @@ class M_olahan extends CI_Model
 					break;
 				}
 			}		
-
 			return $result;
-
 		} else {
 			return false;
 		}		

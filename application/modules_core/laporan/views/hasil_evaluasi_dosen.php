@@ -33,8 +33,8 @@
 
 <ol class="breadcrumb">
 	<li><a href="<?= base_url() ?>">Dashboard</a></li>
-	<li><a href="<?= base_url().'laporan' ?>">Laporan</a></li>
-	<li><a href="<?= base_url().'laporan' ?>">Hasil Evaluasi</a></li>
+	<li class="active">Laporan</li>
+	<li><a href="<?= base_url().'laporan/dosen/hasil_evaluasi/'.$dosen->nik ?>">Hasil Evaluasi</a></li>
 	<li class="active"><?= $dosen->nama ?></li>
 </ol>
 

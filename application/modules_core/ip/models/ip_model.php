@@ -91,6 +91,8 @@ class ip_model extends CI_Model
 	}
 
 	function get_ip_list($id_unit,$th_ajaran,$semester) {
+		// echo $id_unit; echo $th_ajaran; echo $semester; die;
+
 		$sql = "SELECT CONCAT(dsn.gelar_prefix,' ',dsn.nama,' ',dsn.gelar_suffix),dsn.gelar_prefix,dsn.gelar_suffix,
 				dsn.nik'nik_baru',dsn.nidn,dsn.nama'nama_dsn',p.id_unit,p.unit'nama_prodi',
 				SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
@@ -105,15 +107,15 @@ class ip_model extends CI_Model
 				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
 				o5.eclass*0.2) / COUNT(dsn.nik),2) as ip_dosen
 				FROM (SELECT * FROM kelas_all
-				WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran' AND eva_status = '1' AND prodi = '$id_unit') kls
+				WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran' AND eva_status = '1') kls
 				LEFT JOIN user_dosen_karyawan dsn ON kls.nik = dsn.nik
 				LEFT JOIN ref_unit p ON dsn.id_unit = p.id_unit
 				LEFT JOIN o1_presensi o1 ON kls.mykey = o1.mykey
 				LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey AND kls.nik = o2.nik
 				LEFT JOIN o3_nilailulus o3 ON kls.mykey = o3.mykey
 				LEFT JOIN o4_nilaimasuk o4 ON kls.mykey = o4.mykey
-				LEFT JOIN o5_eclass o5 ON kls.mykey = o5.mykey
-				-- WHERE dsn.id_unit = '$id_unit'
+				LEFT JOIN o5_eclass o5 ON kls.mykey = o5.mykey AND kls.nik = o5.nik
+				WHERE dsn.id_unit = '$id_unit'
 				GROUP BY dsn.nik
 				ORDER BY ip_dosen DESC, jmlh_mtk DESC";
 			$query = $this->db->query($sql);
@@ -388,7 +390,9 @@ class ip_model extends CI_Model
 	{
 		$sql = "SELECT matkul.nik as nik_baru, matkul.nama_dsn, matkul.kode, matkul.nama_mtk, matkul.grup, matkul.mykey,
 								o1.persen_hadir,o2.baik,o3.persen_lulus,o4.flag_tepat,
-								o5.silabus,o5.materi,o5.tugas,o5.nilai,o5.eclass
+								o5.silabus,o5.materi,o5.tugas,o5.nilai,o5.eclass,
+								o4.tgl_masuk, 
+								o1.rencana,o1.tot_hadir
 				FROM
 				(SELECT nik, nama_dsn, kode, nama_mtk, grup, mykey FROM kelas_all 
 				WHERE thn_ajaran = '$th_ajaran' AND semester = '$semester' AND nik = '$nik' AND eva_status = '1') matkul
@@ -397,6 +401,7 @@ class ip_model extends CI_Model
 				LEFT JOIN o3_nilailulus o3 ON o3.mykey = matkul.mykey 
 				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = matkul.mykey 
 				LEFT JOIN o5_eclass o5 ON o5.mykey = matkul.mykey AND o5.nik = matkul.nik
+				GROUP BY matkul.mykey
 				";
 		$query = $this->db->query($sql);
 		// echo '<pre>'; print_r($query->result()); die;
@@ -447,18 +452,116 @@ class ip_model extends CI_Model
 						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
 		$sql_thn_ajaran = "(SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket 
 						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
+		$sql_deadline = "(SELECT MAX(deadline_o4) AS deadline FROM eva_paket 
+						WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM eva_paket))";
 
 		$query_semester  = $this->db->query($sql_semester);
 		$query_thnAjaran = $this->db->query($sql_thn_ajaran);
+		$query_deadline = $this->db->query($sql_deadline);
 
 		if ($query_semester->num_rows() > 0 && $query_thnAjaran->num_rows() > 0) {	
 			$result['semester']   = $query_semester->row()->semester;
 			$result['thn_ajaran'] = $query_thnAjaran->row()->thn_ajaran;
+			$result['deadline'] = $query_deadline->row()->deadline;
 			return $result;
 		} else {
 			return array();
 		}	
+	}
 
+	public function getListDosenAktifPerUnit($thn_ajaran,$semester,$id_paket){	
+		// set periode
+		// if ($id_paket != '') {
+		// 	$sql_latest_paket = "SELECT * FROM eva_paket WHERE id_paket = '$id_paket' ORDER BY thn_ajaran DESC, semester DESC, id_paket DESC";		
+		// 	$query = $this->db->query($sql_latest_paket);
+		// 	$semester 	= "'".$query->row()->semester."'";
+		// 	$thn_ajaran	= "'".$query->row()->thn_ajaran."'";
+		// }
+		// else{
+		// 	$semester 	= "(SELECT MAX(semester) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		// 	$thn_ajaran = "(SELECT MAX(thn_ajaran) FROM ec_kelas_buka WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
+		// }
+
+		// echo $semester; echo $thn_ajaran; die;
+
+		// $sql_listDosen 	= "SELECT d.nik,d.nama,d.gelar_suffix,d.gelar_prefix, d.id_unit, IFNULL(u.unit,'zzz') as unit
+		// 				FROM ec_kelas_buka k
+		// 				JOIN ec_pengajar p ON k.id_kelasb = p.id_kelasb
+		// 				JOIN user_dosen_karyawan d ON d.nik = p.nik
+		// 				JOIN ec_matkul m ON m.kode = k.kode 
+		// 				LEFT JOIN ref_unit u ON u.id_unit = d.id_unit
+		// 				WHERE k.semester = $semester
+		// 				AND k.thn_ajaran = $thn_ajaran
+		// 				AND m.eva_status = 1
+		// 				GROUP BY nik, nama, gelar_suffix, gelar_prefix, id_unit, unit
+		// 				ORDER BY unit,d.nama ASC";
+
+		$sql_listDosen 	= "SELECT k.nik, k.nama_dsn, d.nama, d.gelar_suffix, d.gelar_prefix, d.id_unit, IFNULL(u.unit,'zzz') as unit
+						FROM kelas_all k
+						LEFT JOIN user_dosen_karyawan d ON d.nik = k.nik
+						LEFT JOIN ref_unit u ON u.id_unit = d.id_unit
+						WHERE k.semester = '$semester'
+						AND k.thn_ajaran = '$thn_ajaran'
+						AND k.eva_status = 1
+						AND k.nik != ''
+						GROUP BY nik, nama, gelar_suffix, gelar_prefix, id_unit, unit
+						ORDER BY unit, d.nama ASC";
+
+		// $sql_listDosen 	= "SELECT * FROM kelas_all WHERE nik = '201204178' AND semester = 'GASAL' AND thn_ajaran='2014/2015'";
+
+		$_listDosen = $this->db->query($sql_listDosen);
+
+		// echo "<pre>:"; print_r($_listDosen->result_array());die;
+
+
+		$listDosen = array();
+		if ($_listDosen->num_rows() > 0) {
+			$listDosen = $_listDosen->result_array();
+		}
+
+
+		$_result = array();
+		// Listing the units
+		if ($listDosen) {
+			foreach ($listDosen as $key => $dosen) {
+				// rename unit if empty
+				$id_unit 	= $dosen['id_unit'];
+				$unit 		= $dosen['unit'];
+				if ($dosen['unit']=='zzz') {
+					$id_unit 	= '-';
+					$unit 		= 'Tidak Terdaftar';
+					$listDosen[$key]['id_unit'] = $id_unit;
+					$listDosen[$key]['unit'] 	= $unit;
+				}
+
+				$_result[$id_unit]['id_unit'] 	= $id_unit; 
+				$_result[$id_unit]['unit'] 		= $unit; 
+				$_result[$id_unit]['listDosen']	= array();
+
+				if ($id_paket != '') {
+					// create button print laporan per unit
+					$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."/".$id_paket."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
+				}
+				else{
+					// create button print laporan per unit
+					$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
+
+				}
+			}
+		}
+
+		// Move dosen into unit one by one
+		if ($_result) {
+			foreach ($_result as $key => $value) {
+				foreach ($listDosen as $dosen) {
+					if ($dosen['id_unit'] == $value['id_unit']) {
+						$_result[$key]['listDosen'][] = $dosen;
+					}
+				}
+			}
+		}
+
+		return $_result;
 	}
 
 } // end of class

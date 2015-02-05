@@ -94,8 +94,6 @@ class M_laporan extends CI_Model {
 					$_result[$id_unit]['btn_print']	= "<a href='".base_url()."laporan/pdf_hasil_evaluasi_dosen_per_prodi/".$dosen['id_unit']."' class='btn btn-med blue-bg btn-print-evaluasi' target='_blank' title='Mencetak hasil evaluasi semua dosen ".$dosen['unit']."'><i class='icon-print'></i> Cetak</a>";				
 
 				}
-				
-
 			}
 		}
 
