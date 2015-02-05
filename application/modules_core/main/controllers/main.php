@@ -99,6 +99,7 @@ class Main extends MX_Controller
 				# login trough this way always not as admin/superadmin
 				$this->session->set_userdata('is_super_admin', false);
 				$this->session->set_userdata('is_admin', false);
+				$this->session->set_userdata('is_biro1', false);
 
 				redirect(base_url());
 			}

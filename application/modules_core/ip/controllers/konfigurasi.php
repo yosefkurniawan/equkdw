@@ -278,7 +278,7 @@ class Konfigurasi extends MX_Controller {
 		        	//yang kurang
 		        	if ($_POST['method'] == '1') {
 		        		//delete all value
-		        		$this->m_olahan->delete_o3_raw_nilai($_POST['thn_ajaran'],$_POST['semester']);
+		        		$this->m_olahan->delete_o3_raw_nilai($prodi,$_POST['thn_ajaran'],$_POST['semester']);
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{
@@ -384,7 +384,7 @@ class Konfigurasi extends MX_Controller {
 		        	//yang kurang
 		        	if ($_POST['method'] == '1') {
 		        		//delete all value
-		        		$this->m_olahan->delete_o3_raw_kehadiran($_POST['thn_ajaran'],$_POST['semester']);
+		        		$this->m_olahan->delete_o3_raw_kehadiran($prodi,$_POST['thn_ajaran'],$_POST['semester']);
 				        foreach ($result as $key => $value) {
 				        	if ($value['th_ajaran'] == $_POST['thn_ajaran'] AND $value['semester'] == $_POST['semester'])
 				        	{	

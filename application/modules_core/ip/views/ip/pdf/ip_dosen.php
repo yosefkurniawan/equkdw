@@ -271,7 +271,7 @@
     
     <!-- box left -->
 	<div class="left box-panduan-perhitungan">
-        <h4 class="title">PARAMETER/INDIKATOR YANG DIGUNAKAN DALAM EVALUASI<h4>
+        <h4 class="title">PARAMETER/INDIKATOR YANG DIGUNAKAN DALAM EVALUASI</h4>
 		<table class="table table-bordered table-panduan-perhitungan">
             <thead>
                 <tr>
@@ -314,10 +314,10 @@
                 <tr>
                     <td>P4 (15%)</td>
                     <td>Ketepatan Waktu Penyerahan Nilai</td>
-                    <td>Sebelum atau setelah tanggal 25 Juli 2014</td>
-                    <td>Sebelum atau tepat tanggal 25 Juli 2014</td>
+                    <td>Diserahkan sebelum atau setelah tanggal <?php echo date('d-M-Y',strtotime($periode['deadline'])) ?></td>
+                    <td>Sebelum atau tepat tanggal <?php echo date('d-M-Y',strtotime($periode['deadline'])) ?></td>
                     <td></td>
-                    <td>Setelah 25 Juli 2014</td>
+                    <td>Setelah <?php echo date('d-M-Y',strtotime($periode['deadline'])) ?></td>
                 </tr>
                 <tr>
                     <td>P5 (20%)</td>
@@ -349,7 +349,7 @@
                 <dt>Nama</dt>
                 <dd><?php echo $dsn->nama_dsn?></dd>
                 <dt>IPK</dt>
-                <dd><?php echo $ipk; ?></dd>
+                <dd><?php echo number_format($ipk,2); ?></dd>
             </dl>
         </div>
         <div class="right logo-ukdw">
@@ -511,7 +511,10 @@
                         <?php $p5 = $mtk->eclass ?>
                         <?php echo $mtk->eclass ?>
                     </td>
-                    <td style="text-align:right"><?php echo $ip_mtk = (0.2 * $p1) + (0.35 * $p2) + (0.10 * $p3) + (0.15 * $p4) + (0.20 * $p5) ?></td>
+                    <td style="text-align:right">
+                        <?php $ip_mtk = (0.2 * $p1) + (0.35 * $p2) + (0.10 * $p3) + (0.15 * $p4) + (0.20 * $p5) ?>
+                        <?php echo number_format($ip_mtk,2) ?>
+                    </td>
 
 
                     <?php $i++ ?>
@@ -535,7 +538,7 @@
             <tbody>
                 <tr>
                         <td style="text-align:right">Total IPS : </td>
-                        <td style="text-align:right"><?php echo $ips_tot ?></td>
+                        <td style="text-align:right"><?php echo number_format($ips_tot,2) ?></td>
                 </tr>
                 <tr>
                         <td style="text-align:right">Jumlah Kelas : </td>
@@ -545,7 +548,7 @@
             <tfoot>
                 <tr>
                         <td style="text-align:right">IPK : </td>
-                        <td style="text-align:right"><?php echo round($ips_tot / $i, 2); ?></td>
+                        <td style="text-align:right"><?php echo number_format(round((float)$ips_tot / $i, 2),2); ?></td>
                 </tr>
             </tfoot>
         </table>
