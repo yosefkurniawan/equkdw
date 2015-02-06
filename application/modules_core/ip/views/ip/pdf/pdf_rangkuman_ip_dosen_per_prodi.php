@@ -24,20 +24,21 @@ ob_start();
 	else{
 		foreach ($list_ip_dosen_prodi as $dosen){
 			$nama = '';
-			if (str_replace(" ", "",$dosen->gelar_prefix) != '' AND str_replace(" ", "",$dosen->gelar_prefix) != NULL) {
-				$nama = $dosen->gelar_prefix . ' ';
+			if (str_replace(" ", "",$dosen['gelar_prefix']) != '' AND str_replace(" ", "",$dosen['gelar_prefix']) != NULL) {
+				$nama = $dosen['gelar_prefix'] . ' ';
 			}
-			$nama = $nama . $dosen->nama_dsn;
-			if ($dosen->gelar_suffix != '' AND $dosen->gelar_suffix != NULL) {
-				$nama = $nama . ' ' . $dosen->gelar_suffix ;
+			$nama = $nama . $dosen['nama_dsn'];
+			if ($dosen['gelar_suffix'] != '' AND $dosen['gelar_suffix'] != NULL) {
+				$nama = $nama . ' ' . $dosen['gelar_suffix'] ;
 			}
 
+			$ip = $dosen['total_ip'] / $dosen['jmlh_mtk'];
 			$data_hasil_kelas .= '<tr>
-			    <td width="20%">'.$dosen->nik_baru.'</td>
+			    <td width="20%">'.$dosen['nik_baru'].'</td>
 			    <td width="50%">'.$nama.'</td>
-			    <td width="10%" style="text-align:right">'.$dosen->total_ip.'</td>
-			    <td width="10%" style="text-align:right">'.$dosen->jmlh_mtk.'</td>
-			    <td width="10%" style="text-align:right">'.$dosen->ip_dosen.'</td>
+			    <td width="10%" style="text-align:right">'.$dosen['total_ip'].'</td>
+			    <td width="10%" style="text-align:right">'.$dosen['jmlh_mtk'].'</td>
+			    <td width="10%" style="text-align:right">'.number_format(ROUND($ip,2),2).'</td>
 			</tr>';
 		}
 	}
@@ -82,7 +83,7 @@ ob_start();
 	<!-- Hasil Evaluasi Kelas -->
 	<div class="hasil_kelas">
 		<h2>Hasil Rangkuman IP Dosen</h2>
-		<h4>Program Studi : '.$prodi->unit.'</h4>
+		<h4>Asal Program Studi / Unit : '.$prodi->unit.'</h4>
 		<h4></h4>
 		<h4></h4>
 		<table class="table" id="hasil-evaluasi-dosen">

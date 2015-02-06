@@ -92,42 +92,69 @@ class ip_model extends CI_Model
 
 	function get_ip_list($id_unit,$th_ajaran,$semester) {
 		// echo $id_unit; echo $th_ajaran; echo $semester; die;
+		$sql = "SELECT * FROM user_dosen_karyawan dsn WHERE dsn.id_unit = '$id_unit' ";
+		$query = $this->db->query($sql);
+		// echo '<pre>'; print_r($query->result()); die;
 
-		$sql = "SELECT CONCAT(dsn.gelar_prefix,' ',dsn.nama,' ',dsn.gelar_suffix),dsn.gelar_prefix,dsn.gelar_suffix,
-				dsn.nik'nik_baru',dsn.nidn,dsn.nama'nama_dsn',p.id_unit,p.unit'nama_prodi',
-				SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
-				IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
-				IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
-				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
-				o5.eclass*0.2) as total_ip, 
-				COUNT(dsn.nik) as jmlh_mtk,
-				ROUND(SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
-				IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
-				IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
-				IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
-				o5.eclass*0.2) / COUNT(dsn.nik),2) as ip_dosen
-				FROM (SELECT * FROM kelas_all
-				WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran' AND eva_status = '1') kls
-				LEFT JOIN user_dosen_karyawan dsn ON kls.nik = dsn.nik
-				LEFT JOIN ref_unit p ON dsn.id_unit = p.id_unit
-				LEFT JOIN o1_presensi o1 ON kls.mykey = o1.mykey
-				LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey AND kls.nik = o2.nik
-				LEFT JOIN o3_nilailulus o3 ON kls.mykey = o3.mykey
-				LEFT JOIN o4_nilaimasuk o4 ON kls.mykey = o4.mykey
-				LEFT JOIN o5_eclass o5 ON kls.mykey = o5.mykey AND kls.nik = o5.nik
-				WHERE dsn.id_unit = '$id_unit'
-				GROUP BY dsn.nik
-				ORDER BY ip_dosen DESC, jmlh_mtk DESC";
+		$dosen = array();
+		foreach ($query->result_array() as $key) {
+			$nik = $key['nik'];
+			$sql = "SELECT id_kelasb, gelar_prefix, gelar_suffix, nik_baru, nidn, nama_dsn, id_unit, nama_prodi,
+					SUM(total_ip/jmlh_mtk)'total_ip',
+					COUNT(jmlh_mtk)'jmlh_mtk',
+					ROUND(SUM(total_ip/jmlh_mtk) / COUNT(jmlh_mtk),2)'ip_dosen'
+					FROM (SELECT kls.id_kelasb,dsn.gelar_prefix,dsn.gelar_suffix,
+					dsn.nik'nik_baru',dsn.nidn,dsn.nama'nama_dsn',p.id_unit,p.unit'nama_prodi',
+					-- IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))'persen_hadir'
+					SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
+					IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
+					IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
+					IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
+					o5.eclass*0.2) as total_ip, 
+					COUNT(dsn.nik) as jmlh_mtk,
+					ROUND(SUM(IF(o1.persen_hadir > 90, 4, IF(o1.persen_hadir > 80, 3, 2))*0.2 + 
+					IF(o2.baik > 90, 4, IF(o2.baik > 80, 3, 2))*0.35 + 
+					IF(o3.persen_lulus > 60, 4, IF(o3.persen_lulus > 50 , 3, 2))*0.1 + 
+					IF(o4.flag_tepat = 'T', 4, 2)*0.15 + 
+					o5.eclass*0.2) / COUNT(dsn.nik),2) as ip_dosen
+					FROM (SELECT * FROM kelas_all
+					WHERE semester = '$semester' AND thn_ajaran = '$th_ajaran' AND eva_status = '1' AND nik = '$nik') kls
+					LEFT JOIN user_dosen_karyawan dsn ON kls.nik = dsn.nik
+					LEFT JOIN ref_unit p ON dsn.id_unit = p.id_unit
+					LEFT JOIN o1_presensi o1 ON kls.mykey = o1.mykey
+					LEFT JOIN o2_persenbaik o2 ON kls.mykey = o2.mykey AND kls.nik = o2.nik
+					LEFT JOIN o3_nilailulus o3 ON kls.mykey = o3.mykey
+					LEFT JOIN o4_nilaimasuk o4 ON kls.mykey = o4.mykey
+					LEFT JOIN o5_eclass o5 ON kls.mykey = o5.mykey AND kls.nik = o5.nik
+					GROUP BY kls.mykey) x GROUP BY nik_baru";
 			$query = $this->db->query($sql);
-			// echo '<pre>'; print_r($query->result()); die;
-			if ($query->num_rows() > 0 ) 
-			{
-				return $query->result();
-			} // end of if
-			else 
-			{
-				return array();
-			}					
+			if ($query->num_rows() > 0) {
+				$dosen[$key['nik']] = $query->row_array();
+			}
+		}
+
+		$data = $this->array_multi_subsort($dosen, 'ip_dosen');
+		$dosen = array_reverse($data, true);
+		// echo "<pre>"; print_r($dosen); die;
+		return $dosen;		
+	}
+	
+	function array_multi_subsort($array, $subkey)
+	{
+	    $b = array(); $c = array();
+
+	    foreach ($array as $k => $v)
+	    {
+	        $b[$k] = strtolower($v[$subkey]);
+	    }
+
+	    asort($b);
+	    foreach ($b as $key => $val)
+	    {
+	        $c[] = $array[$key];
+	    }
+
+	    return $c;
 	}
 
 	function get_prodi_o1($prodi,$th_ajaran,$semester) {
