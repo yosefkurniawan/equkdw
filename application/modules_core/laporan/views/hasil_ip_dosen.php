@@ -161,6 +161,8 @@
                             Y
                         <?php elseif ($mtk->flag_tepat == 'F') : ?>
                             T
+                        <?php else : ?>
+                            -
                         <?php endif ?>                                                
 							<i class="tooltip-demo"
 	                            data-original-title="Tgl Penyerahan Nilai : <?php echo date('d-M-Y',strtotime($mtk->tgl_masuk)) ?> "
@@ -174,6 +176,9 @@
                             <?php $p4 = 4 ; ?>
                             <?php echo $p4; ?>
                         <?php elseif ($mtk->flag_tepat == 'F') : ?>
+                            <?php $p4 = 2 ; ?>
+                            <?php echo $p4; ?>
+                        <?php else : ?>
                             <?php $p4 = 2 ; ?>
                             <?php echo $p4; ?>
                         <?php endif ?>                      

@@ -15,8 +15,8 @@
                         <?php elseif ($mtk->persen_hadir <= 80) : ?>
                             <?php $p1 = 2 ; ?>
                         <?php endif ?>
-
                         <?php $p2 = 0 ; ?>
+
                         <!-- p2 -->
                         <?php if ($mtk->baik > 90) : ?>
                             <?php $p2 = 4 ; ?>
@@ -41,6 +41,8 @@
                         <?php if ($mtk->flag_tepat == 'T') : ?>
                             <?php $p4 = 4 ; ?>
                         <?php elseif ($mtk->flag_tepat == 'F') : ?>
+                            <?php $p4 = 2 ; ?>
+                        <?php else : ?>
                             <?php $p4 = 2 ; ?>
                         <?php endif ?>                        
                         
@@ -342,12 +344,25 @@
                 <dd><?php echo $periode['thn_ajaran'] ?></dd>
             </dl>
             <dl>
+
+                <?php
+                    $nama = '';
+                    if (str_replace(" ", "",$dsn->gelar_prefix) != '' AND str_replace(" ", "",$dsn->gelar_prefix) != NULL) {
+                        $nama = $dsn->gelar_prefix . ' ';
+                    }
+                    $nama = $nama . $dsn->nama_dsn;
+                    if ($dsn->gelar_suffix != '' AND $dsn->gelar_suffix != NULL) {
+                        $nama = $nama . ' ' . $dsn->gelar_suffix ;
+                    }
+                ?>
+
+
                 <dt>Program Studi</dt>
                 <dd><?php echo $dsn->unit ?></dd>
                 <dt>NIK</dt>
                 <dd><?php echo $dsn->nik?></dd>
                 <dt>Nama</dt>
-                <dd><?php echo $dsn->nama_dsn?></dd>
+                <dd><?php echo $nama?></dd>
                 <dt>IPK</dt>
                 <dd><?php echo number_format($ipk,2); ?></dd>
             </dl>
@@ -490,6 +505,8 @@
                             Y
                         <?php elseif ($mtk->flag_tepat == 'F') : ?>
                             T
+                        <?php else : ?>
+                            -
                         <?php endif ?>                                                
                     </td>
                     <td style="text-align:right">
@@ -499,6 +516,9 @@
                             <?php $p4 = 4 ; ?>
                             <?php echo $p4; ?>
                         <?php elseif ($mtk->flag_tepat == 'F') : ?>
+                            <?php $p4 = 2 ; ?>
+                            <?php echo $p4; ?>
+                        <?php else : ?>
                             <?php $p4 = 2 ; ?>
                             <?php echo $p4; ?>
                         <?php endif ?>                        
