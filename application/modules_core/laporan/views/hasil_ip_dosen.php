@@ -17,9 +17,16 @@
         </small> 
 
     <div class="pull-right">
-        <a href="<?php echo base_url() ?>laporan/dosen/detail_dosen_pdf/<?php echo $dsn->nik?>
-                <?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
-                class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>        
+
+        <?php if ($admin == 'ya') : ?>
+            <a href="<?php echo base_url(); ?>ip/ip/detail_dosen_pdf/<?php echo $dsn->nik?>/<?php echo $id_paket ?>" 
+                    class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>        
+        <?php else : ?>
+            <a href="<?php echo base_url() ?>laporan/dosen/detail_dosen_pdf/<?php echo $dsn->nik?>
+                    <?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
+                    class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>
+        <?php endif; ?>
+
     </div>
         
     </h1>
@@ -347,13 +354,25 @@
             jQuery('#id_paket').hide();
             return false;
         });     
-        jQuery('#change_period_process').on('click',function(){
-            var nik = jQuery('#nik').val();
-            var id_paket = jQuery('#id_paket').val();
-            var admin = jQuery('#isAdmin').val();
-            window.location.replace(CI_ROOT+'laporan/dosen/ip_dosen/'+nik+'/'+id_paket);
-            return false;
-        });     
+
+        <?php if ($admin == 'ya') : ?>
+            jQuery('#change_period_process').on('click',function(){
+                    var nik = jQuery('#nik').val();
+                    var id_paket = jQuery('#id_paket').val();
+                    var admin = jQuery('#isAdmin').val();
+                    window.location.replace(CI_ROOT+'ip/ip/login_as/'+nik+'/'+id_paket);
+                    return false;
+                });     
+        <?php else : ?>
+            jQuery('#change_period_process').on('click',function(){
+                var nik = jQuery('#nik').val();
+                var id_paket = jQuery('#id_paket').val();
+                var admin = jQuery('#isAdmin').val();
+                window.location.replace(CI_ROOT+'laporan/dosen/ip_dosen/'+nik+'/'+id_paket);
+                return false;
+            });     
+        <?php endif; ?>
+
     });
     
 </script>
