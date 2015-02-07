@@ -454,7 +454,13 @@
                     <td><?php echo $mtk->kode ?></td>
                     <td><?php echo $mtk->nama_mtk ?></td>
                     <td style="text-align:center"><?php echo $mtk->grup ?></td>
-                    <td style="text-align:right"><?php echo $mtk->persen_hadir ?>%</td>
+                    <td style="text-align:right">
+                        <?php if($mtk->persen_hadir > 100) : ?>
+                            100%
+                        <?php else : ?>
+                            <?php echo $mtk->persen_hadir ?>%
+                        <?php endif; ?>
+                    </td>
                     <td style="text-align:right">
                         <?php $p1 = 0 ; ?>
                         <!-- p1 -->
