@@ -591,4 +591,22 @@ class ip_model extends CI_Model
 		return $_result;
 	}
 
+	function getDosenListPerProdi($id_unit, $semester, $thn_ajaran) {
+
+		$sql_dosen_list = "SELECT d.*, u.unit FROM user_dosen_karyawan d
+							JOIN ref_unit u ON u.id_unit = d.id_unit
+							JOIN kelas_all k ON k.nik = d.nik AND k.semester = '$semester' AND k.thn_ajaran = '$thn_ajaran'
+							WHERE d.id_unit = '$id_unit'
+							GROUP BY d.nik";
+		
+		$query = $this->db->query($sql_dosen_list);
+		if ($query->num_rows() > 0 ) {
+			return $query->result_array();
+		}
+		else {
+			return array();
+		}				
+
+	}
+
 } // end of class

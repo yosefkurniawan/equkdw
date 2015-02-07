@@ -151,8 +151,75 @@ class Ip extends MX_Controller
 		$data['title'] 		= $pdf_title;
 		$data['content'] 	= 'ip/ip/pdf/ip_dosen';
 		$data['custom_css'][] 	= 'public/assets/css/pdf-ip-dosen.css';
+
    		// $data['custom_js'][] 	= 'public/assets/js/pinaple-soal-tambahan.js';
 		// $data['active']		= 'hasil evaluasi';
+		$this->load->view('main/render_layout',$data);
+	}
+
+	function detail_dosen_perprodi_pdf($id_unit = NULL, $id_paket = NULL){
+
+		if ($id_unit == NULL) {
+			redirect('ip/ip');
+		}
+
+		if ($id_paket == '') {
+			$data['id_paket'] 	= '';
+			$_periode 				= $this->ip_model->getLastPeriodePaket();
+			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$periode['semester']	= $_periode['semester'];
+			$data['periode']['semester'] 	= $_periode['semester'];
+			$data['periode']['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$data['periode']['deadline'] 	= $_periode['deadline'];
+		}
+		else {
+			$data['id_paket'] 		= $id_paket;
+			$periode['thn_ajaran']	= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
+			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
+			$periode['deadline']	= $this->m_laporan->getPaketList($id_paket)->deadline_o4;
+			$data['periode']['semester'] 	= $periode['semester'];
+			$data['periode']['thn_ajaran'] 	= $periode['thn_ajaran'];
+			$data['periode']['deadline'] 	= $periode['deadline'];			
+		}
+
+		// get dosen list per prodi
+		$dosen_list = $this->ip_model->getDosenListPerProdi($id_unit, $periode['semester'], $periode['thn_ajaran']);
+
+		foreach ($dosen_list as $key => $dosen) {
+			
+			$nik = $dosen['nik'];
+
+			$data['dsn'][] = $this->ip_model->get_dosen_info($nik);
+
+			$data['ajar'][] = $this->ip_model->get_dosen_ajar($nik,$periode['thn_ajaran'],$periode['semester']);		
+		}
+		
+		/* -- Perhitungan rata-rata p1 - p5 semua dosen di universitas -- */
+		$data['uni_o1'] = $this->ip_model->get_univ_o1($periode['thn_ajaran'],$periode['semester']);
+		$data['uni_o2'] = $this->ip_model->get_univ_o2($periode['thn_ajaran'],$periode['semester']);
+		$data['uni_o3'] = $this->ip_model->get_univ_o3($periode['thn_ajaran'],$periode['semester']);
+		$data['uni_o4'] = $this->ip_model->get_univ_o4($periode['thn_ajaran'],$periode['semester']);
+		$data['uni_o5'] = $this->ip_model->get_univ_o5($periode['thn_ajaran'],$periode['semester']);
+
+		/* -- Perhitungan rata-rata p1 - p5 semua dosen di prodi yang sama -- */
+		$data['prodi_o1'] = $this->ip_model->get_prodi_o1($id_unit,$periode['thn_ajaran'],$periode['semester']);
+		$data['prodi_o2'] = $this->ip_model->get_prodi_o2($id_unit,$periode['thn_ajaran'],$periode['semester']);
+		$data['prodi_o3'] = $this->ip_model->get_prodi_o3($id_unit,$periode['thn_ajaran'],$periode['semester']);
+		$data['prodi_o4'] = $this->ip_model->get_prodi_o4($id_unit,$periode['thn_ajaran'],$periode['semester']);
+		$data['prodi_o5'] = $this->ip_model->get_prodi_o5($id_unit,$periode['thn_ajaran'],$periode['semester']);
+
+		/* -- Give PDF Default Name -- */
+		$pdf_title = "IP Dosen ".$periode['thn_ajaran']." ".$periode['semester']." - " . $id_unit; 
+		$data['title'] 		= $pdf_title;
+
+		/* -- Render Layout -- */
+		$data['content'] 		= 'ip/ip/pdf/ip_dosen_perprodi';
+		$data['custom_css'][] 	= 'public/assets/css/pdf-ip-dosen.css';
+   		// $data['custom_js'][] 	= 'public/assets/js/pinaple-soal-tambahan.js';
+		// $data['active']		= 'hasil evaluasi';
+
+		// echo "<pre>"; print_r($data);die;
+
 		$this->load->view('main/render_layout',$data);
 	}
 

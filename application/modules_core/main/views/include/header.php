@@ -65,8 +65,8 @@
 <?php endif ?>
 
 <!-- high chart -->
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="<?=base_url()?>public/assets/js/highchart/highcharts.js"></script>
+<script src="<?=base_url()?>public/assets/js/highchart/modules/exporting.js"></script>
 
 </head>
 <body>
