@@ -27,7 +27,7 @@ class M_o4 extends CI_Model{
 		if ($prodi) { $where_prodi = " AND k.prodi = $prodi"; }
 
 		$sql = "SELECT k.*, o4.tgl_masuk, o4.flag_tepat FROM kelas_all k
-				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = CONCAT(k.id_kelasb,k.kode)
+				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = CONCAT(k.kode,k.grup,k.semester,k.thn_ajaran)
 				WHERE 1 = 1 $where_semester $where_thn_ajaran $where_prodi
 				ORDER BY k.kode, k.grup";
 

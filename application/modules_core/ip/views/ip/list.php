@@ -69,8 +69,11 @@
 					<ul class="list_dosen list-unstyled">
 						<?php foreach ($unit['listDosen'] as $dosen): ?>
 							<li class="col-md-4">
-								<?= $dosen['gelar_prefix']." ".$dosen['nama']." ".$dosen['gelar_suffix'] ?> <a href ="<?php echo base_url(); ?>ip/ip/detail_dosen_pdf/<?php echo $dosen['nik']?>/<?php echo $id_paket ?>"
+								<?= $dosen['gelar_prefix']." ".$dosen['nama']." ".$dosen['gelar_suffix'] ?> 
+								<a href ="<?php echo base_url(); ?>ip/ip/detail_dosen_pdf/<?php echo $dosen['nik']?>/<?php echo $id_paket ?>"
 								target="_blank"><i class="icon-print"></i></a>
+								<a href ="<?php echo base_url(); ?>ip/ip/login_as/<?php echo $dosen['nik']?>/<?php echo $id_paket ?>"
+								target="_blank"><i class="icon-eye-open"></i></a>							
 							</li>
 						<?php endforeach ?>
 					</ul>
