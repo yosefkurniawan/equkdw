@@ -1,44 +1,57 @@
 <div class="page-header">
-	<h1>
-		Hasil IP Dosen
-		<small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?> &nbsp; <a href="" id="change-period"> <i class="icon-cog"></i></a> &nbsp;
+    <h1>
+        Hasil IP Dosen
+        <small>Periode <?= $periode['semester'].' - '.$periode['thn_ajaran'] ?> &nbsp; <a href="" id="change-period"> <i class="icon-cog"></i></a> &nbsp;
 
-		<input type="hidden" id="nik" value="<?php echo $dsn->nik?>" />
-		
-		<select id="id_paket" style="width:160px;display:none">
-			<?php foreach($paket_list as $item) : ?>
-				<option value="<?php echo $item['id_paket']?>">
-					<?php echo $item['thn_ajaran']?> <?php echo $item['semester']?></option>
-			<?php endforeach; ?>
-		</select>
+        <input type="hidden" id="nik" value="<?php echo $dsn->nik?>" />
+        
+        <select id="id_paket" style="width:160px;display:none">
+            <?php foreach($paket_list as $item) : ?>
+                <option value="<?php echo $item['id_paket']?>">
+                    <?php echo $item['thn_ajaran']?> <?php echo $item['semester']?></option>
+            <?php endforeach; ?>
+        </select>
 
-		&nbsp;&nbsp;<a href="#" id="change_period_process" style="display:none"><i class='icon-save'> </i></a>
-		&nbsp;&nbsp;<a href="#" id="tutup_period_form" style="display:none"><i class='icon-remove'> </i></a>
-		</small> 
+        &nbsp;&nbsp;<a href="#" id="change_period_process" style="display:none"><i class='icon-save'> </i></a>
+        &nbsp;&nbsp;<a href="#" id="tutup_period_form" style="display:none"><i class='icon-remove'> </i></a>
+        </small> 
 
-	<div class="pull-right">
-		<a href="<?php echo base_url() ?>laporan/dosen/detail_dosen_pdf/<?php echo $dsn->nik?>
-				<?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
-				class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>		
-	</div>
-		
-	</h1>
+    <div class="pull-right">
+        <a href="<?php echo base_url() ?>laporan/dosen/detail_dosen_pdf/<?php echo $dsn->nik?>
+                <?php if ($id_paket != '') : echo '/'.$id_paket; endif; ?>" 
+                class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>        
+    </div>
+        
+    </h1>
 </div>
 
+<?php if ($admin == 'ya') : ?>
+
 <ol class="breadcrumb">
-	<li><a href="<?= base_url() ?>">Dashboard</a></li>
-	<li class="active">Laporan</li>
-	<li><a href="<?= base_url().'laporan/dosen/ip_dosen/' ?>">Laporan IP Dosen</a></li>
-	<li class="active"><?= $dsn->nama_dsn ?></li>
+    <li><a href="<?= base_url() ?>">Dashboard</a></li>
+    <li class="active">Laporan</a></li>
+    <li><a href="<?= base_url().'ip/ip' ?>">IP Dosen</a></li>
+    <li class="active"><?= $dsn->nama_dsn ?></li>
 </ol>
+
+<?php else : ?>
+
+<ol class="breadcrumb">
+    <li><a href="<?= base_url() ?>">Dashboard</a></li>
+    <li class="active">Laporan</li>
+    <li><a href="<?= base_url().'laporan/dosen/ip_dosen/' ?>">Laporan IP Dosen</a></li>
+    <li class="active"><?= $dsn->nama_dsn ?></li>
+</ol>
+
+<?php endif; ?>
 
 <h4>Dosen : <?= $dsn->nama_dsn ?> / <?= $dsn->nik ?> / <?php echo $dsn->unit ?>&nbsp;&nbsp;&nbsp;</h4>
 
 <!-- Hasil evaluasi kelas -->
 <div class="panel colored">
-	<div class="panel-heading green-bg"><h3 class="panel-title">Hasil IP Dosen</h3></div>
+    <div class="panel-heading green-bg"><h3 class="panel-title">Hasil IP Dosen</h3></div>
 
-	<div class="panel-body table-responsive">
+    <div class="panel-body table-responsive">
 
         <table class="table table-bordered">
             <thead>
@@ -83,20 +96,32 @@
                 <tr class="success">
             <?php else : ?>
                 <tr class="warning">
-           	<?php endif ?>
+            <?php endif ?>
                     <td><?php echo $i ?></td>
                     <td><?php echo $mtk->kode ?></td>
                     <td><?php echo $mtk->nama_mtk ?></td>
                     <td style="text-align:center"><?php echo $mtk->grup ?></td>
                     <td style="text-align:right">
-                    	<?php if (isset($mtk->persen_hadir)) : ?>
-                    	<?php echo $mtk->persen_hadir ?>%
-						<i class="tooltip-demo"
-                            data-original-title="Hadir Dalam <?php echo $mtk->tot_hadir ?> Pertemuan dari Total Rencana <?php echo $mtk->rencana ?> Pertemuan"
+                        <?php if (isset($mtk->persen_hadir)) : ?>
+                        <?php if ($mtk->persen_hadir > 100) : ?>
+                            100%
+                        <i class="tooltip-demo"
+                            data-original-title="Hadir Dalam <?php echo $mtk->rencana ?> Pertemuan dari Total Rencana <?php echo $mtk->rencana ?> Pertemuan"
                             data-placement="top" data-toggle="tooltip" href="#"
                             title=""><i class="icon-question-sign"></i></i> 
                         <?php else : ?>
+                        <?php echo $mtk->persen_hadir ?>%
+                        <i class="tooltip-demo"
+                            data-original-title="Hadir Dalam <?php echo $mtk->tot_hadir ?> Pertemuan dari Total Rencana <?php echo $mtk->rencana ?> Pertemuan"
+                            data-placement="top" data-toggle="tooltip" href="#"
+                            title=""><i class="icon-question-sign"></i></i> 
+                        <?php endif; ?>
+                        <?php else : ?>
                         -
+                        <i class="tooltip-demo"
+                            data-original-title="Hadir Dalam <?php echo $mtk->tot_hadir ?> Silahkan Konfirmasi Ke Biro 1"
+                            data-placement="top" data-toggle="tooltip" href="#"
+                            title=""><i class="icon-question-sign"></i></i> 
                         <?php endif; ?>
                     </td>
                     <td style="text-align:right">
@@ -114,8 +139,8 @@
                         <?php endif ?>
                     </td>
                     <td style="text-align:right">
-                    	<?php if ($mtk->baik != 0) : ?>
-                    	<?php echo $mtk->baik ?>%
+                        <?php if ($mtk->baik != 0) : ?>
+                        <?php echo $mtk->baik ?>%
                         <?php else : ?>
                         -
                         <?php endif; ?>
@@ -135,8 +160,8 @@
                         <?php endif ?>
                     </td>
                     <td style="text-align:right">
-                    	<?php if (isset($mtk->persen_lulus)) : ?>
-                    	<?php echo $mtk->persen_lulus ?>%
+                        <?php if (isset($mtk->persen_lulus)) : ?>
+                        <?php echo $mtk->persen_lulus ?>%
                         <?php else : ?>
                         -
                         <?php endif; ?>
@@ -159,15 +184,23 @@
                         <!-- p4 -->
                         <?php if ($mtk->flag_tepat == 'T') : ?>
                             Y
+                            <i class="tooltip-demo"
+                                data-original-title="Tgl Penyerahan Nilai : <?php echo date('d-M-Y',strtotime($mtk->tgl_masuk)) ?> "
+                                data-placement="top" data-toggle="tooltip" href="#"
+                                title=""><i class="icon-question-sign"></i></i>                          
                         <?php elseif ($mtk->flag_tepat == 'F') : ?>
                             T
+                            <i class="tooltip-demo"
+                                data-original-title="Tgl Penyerahan Nilai : <?php echo date('d-M-Y',strtotime($mtk->tgl_masuk)) ?> "
+                                data-placement="top" data-toggle="tooltip" href="#"
+                                title=""><i class="icon-question-sign"></i></i>                          
                         <?php else : ?>
                             -
+                            <i class="tooltip-demo"
+                                data-original-title="Nilai Belum Diserahkan, Silahkan Konfirmasi di Biro 1"
+                                data-placement="top" data-toggle="tooltip" href="#"
+                                title=""><i class="icon-question-sign"></i></i>                          
                         <?php endif ?>                                                
-							<i class="tooltip-demo"
-	                            data-original-title="Tgl Penyerahan Nilai : <?php echo date('d-M-Y',strtotime($mtk->tgl_masuk)) ?> "
-	                            data-placement="top" data-toggle="tooltip" href="#"
-	                            title=""><i class="icon-question-sign"></i></i>                          
                     </td>
                     <td style="text-align:right">
                         <?php $p4 = 0 ; ?>
@@ -237,7 +270,7 @@
 
         <div class="col-sm-12" style="font-size:12px">
         <h4 class="title">PARAMETER/INDIKATOR YANG DIGUNAKAN DALAM EVALUASI</h4>
-		<table class="table table-bordered">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th rowspan="2" style="text-align:center" >No</th>
@@ -294,33 +327,33 @@
                 </tr>
             </tbody>
         </table>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 
 <script>
-	CI_ROOT = "<?php echo base_url() ?>";
+    CI_ROOT = "<?php echo base_url() ?>";
 
     jQuery(document).ready(function() {   
-		jQuery('#change-period').on('click',function(){
-			jQuery('#id_paket').show();
-			jQuery('#change_period_process').show();
-			jQuery('#tutup_period_form').show();
-			return false;
-		});	    
-		jQuery('#tutup_period_form').on('click',function(){
-			jQuery(this).hide();
-			jQuery('#change_period_process').hide();
-			jQuery('#id_paket').hide();
-			return false;
-		});	    
-		jQuery('#change_period_process').on('click',function(){
-			var nik = jQuery('#nik').val();
-			var id_paket = jQuery('#id_paket').val();
-			var admin = jQuery('#isAdmin').val();
-			window.location.replace(CI_ROOT+'laporan/dosen/ip_dosen/'+nik+'/'+id_paket);
-			return false;
-		});	    
+        jQuery('#change-period').on('click',function(){
+            jQuery('#id_paket').show();
+            jQuery('#change_period_process').show();
+            jQuery('#tutup_period_form').show();
+            return false;
+        });     
+        jQuery('#tutup_period_form').on('click',function(){
+            jQuery(this).hide();
+            jQuery('#change_period_process').hide();
+            jQuery('#id_paket').hide();
+            return false;
+        });     
+        jQuery('#change_period_process').on('click',function(){
+            var nik = jQuery('#nik').val();
+            var id_paket = jQuery('#id_paket').val();
+            var admin = jQuery('#isAdmin').val();
+            window.location.replace(CI_ROOT+'laporan/dosen/ip_dosen/'+nik+'/'+id_paket);
+            return false;
+        });     
     });
     
 </script>

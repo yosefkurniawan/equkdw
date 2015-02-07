@@ -53,6 +53,46 @@ class Ip extends MX_Controller
 		$this->load->view('main/render_layout',$data);
 	}
 
+	function login_as($nik='',$id_paket=''){
+
+		if ($nik == NULL) {
+			redirect('ip/ip');
+		}
+
+		if ($id_paket == '') {
+			$data['id_paket'] 	= '';
+			$_periode 				= $this->ip_model->getLastPeriodePaket();
+			$periode['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$periode['semester']	= $_periode['semester'];
+			$data['periode']['semester'] 	= $_periode['semester'];
+			$data['periode']['thn_ajaran'] 	= $_periode['thn_ajaran'];
+			$data['periode']['deadline'] 	= $_periode['deadline'];
+		}
+		else {
+			$data['id_paket'] 		= $id_paket;
+			$periode['thn_ajaran']	= $this->m_laporan->getPaketList($id_paket)->thn_ajaran;
+			$periode['semester']	= $this->m_laporan->getPaketList($id_paket)->semester;
+			$periode['deadline']	= $this->m_laporan->getPaketList($id_paket)->deadline_o4;
+			$data['periode']['semester'] 	= $periode['semester'];
+			$data['periode']['thn_ajaran'] 	= $periode['thn_ajaran'];
+			$data['periode']['deadline'] 	= $periode['deadline'];			
+		}
+		/* -- Give PDF Default Name -- */
+		
+		/* -- Render Layout -- */
+		$data['admin']				= 'ya';
+		$data['dsn'] 				= $this->ip_model->get_dosen_info($nik);
+		$data['ajar'] 				= $this->ip_model->get_dosen_ajar($nik,$periode['thn_ajaran'],$periode['semester']);
+		$title = "IP Dosen ".$periode['thn_ajaran']." ".$periode['semester']." - " . $data['dsn']->nama_dsn; 
+		$data['title'] 				= $title;
+		$data['content'] 			= 'laporan/hasil_ip_dosen';
+		$data['paket_list']			= $this->m_laporan->getPaketList();
+		$data['btn_print']			= "<a href='".base_url()."laporan/dosen/detail_dosen_pdf/".$data['dsn']->nik."' class='btn btn-med blue-bg' target='_blank'><i class='icon-print'></i> Cetak</a>";
+   		// $data['custom_js'][] 	= 'public/assets/js/pinaple-soal-tambahan.js';
+		// $data['active']		= 'hasil evaluasi';
+		$this->load->view('main/render_layout',$data);
+	}	
+
 	function detail_dosen_pdf($nik = NULL,$id_paket = NULL){
 
 		if ($nik == NULL) {
