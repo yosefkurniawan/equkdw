@@ -46,6 +46,11 @@
 		    <h5>Deadline o4</h5>
 		    <a href="<?= base_url() ?>ip/konfigurasi_o4/deadline">View Details <i class="icon-"></i></a></div>
 		</li>
+		<li class="col-md-4">
+		  <div class="green-bg"><i class="icon-cogs"></i>
+		    <h5>Input Tanggal Penyerahan Berkas</h5>
+		    <a href="<?= base_url() ?>ip/konfigurasi_o4">View Details <i class="icon-"></i></a></div>
+		</li>
 	</ul>
 </div>
 

@@ -532,7 +532,7 @@ class ip_model extends CI_Model
 						AND k.eva_status = 1
 						AND k.nik != ''
 						GROUP BY nik, nama, gelar_suffix, gelar_prefix, id_unit, unit
-						ORDER BY unit, d.nama ASC";
+						ORDER BY unit, k.nik, d.nama ASC";
 
 		// $sql_listDosen 	= "SELECT * FROM kelas_all WHERE nik = '201204178' AND semester = 'GASAL' AND thn_ajaran='2014/2015'";
 

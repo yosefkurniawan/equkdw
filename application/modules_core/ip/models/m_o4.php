@@ -8,7 +8,9 @@
 
 class M_o4 extends CI_Model{
 
-	function getListMtk($prodi = NULL, $semester = NULL, $thn_ajaran = NULL) {
+	function getListMtk($prodi = NULL, $dosen = NULL, $semester = NULL, $thn_ajaran = NULL) {
+		$dosen = strtolower($dosen);
+		$where_dosen = "";
 
 		if ($semester) {
 			$where_semester = " AND k.semester = '$semester'";			
@@ -24,11 +26,14 @@ class M_o4 extends CI_Model{
 								WHERE thn_ajaran = (SELECT MAX(thn_ajaran) AS thn_ajaran FROM ec_kelas_buka))";
 		}
 
-		if ($prodi) { $where_prodi = " AND k.prodi = $prodi"; }
+		if ($prodi) { $where_prodi = " AND u.id_unit = $prodi"; }
+		if ($dosen) { $where_dosen = " AND LOWER(k.nama_dsn) LIKE '%$dosen%'"; }
 
 		$sql = "SELECT k.*, o4.tgl_masuk, o4.flag_tepat FROM kelas_all k
+				LEFT JOIN user_dosen_karyawan u ON u.nik = k.nik
 				LEFT JOIN o4_nilaimasuk o4 ON o4.mykey = CONCAT(k.kode,k.grup,k.semester,k.thn_ajaran)
-				WHERE 1 = 1 $where_semester $where_thn_ajaran $where_prodi
+				WHERE 1 = 1 $where_semester $where_thn_ajaran $where_prodi $where_dosen
+				GROUP BY k.mykey
 				ORDER BY k.kode, k.grup";
 
 		$query = $this->db->query($sql);
@@ -129,7 +134,7 @@ class M_o4 extends CI_Model{
 					$tgl_masuk = '';
 				}
 				
-				$mykey 		= $_POST['id_kelasb'][$key].$kode;
+				$mykey 		= $_POST['kode'][$key].$_POST['grup'][$key].$_POST['semester'].$_POST['thn_ajaran'];
 
 				// check does it exist already?
 				$sql_cek = "SELECT * FROM o4_nilaimasuk WHERE mykey = '$mykey'";
