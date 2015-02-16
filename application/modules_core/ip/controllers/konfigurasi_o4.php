@@ -54,12 +54,14 @@ class Konfigurasi_o4 extends MX_Controller {
 		$selected_semester	 	= ($this->input->get('semester'))? $this->input->get('semester') : $lastPeroide['semester'];
 		$selected_thn_ajaran 	= ($this->input->get('thn_ajaran'))? str_replace('-', '/', $this->input->get('thn_ajaran')) : $lastPeroide['thn_ajaran'];
 		$selected_prodi 		= ($this->input->get('prodi'))? $this->input->get('prodi') : '';
+		$dosen_name 			= ($this->input->get('nama-dosen'))? $this->input->get('nama-dosen') : '';
 
 		$data['last_semester']		= $lastPeroide['semester'];
 		$data['last_thn_ajaran']	= $lastPeroide['thn_ajaran'];
 
 		$data['semester']			= $selected_semester;
 		$data['thn_ajaran']			= $selected_thn_ajaran;
+		$data['dosen_name'] 	= $dosen_name;
 
 		// save data if POST
 		if ($_POST) {
@@ -71,7 +73,7 @@ class Konfigurasi_o4 extends MX_Controller {
 
 		// get list mtk
 		if ($selected_prodi) {
-			$data['list_matkul']		= $this->m_o4->getListMtk($selected_prodi,$selected_semester,$selected_thn_ajaran);
+			$data['list_matkul']		= $this->m_o4->getListMtk($selected_prodi,$dosen_name,$selected_semester,$selected_thn_ajaran);
 			$data['selected_prodi']		= $selected_prodi;
 		}else{
 			$data['list_matkul']		= array();

@@ -75,7 +75,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="col-lg-2"><label>Prodi</label></div>
+							<div class="col-lg-2"><label>Prodi Dosen</label></div>
 							<div class="col-lg-4">
 								<select id="select-prodi" name="prodi" class="full-width">
 							        <option value="">-- Pilih Prodi --</option>
@@ -83,6 +83,13 @@
 							        	<?php $selected = ($selected_prodi == $prodi['id_unit'])? 'selected="selected"' : ''; ?>
 							        	<option value="<?php echo $prodi['id_unit'] ?>" <?php echo $selected ?>><?php echo $prodi['nama_prodi']; ?></option>
 							        <?php endforeach ?>
+							    </select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-lg-2"><label>Nama Dosen</label></div>
+							<div class="col-lg-4">
+								<input id="nama-dosen" name="nama-dosen" class="form-control full-width" value="<?php echo $dosen_name ?>">
 							    </select>
 							</div>
 						</div>
@@ -124,7 +131,7 @@
                                 	<input type="hidden" name="id_kelasb[]" value="<?php echo $matkul['id_kelasb'] ?>">
                                 	<input type="hidden" name="kode[]" value="<?php echo $matkul['kode'] ?>">
                                 	<input type="hidden" name="grup[]" value="<?php echo $matkul['grup'] ?>">
-                                	<tr class="row-<?php echo $matkul['kode'] ?>">
+                                	<tr class="row-<?php echo $matkul['id_kelasb'] ?>">
                                 		<td><?php echo $matkul['kode'] ?></td>
                                 		<td><?php echo $matkul['nama_mtk'] ?></td>
                                 		<td><?php echo $matkul['grup'] ?></td>
@@ -149,7 +156,7 @@
 	                                				$tgl_masuk 	= $_tgl_masuk[2].'/'.$_tgl_masuk[1].'/'.$_tgl_masuk[0];
 	                                			}
                                 			?>
-                                			<input type="text" class="form-control datepicker tgl_masuk" name="tgl_masuk[]" value="<?php echo $tgl_masuk ?>" onchange="cekFlagTepat(<?php echo $deadline; ?> , getTimeStamp(this.value), '<?php echo $matkul['kode'] ?>')" />
+                                			<input type="text" class="form-control datepicker tgl_masuk" name="tgl_masuk[]" value="<?php echo $tgl_masuk ?>" onchange="cekFlagTepat(<?php echo $deadline; ?> , getTimeStamp(this.value), '<?php echo $matkul['kode'] ?>','<?php echo $matkul['id_kelasb'] ?>')" />
                                 		</td>
                                 		<td style="text-align:center;vertical-align:middle">
                     						<a href="javascript:void(0)" class="btn btn-med blue-bg save" onclick="save('<?php echo $matkul['kode'] ?>','<?php echo $matkul['grup'] ?>','<?php echo $matkul['prodi'] ?>','<?php echo $matkul['id_kelasb'] ?>')"><i class="icon-save"></i></a> 
@@ -213,16 +220,16 @@
 		return new Date(newDate)/1000;
     }
 
-    function cekFlagTepat(deadline,tgl_masuk,kode) {
+    function cekFlagTepat(deadline,tgl_masuk,kode,id_kelasb) {
     	if(tgl_masuk > deadline) {
-    		jQuery('#tabelInputO4').find('.row-'+kode).find('.status').removeClass('label-success').removeClass('label-warning').addClass('label-danger').text('Telat');
-    		jQuery('#tabelInputO4').find('.row-'+kode).find('.flag_tepat').val('F');
+    		jQuery('#tabelInputO4').find('.row-'+id_kelasb).find('.status').removeClass('label-success').removeClass('label-warning').addClass('label-danger').text('Telat');
+    		jQuery('#tabelInputO4').find('.row-'+id_kelasb).find('.flag_tepat').val('F');
     	}else if (tgl_masuk <= deadline) {
-    		jQuery('#tabelInputO4').find('.row-'+kode).find('.status').removeClass('label-danger').removeClass('label-warning').addClass('label-success').text('Tepat Waktu');
-    		jQuery('#tabelInputO4').find('.row-'+kode).find('.flag_tepat').val('T');
+    		jQuery('#tabelInputO4').find('.row-'+id_kelasb).find('.status').removeClass('label-danger').removeClass('label-warning').addClass('label-success').text('Tepat Waktu');
+    		jQuery('#tabelInputO4').find('.row-'+id_kelasb).find('.flag_tepat').val('T');
     	}else{
-    		jQuery('#tabelInputO4').find('.row-'+kode).find('.status').removeClass('label-danger').removeClass('label-success').addClass('label-warning').text('Belum Mengumpulkan');
-    		jQuery('#tabelInputO4').find('.row-'+kode).find('.flag_tepat').val('N');
+    		jQuery('#tabelInputO4').find('.row-'+id_kelasb).find('.status').removeClass('label-danger').removeClass('label-success').addClass('label-warning').text('Belum Mengumpulkan');
+    		jQuery('#tabelInputO4').find('.row-'+id_kelasb).find('.flag_tepat').val('N');
     	}
     }
 
@@ -242,20 +249,24 @@
     }
 
     function save(kode,grup,prodi,id_kelasb) {
+    
+/*     	console.log(jQuery('#form-o4-grid .row-'+id_kelasb).find('.flag_tepat').val());return false; */
     	
-		jQuery('#form-o4-grid .row-'+kode).find('a.save').hide();
-		jQuery('#form-o4-grid .row-'+kode).find('span.loading').show();
-		
+		jQuery('#form-o4-grid .row-'+id_kelasb).find('a.save').hide();
+		jQuery('#form-o4-grid .row-'+id_kelasb).find('span.loading').show();
+				
 		var data = {
             kode: kode,
             grup: grup,
             prodi: prodi,
-            tgl_masuk: jQuery('#form-o4-grid .row-'+kode).find('.tgl_masuk').val(),
-            flag_tepat: jQuery('#form-o4-grid .row-'+kode).find('.flag_tepat').val(),
+            tgl_masuk: jQuery('#form-o4-grid .row-'+id_kelasb).find('.tgl_masuk').val(),
+            flag_tepat: jQuery('#form-o4-grid .row-'+id_kelasb).find('.flag_tepat').val(),
             semester: '<?php echo $semester ?>',
             thn_ajaran: '<?php echo $thn_ajaran ?>',
             id_kelasb: id_kelasb
         }
+
+/* 		console.log(data);return false; */
 
         $.ajax({
             url: '<?php echo base_url() ?>ip/konfigurasi_o4/save',
@@ -263,14 +274,14 @@
             dataType: 'json',
             data: data,
             success: function (data) {
-				jQuery('#form-o4-grid .row-'+kode).find('span.loading').hide();
-				jQuery('#form-o4-grid .row-'+kode).find('span.success').show().delay(1000).fadeOut(2000);
-				jQuery('#form-o4-grid .row-'+kode).find('a.save').delay(3000).fadeIn();
+				jQuery('#form-o4-grid .row-'+id_kelasb).find('span.loading').hide();
+				jQuery('#form-o4-grid .row-'+id_kelasb).find('span.success').show().delay(1000).fadeOut(2000);
+				jQuery('#form-o4-grid .row-'+id_kelasb).find('a.save').delay(3000).fadeIn();
             },
             error: function(data) {
             	alert(data.msg);
-            	jQuery('#form-o4-grid .row-'+kode).find('span.loading').hide();
-				jQuery('#form-o4-grid .row-'+kode).find('a.save').show();
+            	jQuery('#form-o4-grid .row-'+id_kelasb).find('span.loading').hide();
+				jQuery('#form-o4-grid .row-'+id_kelasb).find('a.save').show();
             }
         });
     }
