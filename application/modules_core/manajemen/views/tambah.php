@@ -12,10 +12,10 @@
 	<div class="panel-heading green-bg">
 		<h3 class="panel-title">Informasi User</h3>
 	</div>
-	<?php echo $this->session->userdata('message'); ?>
 	<form method="POST" action="<?php echo base_url(); ?>manajemen/user/tambah_proses">
 		<input type="hidden" name="user" value="<?php echo $this->session->userdata('username'); ?>">
 		<div class="panel-body">
+			<?php echo $this->session->userdata('message'); ?>
 			<div class="row">
 				<div class="col-md-5">
 					<div class="form-group">
@@ -63,8 +63,8 @@
 						<div class="controls">
 							<select name="role" class="form-control">
 								<option value="">-- PILIH --</option>
-								<option value="super admin">SUPER ADMIN</option>
 								<option value="admin">ADMIN</option>
+								<option value="biro1">BIRO 1</option>
 							</select>
 						</div>
 					</div>
@@ -73,6 +73,7 @@
 		</div>
 		<div class="panel-footer">
 			<div class="form-group">
+				<a href="<?php echo base_url().'manajemen/user' ?>" class="btn btn-med gray-bg">Kembali</a>
 				<input type="submit" name="submit" class="btn btn-med blue-bg" value="simpan" />
 			</div>
 		</div>

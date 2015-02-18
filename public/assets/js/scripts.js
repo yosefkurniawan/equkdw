@@ -37,7 +37,7 @@
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/bwizard/bwizard.min.js"></script>'); /*==== Bootstrap Wizard ====*/
   
-  document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/data-tables/jquery.dataTables.min.js"></script>'); /*==== Data Tables ====*/
+  
   
   document.writeln('<script src="'+CI_ROOT+'public/assets/js/plugins/data-tables/DT_bootstrap.js"></script>'); /*==== Bootstrap Data Tables ====*/
   

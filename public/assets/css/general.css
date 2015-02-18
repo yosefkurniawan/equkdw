@@ -163,6 +163,32 @@ nav#main_topnav .toggle li a {
 	display: none;
 }
 
+/*========================================*/
+/* Datatables
+/*========================================*/
+
+.DTTT.btn-group,
+.dataTables_info {
+	float: left;
+}
+
+.dataTables_filter,
+.dataTables_paginate {
+	float: right;
+}
+
+.dataTables_filter input {
+	width: 170px;
+}
+
+.dt-panelmenu {
+	margin: 15px 0;
+}
+
+.dt-panelfooter {
+	margin: 15px 0 0;
+}
+
 /* ---------------  <= 640 px layout -------------------- */
 @media only screen and (max-width: 640px) {
 	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {

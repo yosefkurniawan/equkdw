@@ -8,7 +8,8 @@ class User extends MX_Controller
 		$this->load->model('m_user');
 
 		# checking whether logged in or not
-		if (!isset($this->session->userdata['is_super_admin']) || !$this->session->userdata['is_super_admin'] ) {
+		if ((!isset($this->session->userdata['is_super_admin']) && !$this->session->userdata['is_super_admin']) || 
+			(!isset($this->session->userdata['is_admin']) && !$this->session->userdata['is_admin'])) {
 			redirect('main/page404');	
 		} 
 	}
@@ -56,7 +57,7 @@ class User extends MX_Controller
 			$this->session->set_userdata($data);
 		} else {
 			$data = array(
-				'message'		=> validation_errors(),
+				'message'		=> '<div class="alert alert-danger">'.validation_errors().'</div>',
 				'email'			=> $this->input->post('email'),
 				'user'			=> $this->input->post('username'),
 				'password'		=> $this->input->post('password'),
@@ -99,7 +100,7 @@ class User extends MX_Controller
 			$this->session->set_userdata($data);
 		} else {
 			$data = array(
-				'message'		=> validation_errors(),
+				'message'		=> '<div class="alert alert-danger">'.validation_errors().'</div>',
 				'role'			=> $this->input->post('username')
 			);
 			$this->session->set_userdata($data);
