@@ -27,6 +27,11 @@
 
 <link href="<?=base_url()?>public/assets/css/jquery.datetimepicker.css" rel="stylesheet"/>
 
+<!-- Datatables CSS -->
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>public/assets/js/datatables/media/css/dataTables.bootstrap.css">
+<!-- Datatables Editor CSS -->
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>public/assets/js/datatables/extensions/Editor/css/dataTables.editor.css">
+
 <!-- <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/style.css"> -->
 
 <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/jquery.fileupload.css">
@@ -42,7 +47,6 @@
 <!-- admin -->
 <link href="<?=base_url()?>public/assets/css/admin.css" rel="stylesheet"/>
 
-<link href="<?=base_url()?>public/assets/css/data-tables/data-table.css" rel="stylesheet" type="text/css">
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 
 <?php if (isset($custom_css)): ?>
@@ -55,6 +59,7 @@
         CI_ROOT = "<?=base_url() ?>";
 </script>
 <script src="<?=base_url()?>public/assets/js/scripts.js"></script>
+
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]><script src="<?=base_url()?>public/assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="<?=base_url()?>public/assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->
 
@@ -67,6 +72,16 @@
 <!-- high chart -->
 <script src="<?=base_url()?>public/assets/js/highchart/highcharts.js"></script>
 <script src="<?=base_url()?>public/assets/js/highchart/modules/exporting.js"></script>
+
+<!-- Datatables -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/media/js/jquery.dataTables.js"></script>
+<!-- Datatables Tabletools addon -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<!-- Datatables Editor addon - READ LICENSING NOT MIT  -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/extensions/Editor/js/dataTables.editor.js"></script>
+<!-- Datatables Bootstrap Modifications  -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/media/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/extensions/Editor/js/editor.bootstrap.js"></script>
 
 </head>
 <body>

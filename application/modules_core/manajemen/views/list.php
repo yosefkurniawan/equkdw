@@ -30,9 +30,9 @@
 				<td>
 					<?php if ( $result['username'] != $this->session->userdata('username') ): ?>
 						<?php if ($result['status'] == 'aktif'): ?>
-							<a href="<?php echo base_url(); ?>manajemen/user/deactivated/<?php echo $result['id']; ?>" class="btn btn-med blue-bg" onclick="return confirm('Apakah user ini akan dinonaktifkan?');"><?php echo $result['status']; ?></a>
+							<a href="<?php echo base_url(); ?>manajemen/user/deactivated/<?php echo $result['id']; ?>" class="btn btn-med blue-bg tooltip-demo" onclick="return confirm('Apakah user ini akan dinonaktifkan?');" data-placement="top" data-toggle="tooltip" data-original-title="Klik untuk menonaktifkan"><?php echo $result['status']; ?></a>
 						<?php else: ?>
-							<a href="<?php echo base_url(); ?>manajemen/user/activated/<?php echo $result['id']; ?>" class="btn btn-med red-bg" onclick="return confirm('Apakah user ini akan diaktifkan?');"><?php echo $result['status']; ?></a>
+							<a href="<?php echo base_url(); ?>manajemen/user/activated/<?php echo $result['id']; ?>" class="btn btn-med red-bg tooltip-demo" onclick="return confirm('Apakah user ini akan diaktifkan?');" data-placement="top" data-toggle="tooltip" data-original-title="Klik untuk mengaktifkan"><?php echo $result['status']; ?></a>
 						<?php endif ; ?>
 					<?php endif ?>
 				</td>

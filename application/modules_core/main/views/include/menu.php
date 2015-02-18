@@ -15,6 +15,12 @@
 			<li><a href="<?=base_url()?>loginas" title="Login As" >Login As</a></li>
 	<?php endif ?>
 	<?php if ($this->session->userdata['is_admin']): ?>
+			<li>
+				<i class="icon-cog"></i><a href="javascript:void(0)" title="Konfigurasi" >Konfigurasi</a>
+				<ul class="toggle">
+					<li><a href="<?=base_url()?>manajemen/user" title="Konfigurasi User" >User</a></li>
+				</ul>
+			</li>
 			<li><i class="icon-globe"></i><a href="<?=base_url()?>" title="Dashboard" >Dashboard</a></li>
 			<li>
 				<i class="icon-check"></i><a href="javascript:void(0)" title="Menu Kuisioner" >Kuisioner</a>
