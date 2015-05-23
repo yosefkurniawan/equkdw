@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title><?php echo $title ?></title>
+<!-- Meta Tags -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link rel="shortcut icon" href="<?=base_url()?>public/assets/images/favicon.ico" />
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=Standards"><![endif]-->
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="keywords" content="eQuiz, UKDW, SI, Universitas Kristen Duta Wacana, DWCU, Duta Wacana Christian University, Yogyakarta, Indonesia, SI, IS">
+<meta name="description" content="eQuiz - information system for creating survey and evaluation in duta wacana christian university">
+<meta name="author" content="Pinaple Studio">
+<!-- Bootstrap Version 3.0-->
+<link rel="stylesheet" href="<?=base_url()?>public/assets/css/bootstrap/bootstrap.min.css" />
+<!--Base style sheet-->
+<link href="<?=base_url()?>public/assets/css/base.css" type="text/css" rel="stylesheet">
+<!-- Chosen (input/select)-->
+<link href="<?=base_url()?>public/assets/css/chosen/chosen.css" rel="stylesheet"/>
+<!-- Visualize Charts-->
+<link href="<?=base_url()?>public/assets/css/visualize/visualize.css" rel="stylesheet"/>
+<!-- Full Calendar-->
+<link href="<?=base_url()?>public/assets/css/fullcalendar/fullcalendar.css" rel="stylesheet"/>
+<!-- Jquery UI-->
+<link href="<?=base_url()?>public/assets/css/jquery-ui/jquery-ui.css" rel="stylesheet"/>
+
+<link href="<?=base_url()?>public/assets/css/jquery.datetimepicker.css" rel="stylesheet"/>
+
+<!-- Datatables CSS -->
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>public/assets/js/datatables/media/css/dataTables.bootstrap.css">
+<!-- Datatables Editor CSS -->
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>public/assets/js/datatables/extensions/Editor/css/dataTables.editor.css">
+
+<!-- <link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/style.css"> -->
+
+<link rel="stylesheet" href="<?=base_url()?>public/js/plugins/jquery-file-upload/css/jquery.fileupload.css">
+<!-- select2 - autocomplete -->
+<link rel="stylesheet" href="<?=base_url()?>public/assets/css/select2.css">
+
+<!-- general -->
+<link href="<?=base_url()?>public/assets/css/general.css" rel="stylesheet"/>
+<!-- Soal -->
+<link href="<?=base_url()?>public/assets/css/soal.css" rel="stylesheet"/>
+<!-- Laporan -->
+<link href="<?=base_url()?>public/assets/css/laporan.css" rel="stylesheet"/>
+<!-- admin -->
+<link href="<?=base_url()?>public/assets/css/admin.css" rel="stylesheet"/>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+
+<?php if (isset($custom_css)): ?>
+  <?php foreach ($custom_css as $path): ?>
+    <link rel="stylesheet" type="text/css" href="<?= base_url().$path ?>">
+  <?php endforeach ?>
+<?php endif ?>
+
+<script type="text/javascript">
+        CI_ROOT = "<?=base_url() ?>";
+</script>
+<script src="<?=base_url()?>public/assets/js/scripts.js"></script>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]><script src="<?=base_url()?>public/assets/js/html5shiv/html5shiv.js" type="text/javascript"></script><script src="<?=base_url()?>public/assets/js/respond/respond.min.js" type="text/javascript"></script><![endif]-->
+
+<?php if (isset($custom_js)): ?>
+  <?php foreach ($custom_js as $path): ?>
+    <script src="<?= base_url().$path ?>"></script>
+  <?php endforeach ?>
+<?php endif ?>
+
+<!-- high chart -->
+<script src="<?=base_url()?>public/assets/js/highchart/highcharts.js"></script>
+<script src="<?=base_url()?>public/assets/js/highchart/modules/exporting.js"></script>
+
+<!-- Datatables -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/media/js/jquery.dataTables.js"></script>
+<!-- Datatables Tabletools addon -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<!-- Datatables Editor addon - READ LICENSING NOT MIT  -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/extensions/Editor/js/dataTables.editor.js"></script>
+<!-- Datatables Bootstrap Modifications  -->
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/media/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>public/assets/js/datatables/extensions/Editor/js/editor.bootstrap.js"></script>
+
+</head>
+<body>
+
+<!-- FOTO PROFIL -->
+<header>
+ <!-- LOGO -->
+  <div class="container-fluid clearfix">
+    <a href="<?=base_url()?>" title="eQuiz" class="pull-left">
+      <img src="<?=base_url()?>public/assets/images/logo.png" title="eQuiz" alt="eQuiz">
+    </a>
+
+
+    <div class="user pull-right">
+      <a href="#" title="User Options" data-toggle="dropdown" class="pull-right">
+        <div class="pull-left">
+          <h5><? echo ucwords($this->session->userdata['nama']);?></h5>
+          <p>
+          <?php if ($this->session->userdata['is_super_admin']): ?>
+            Superadmin
+          <?php endif; ?>
+          <?php if ($this->session->userdata['is_admin']): ?>
+            Admin
+          <?php endif; ?>
+          <?php if ($this->session->userdata['is_biro1']): ?>
+	          Biro1
+          <?php endif ?>
+          <?php if ($this->session->userdata['is_kepala_unit']) : ?>          
+              Kepala Unit
+              <?php if ($this->session->userdata['status'] == 'Dosen'): ?>
+                dan Dosen
+              <?php endif ?>
+          <?php elseif ($this->session->userdata['status'] == 'Dosen'): ?>
+          Dosen
+          <?php endif ?>
+          <?php if ($this->session->userdata['status'] == 'Mahasiswa'): ?>
+          Mahasiswa
+          <?php endif ?>
+        </p>
+        </div>
+        <div class="pull-right">
+          <!-- <img src="<?=base_url()?>public/assets/images/user_pic/user.jpg" title="User Pic" alt="User Pic"> -->
+        </div>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <?php if ($this->session->userdata['is_admin'] || $this->session->userdata['is_super_admin'] || $this->session->userdata['is_biro1']): ?>
+          <li><a href="<?php echo base_url(); ?>account/pengaturan_akun">Ubah Password</a></li>
+        <?php endif ?>
+        <?php if ($this->session->userdata['status'] != 'Mahasiswa'): ?>
+          <li><a href="<?php echo base_url(); ?>main">Dashboard</a></li>
+        <?php endif ?>
+          <li><a href="<?php echo base_url(); ?>main/logout">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<!--HEADER ENDS-->
+
+<body>

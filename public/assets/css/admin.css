@@ -1,0 +1,26 @@
+/* ============================================= */
+/* Dashboard
+/* ============================================= */
+
+.admin-center {
+	margin: 0 auto;
+	width: 600px;
+	margin-top: 5%;
+}
+
+.admin-center h2 {
+	font-size: 16px;
+	border-bottom: 1px solid #ccc;
+	font-weight: bold;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
+
+
+
+/* ---------------  <= 768 px layout -------------------- */
+@media only screen and (max-width: 768px) {
+	.admin-center {
+		width: 100%;
+	}
+}
