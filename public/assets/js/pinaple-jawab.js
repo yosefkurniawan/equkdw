@@ -5,8 +5,7 @@
  */
 
 $(document).ready(function(){
-
-
+	
 	// Navbar Scroll To
 	$('#nav-dosen-1').click(function(){
 		$('html, body').animate({
@@ -151,7 +150,7 @@ function submit_jawaban(){
 			   {
 			$('#save-jawaban-loading').css('display', 'none');
 			$('#save-jawaban').show();
-			        window.location.replace(CI_ROOT + 'mahasiswa/dashboard');
+			        window.location.href = CI_ROOT + 'mahasiswa/dashboard';
 			   },
 
 			   error: function (jqXHR, textStatus, errorThrown)
